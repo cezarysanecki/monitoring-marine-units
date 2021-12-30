@@ -25,7 +25,7 @@ public class AccessTokenScheduler {
     @Inject
     ObjectMapper objectMapper;
 
-    @Scheduled(every = "30m")
+    @Scheduled(every = "${barents-watch.token.scheduled.every:30m}")
     void fetchAccessToken() throws JsonProcessingException {
         Form form = new Form()
                 .param("client_id", accessTokenProperties.clientId)
