@@ -17,8 +17,8 @@ public class BarentsWatchResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/vessels/positions")
-    public String getAllVessels(BoundingBox boundingBox) {
-        return barentsWatchService.getAllVessels();
+    public String getVesselsPositionFor(BoundingBox boundingBox) {
+        return barentsWatchService.getVesselsPositionFor(boundingBox);
     }
 }
 

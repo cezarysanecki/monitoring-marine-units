@@ -5,7 +5,7 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 class BarentsWatchService {
 
-    String getAllVessels() {
+    String getVesselsPositionFor(BoundingBox boundingBox) {
         return "vessels";
     }
 }
