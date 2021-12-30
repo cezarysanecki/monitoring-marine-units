@@ -19,15 +19,18 @@ public class TokenScheduler {
     TokenExternalApi tokenExternalApi;
 
     @Inject
+    Access access;
+
+    @Inject
     ObjectMapper objectMapper;
 
     @Scheduled(every = "30m")
     void fetchAccessToken() throws JsonProcessingException {
         Form form = new Form()
-                .param("client_id", "xxx")
-                .param("scope", "api")
-                .param("client_secret", "xxx")
-                .param("grant_type", "client_credentials");
+                .param("client_id", access.clientId)
+                .param("scope", access.scope)
+                .param("client_secret", access.clientSecret)
+                .param("grant_type", access.grantType);
 
         AccessToken accessToken = objectMapper.readValue(tokenExternalApi.fetchToken(form), AccessToken.class);
 
