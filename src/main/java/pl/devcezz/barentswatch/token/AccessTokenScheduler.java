@@ -35,7 +35,7 @@ public class AccessTokenScheduler {
 
         Token token = objectMapper.readValue(accessTokenExternalApi.fetchToken(form), Token.class);
 
-        Registry.accessToken.set(token.value());
+        Registry.accessToken.set("Bearer " + token.value());
     }
 }
 

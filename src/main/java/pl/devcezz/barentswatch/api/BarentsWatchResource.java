@@ -25,7 +25,7 @@ public class BarentsWatchResource {
     @Path("/vessel/position")
     public List<OpenPosition> getVesselsPositionFor(BoundingBoxRequest request) {
         return barentsWatchExternalApi.getVesselsPositionsFor(
-                "Bearer " + Registry.accessToken.get(),
+                Registry.accessToken.get(),
                 request.xMin(),
                 request.xMax(),
                 request.yMin(),
@@ -37,7 +37,7 @@ public class BarentsWatchResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/vessel/position/{mmsi}")
     public OpenPosition getVesselsPositionFor(@PathParam(value = "mmsi") Integer mmsi) {
-        return barentsWatchExternalApi.getVesselPositionFor("Bearer " + Registry.accessToken.get(), mmsi);
+        return barentsWatchExternalApi.getVesselPositionFor(Registry.accessToken.get(), mmsi);
     }
 }
 
