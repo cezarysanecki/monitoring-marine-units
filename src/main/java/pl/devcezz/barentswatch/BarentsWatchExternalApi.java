@@ -7,15 +7,15 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.QueryParam;
 import java.util.List;
 
-@RegisterRestClient(configKey = "open-positions")
+@RegisterRestClient(configKey = "barents-watch-api")
 public interface BarentsWatchExternalApi {
 
     @GET
-    List<OpenPosition> method(@HeaderParam("Authorization") String token,
-                  @QueryParam(value = "Xmin") double xMin,
-                  @QueryParam(value = "Xmax") double xMax,
-                  @QueryParam(value = "Ymin") double yMin,
-                  @QueryParam(value = "Ymax") double yMax);
+    List<OpenPosition> getVesselsPositionsFor(@HeaderParam("Authorization") String token,
+                                              @QueryParam(value = "Xmin") double xMin,
+                                              @QueryParam(value = "Xmax") double xMax,
+                                              @QueryParam(value = "Ymin") double yMin,
+                                              @QueryParam(value = "Ymax") double yMax);
 }
 
 record OpenPosition(String timeStamp, Long mmsi, Geometry geometry) {}
