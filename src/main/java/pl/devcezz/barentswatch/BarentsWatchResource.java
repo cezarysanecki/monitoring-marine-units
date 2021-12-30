@@ -16,8 +16,10 @@ public class BarentsWatchResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/vessels")
-    public String getAllVessels() {
+    @Path("/vessels/positions")
+    public String getAllVessels(BoundingBox boundingBox) {
         return barentsWatchService.getAllVessels();
     }
 }
+
+record BoundingBox(double xMin, double xMax, double yMin, double yMax) {}
