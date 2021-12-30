@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch;
+package pl.devcezz.barentswatch.api;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
@@ -18,6 +18,3 @@ public interface BarentsWatchExternalApi {
                                               @QueryParam(value = "Ymax") double yMax);
 }
 
-record OpenPosition(String timeStamp, Long mmsi, Geometry geometry) {}
-
-record Geometry(String type, List<Double> coordinates) {}

@@ -1,21 +1,21 @@
-package pl.devcezz.barentswatch;
+package pl.devcezz.barentswatch.token;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Singleton;
 
 @Singleton
-public class Access {
+public class AccessTokenProperties {
 
     @ConfigProperty(name = "barents-watch.access.client-id")
-    String clientId;
+    public String clientId;
 
     @ConfigProperty(name = "barents-watch.access.scope")
-    String scope;
+    public String scope;
 
     @ConfigProperty(name = "barents-watch.access.client-secret")
-    String clientSecret;
+    public String clientSecret;
 
     @ConfigProperty(name = "barents-watch.access.grant-type")
-    String grantType;
+    public String grantType;
 }

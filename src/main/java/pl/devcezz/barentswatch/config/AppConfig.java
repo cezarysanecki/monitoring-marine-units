@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch;
+package pl.devcezz.barentswatch.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

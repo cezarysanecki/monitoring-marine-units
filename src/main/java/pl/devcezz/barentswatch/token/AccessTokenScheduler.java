@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch;
+package pl.devcezz.barentswatch.token;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,20 +6,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import pl.devcezz.barentswatch.Registry;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Form;
 
 @ApplicationScoped
-public class TokenScheduler {
+public class AccessTokenScheduler {
 
     @Inject
     @RestClient
-    TokenExternalApi tokenExternalApi;
+    AccessTokenExternalApi accessTokenExternalApi;
 
     @Inject
-    Access access;
+    AccessTokenProperties accessTokenProperties;
 
     @Inject
     ObjectMapper objectMapper;
@@ -27,16 +28,16 @@ public class TokenScheduler {
     @Scheduled(every = "30m")
     void fetchAccessToken() throws JsonProcessingException {
         Form form = new Form()
-                .param("client_id", access.clientId)
-                .param("scope", access.scope)
-                .param("client_secret", access.clientSecret)
-                .param("grant_type", access.grantType);
+                .param("client_id", accessTokenProperties.clientId)
+                .param("scope", accessTokenProperties.scope)
+                .param("client_secret", accessTokenProperties.clientSecret)
+                .param("grant_type", accessTokenProperties.grantType);
 
-        AccessToken accessToken = objectMapper.readValue(tokenExternalApi.fetchToken(form), AccessToken.class);
+        Token token = objectMapper.readValue(accessTokenExternalApi.fetchToken(form), Token.class);
 
-        Registry.accessToken.set(accessToken.accessToken());
+        Registry.accessToken.set(token.value());
     }
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-record AccessToken(@JsonProperty(value = "access_token") String accessToken) {}
+record Token(@JsonProperty(value = "access_token") String value) {}

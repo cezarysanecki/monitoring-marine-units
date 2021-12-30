@@ -1,6 +1,7 @@
-package pl.devcezz.barentswatch;
+package pl.devcezz.barentswatch.api;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import pl.devcezz.barentswatch.Registry;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
