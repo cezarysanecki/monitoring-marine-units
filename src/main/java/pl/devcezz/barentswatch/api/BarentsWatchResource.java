@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -21,7 +22,7 @@ public class BarentsWatchResource {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/vessels/positions")
+    @Path("/vessel/position")
     public List<OpenPosition> getVesselsPositionFor(BoundingBoxRequest request) {
         return barentsWatchExternalApi.getVesselsPositionsFor(
                 "Bearer " + Registry.accessToken.get(),
@@ -29,6 +30,14 @@ public class BarentsWatchResource {
                 request.xMax(),
                 request.yMin(),
                 request.yMax());
+    }
+
+    @GET
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/vessel/position/{mmsi}")
+    public OpenPosition getVesselsPositionFor(@PathParam(value = "mmsi") Integer mmsi) {
+        return barentsWatchExternalApi.getVesselPositionFor("Bearer " + Registry.accessToken.get(), mmsi);
     }
 }
 
