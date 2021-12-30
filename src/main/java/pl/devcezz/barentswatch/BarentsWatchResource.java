@@ -19,14 +19,14 @@ public class BarentsWatchResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/vessels/positions")
-    public List<OpenPosition> getVesselsPositionFor(BoundingBox boundingBox) {
+    public List<OpenPosition> getVesselsPositionFor(BoundingBoxRequest request) {
         return barentsWatchExternalApi.method(
                 "Bearer xxx",
-                boundingBox.xMin(),
-                boundingBox.xMax(),
-                boundingBox.yMin(),
-                boundingBox.yMax());
+                request.xMin(),
+                request.xMax(),
+                request.yMin(),
+                request.yMax());
     }
 }
 
-record BoundingBox(double xMin, double xMax, double yMin, double yMax) {}
+record BoundingBoxRequest(double xMin, double xMax, double yMin, double yMax) {}
