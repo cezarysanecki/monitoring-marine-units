@@ -1,7 +1,9 @@
-package pl.devcezz.barentswatch.api;
+package pl.devcezz.barentswatch.vessel;
 
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 import pl.devcezz.barentswatch.Registry;
+import pl.devcezz.barentswatch.externalapi.BarentsWatchExternalApi;
+import pl.devcezz.barentswatch.externalapi.OpenPosition;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -12,8 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-@Path("/barentswatch")
-public class BarentsWatchResource {
+@Path("/barentswatch/vessel")
+public class VesselResource {
 
     @Inject
     @RestClient
@@ -22,7 +24,7 @@ public class BarentsWatchResource {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/vessel/position")
+    @Path("/position")
     public List<OpenPosition> getVesselsPositionFor(BoundingBoxRequest request) {
         return barentsWatchExternalApi.getVesselsPositionsFor(
                 Registry.accessToken.get(),
@@ -35,7 +37,7 @@ public class BarentsWatchResource {
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/vessel/position/{mmsi}")
+    @Path("/position/{mmsi}")
     public OpenPosition getVesselsPositionFor(@PathParam(value = "mmsi") Integer mmsi) {
         return barentsWatchExternalApi.getVesselPositionFor(Registry.accessToken.get(), mmsi);
     }

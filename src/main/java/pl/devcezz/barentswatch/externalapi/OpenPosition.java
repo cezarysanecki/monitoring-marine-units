@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch.api;
+package pl.devcezz.barentswatch.externalapi;
 
 import java.util.List;
 
