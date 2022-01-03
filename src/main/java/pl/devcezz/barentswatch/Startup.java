@@ -18,6 +18,6 @@ public class Startup {
     public void loadUsers(@Observes StartupEvent evt) {
         clientRepository.deleteAll();
 
-        clientRepository.add("user", "user", "user");
+        clientRepository.add("user@user.pl", "user", "user");
     }
 }

@@ -3,7 +3,7 @@ package pl.devcezz.barentswatch.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.Produces;
+import javax.enterprise.inject.Produces;
 
 @ApplicationScoped
 public final class AppConfig {

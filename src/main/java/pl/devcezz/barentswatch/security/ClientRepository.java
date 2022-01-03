@@ -8,9 +8,9 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class ClientRepository implements PanacheRepository<Client> {
 
-    public void add(String username, String password, String role) {
+    public void add(String email, String password, String role) {
         Client client = new Client();
-        client.username = username;
+        client.email = email;
         client.password = BcryptUtil.bcryptHash(password);
         client.role = role;
         persist(client);
