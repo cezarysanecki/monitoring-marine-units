@@ -1,7 +1,6 @@
 package pl.devcezz.barentswatch;
 
 import io.quarkus.runtime.StartupEvent;
-import pl.devcezz.barentswatch.security.Client;
 import pl.devcezz.barentswatch.security.ClientRepository;
 
 import javax.enterprise.event.Observes;
@@ -19,7 +18,6 @@ public class Startup {
     public void loadUsers(@Observes StartupEvent evt) {
         clientRepository.deleteAll();
 
-        clientRepository.add("admin", "admin", "admin");
         clientRepository.add("user", "user", "user");
     }
 }
