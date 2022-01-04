@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch.token;
+package pl.devcezz.barentswatch.externalapi.token;
 
 import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 
