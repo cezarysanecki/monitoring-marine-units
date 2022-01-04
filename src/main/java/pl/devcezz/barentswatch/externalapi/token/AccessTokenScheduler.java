@@ -6,14 +6,19 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.quarkus.scheduler.Scheduled;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.devcezz.barentswatch.Registry;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Form;
 
 @ApplicationScoped
 public class AccessTokenScheduler {
+
+    Logger logger = LoggerFactory.getLogger(AccessTokenScheduler.class);
 
     @Inject
     @RestClient
@@ -33,9 +38,13 @@ public class AccessTokenScheduler {
                 .param("client_secret", accessTokenProperties.clientSecret)
                 .param("grant_type", accessTokenProperties.grantType);
 
-        Token token = objectMapper.readValue(accessTokenExternalApi.fetchToken(form), Token.class);
-
-        Registry.accessToken.set("Bearer " + token.value());
+        try {
+            Token token = objectMapper.readValue(accessTokenExternalApi.fetchToken(form), Token.class);
+            Registry.accessToken.set("Bearer " + token.value());
+        } catch (WebApplicationException exception) {
+            logger.error("Cannot access token from external API: {}", exception.getMessage());
+            throw exception;
+        }
     }
 }
 
