@@ -12,6 +12,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -26,13 +27,11 @@ public class VesselResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/position")
-    public List<OpenPosition> getVesselsPositionFor(BoundingBoxRequest request) {
-        return barentsWatchExternalApi.getVesselsPositionsFor(
-                Registry.accessToken.get(),
-                request.xMin(),
-                request.xMax(),
-                request.yMin(),
-                request.yMax());
+    public List<OpenPosition> getVesselsPositionFor(@QueryParam(value = "xMin") Double xMin,
+                                                    @QueryParam(value = "xMax") Double xMax,
+                                                    @QueryParam(value = "yMin") Double yMin,
+                                                    @QueryParam(value = "yMax") Double yMax) {
+        return barentsWatchExternalApi.getVesselsPositionsFor(Registry.accessToken.get(), xMin, xMax, yMin, yMax);
     }
 
     @GET
@@ -43,5 +42,3 @@ public class VesselResource {
         return barentsWatchExternalApi.getVesselPositionFor(Registry.accessToken.get(), mmsi);
     }
 }
-
-record BoundingBoxRequest(double xMin, double xMax, double yMin, double yMax) {}
