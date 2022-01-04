@@ -5,6 +5,7 @@ import pl.devcezz.barentswatch.Registry;
 import pl.devcezz.barentswatch.externalapi.BarentsWatchExternalApi;
 import pl.devcezz.barentswatch.externalapi.OpenPosition;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -35,9 +36,9 @@ public class VesselResource {
     }
 
     @GET
-    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/position/{mmsi}")
+    @RolesAllowed({ "user" })
     public OpenPosition getVesselsPositionFor(@PathParam(value = "mmsi") Integer mmsi) {
         return barentsWatchExternalApi.getVesselPositionFor(Registry.accessToken.get(), mmsi);
     }
