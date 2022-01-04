@@ -20,11 +20,9 @@ public class VerifyClientInterceptor {
         Client client = clientRepository.find("email", request.email()).firstResult();
 
         if (client == null || !BcryptUtil.matches(request.password(), client.password)) {
-            return new Issue("invalid_client");
+            throw new FailedClientVerificationException("invalid_client");
         }
 
         return context.proceed();
     }
 }
-
-record Issue(String error) {}
