@@ -7,6 +7,13 @@ public class Vessel {
     public Status status;
     public List<Track> tracks;
 
+    public static Vessel createNewVessel(Integer mmsi) {
+        Vessel vessel = new Vessel();
+        vessel.mmsi = mmsi;
+        vessel.status = Status.TRACKED;
+        return vessel;
+    }
+
     public enum Status {
         TRACKED, SUSPENDED
     }

@@ -12,5 +12,10 @@ public class UserVessel {
     public ObjectId id;
     public String email;
     public List<Vessel> vessels = new ArrayList<>();
+
+    public boolean containsVessel(Integer mmsi) {
+        return vessels.stream()
+                .anyMatch(vessel -> vessel.mmsi.equals(mmsi));
+    }
 }
 
