@@ -9,7 +9,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.time.Duration;
 
 @Path("/barentswatch/client")
 public class ClientResource {
@@ -17,11 +16,8 @@ public class ClientResource {
     @Inject
     ClientRepository clientRepository;
 
-    @ConfigProperty(name = "smallrye.jwt.verify.issuer")
-    public String issuer;
-
-    @ConfigProperty(name = "smallrye.jwt.verify.expired-at.minutes")
-    public Integer expiredAtInMinutes;
+    @ConfigProperty(name = "smallrye.jwt.new-token.lifespan")
+    public Integer lifespan;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -31,16 +27,14 @@ public class ClientResource {
     public TokenResponse generateAccessToken(LoginRequest request) {
         Client client = clientRepository.find("email", request.email()).firstResult();
 
-        String token = Jwt.issuer(issuer)
-                .subject(client.email)
-                .expiresIn(Duration.ofMinutes(expiredAtInMinutes))
+        String token = Jwt.subject(client.email)
                 .groups(client.role)
                 .sign();
 
-        return new TokenResponse(token, expiredAtInMinutes * 60);
+        return new TokenResponse(token, lifespan);
     }
 }
 
 record LoginRequest(String email, String password) {}
 
-record TokenResponse(String apiToken, Integer expiresAt) {}
+record TokenResponse(String apiToken, Integer expiresAtSeconds) {}
