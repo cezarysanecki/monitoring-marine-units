@@ -1,0 +1,288 @@
+{
+	"info": {
+		"_postman_id": "30984bc3-82ac-4a2f-9665-659ed6e2ceaf",
+		"name": "AIS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let res = pm.response.json();\r",
+							"pm.environment.set(\"token\", res[\"access_token\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "client_id",
+							"value": "xxx",
+							"type": "string"
+						},
+						{
+							"key": "scope",
+							"value": "api",
+							"type": "string"
+						},
+						{
+							"key": "client_secret",
+							"value": "xxx",
+							"type": "string"
+						},
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "string"
+						}
+					],
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://id.barentswatch.no/connect/token",
+					"protocol": "https",
+					"host": [
+						"id",
+						"barentswatch",
+						"no"
+					],
+					"path": [
+						"connect",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get vessels positions",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "string"
+					}
+				],
+				"url": {
+					"raw": "https://www.barentswatch.no/bwapi/v2/geodata/ais/openpositions?Xmin=10.09094&Xmax=10.67047&Ymin=-63.3989&Ymax=63.58645",
+					"protocol": "https",
+					"host": [
+						"www",
+						"barentswatch",
+						"no"
+					],
+					"path": [
+						"bwapi",
+						"v2",
+						"geodata",
+						"ais",
+						"openpositions"
+					],
+					"query": [
+						{
+							"key": "Xmin",
+							"value": "10.09094"
+						},
+						{
+							"key": "Xmax",
+							"value": "10.67047"
+						},
+						{
+							"key": "Ymin",
+							"value": "-63.3989"
+						},
+						{
+							"key": "Ymax",
+							"value": "63.58645"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get vessel data",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{token}}",
+						"type": "string"
+					}
+				],
+				"url": {
+					"raw": "https://www.barentswatch.no/bwapi/v1/geodata/vessel/ais/open/{{mmsi}}",
+					"protocol": "https",
+					"host": [
+						"www",
+						"barentswatch",
+						"no"
+					],
+					"path": [
+						"bwapi",
+						"v1",
+						"geodata",
+						"vessel",
+						"ais",
+						"open",
+						"{{mmsi}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q - Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let res = pm.response.json();\r",
+							"pm.environment.set(\"barentsWatchToken\", res[\"apiToken\"]);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"user@user.pl\",\r\n    \"password\": \"user\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/barentswatch/client/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"barentswatch",
+						"client",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q - Get vessels positions",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"xMin\": 10.09094,\r\n    \"xMax\": 10.67047,\r\n    \"yMin\": -63.3989,\r\n    \"yMax\": 63.58645\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/barentswatch/vessel/position",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"barentswatch",
+						"vessel",
+						"position"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Q - Get vessel position",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Bearer {{barentsWatchToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/barentswatch/vessel/position/{{mmsi}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"barentswatch",
+						"vessel",
+						"position",
+						"{{mmsi}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "mmsi",
+			"value": "219024336"
+		}
+	]
+}
