@@ -3,6 +3,7 @@ package pl.devcezz.barentswatch.user.entity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
 import pl.devcezz.barentswatch.user.VesselAlreadySuspendedException;
+import pl.devcezz.barentswatch.user.VesselIsNotTrackedException;
 import pl.devcezz.barentswatch.user.tracker.PointRegistry;
 
 import java.util.ArrayList;
@@ -42,6 +43,13 @@ public class UserVessel {
                 .filter(vessel -> vessel.isTracking(mmsi))
                 .findFirst()
                 .ifPresent(Vessel::suspendTracking);
+    }
+
+    public void removeTrackingVessel(Integer mmsi) {
+        if (vessels.stream().noneMatch(vessel -> vessel.isFor(mmsi))) {
+            throw new VesselIsNotTrackedException();
+        }
+        vessels.removeIf(vessel -> vessel.isFor(mmsi));
     }
 
     public void addPointForVessel(Integer mmsi, PointRegistry pointRegistry) {

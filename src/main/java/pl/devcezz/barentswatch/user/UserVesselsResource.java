@@ -35,4 +35,13 @@ public class UserVesselsResource {
         userVessel.suspendTrackingVessel(mmsi);
         userVesselRepository.update(userVessel);
     }
+
+    @DELETE
+    @Path("/track")
+    @RolesAllowed({ "user" })
+    public void removeTrackingVessel(Integer mmsi) {
+        UserVessel userVessel = userVesselRepository.find("email", token.getSubject()).firstResult();
+        userVessel.removeTrackingVessel(mmsi);
+        userVesselRepository.update(userVessel);
+    }
 }
