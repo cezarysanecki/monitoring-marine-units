@@ -51,8 +51,8 @@ public class Track {
         Optional<Point> point = points.stream()
                 .max(Comparator.comparing(p -> p.timestamp));
 
-        point.ifPresentOrElse(p1 -> {
-            if (timestamp.isAfter(p1.timestamp)) {
+        point.ifPresentOrElse(p -> {
+            if (timestamp.isAfter(p.timestamp)) {
                 points.add(Point.createPoint(timestamp, x, y));
             }
         }, () -> points.add(Point.createPoint(timestamp, x, y)));
