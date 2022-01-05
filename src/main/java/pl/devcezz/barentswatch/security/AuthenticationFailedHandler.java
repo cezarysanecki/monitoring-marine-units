@@ -42,7 +42,8 @@ record AuthenticationResponse(List<String> errors) {}
 
 enum ErrorCode {
     INVALID_TOKEN(9, "invalid_token"),
-    EXPIRED_TOKEN(1, "expired_token");
+    EXPIRED_TOKEN(1, "expired_token"),
+    UNPARSABLE_TOKEN(17, "unparsable_token");
 
     ErrorCode(int errorCode, String message) {
         this.errorCode = errorCode;
