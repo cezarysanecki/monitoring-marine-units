@@ -1,6 +1,7 @@
 package pl.devcezz.barentswatch.user.entity;
 
 import pl.devcezz.barentswatch.user.exception.VesselAlreadyTrackedException;
+import pl.devcezz.barentswatch.user.tracker.PointRegistry;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,16 +20,6 @@ public class Vessel {
         vessel.status = Status.TRACKED;
         vessel.tracks.add(Track.createOpenedTrack());
         return vessel;
-    }
-
-    boolean canAddPoint(LocalDateTime timestamp) {
-        Optional<LocalDateTime> lastUpdate = tracks.stream()
-                .map(Track::getLastUpdate)
-                .flatMap(Optional::stream)
-                .max(LocalDateTime::compareTo);
-
-        return lastUpdate.map(lastTimestamp -> lastTimestamp.isBefore(timestamp))
-                .orElse(true);
     }
 
     boolean isFor(Integer mmsi) {
@@ -56,6 +47,27 @@ public class Vessel {
         status = Vessel.Status.SUSPENDED;
         tracks.removeIf(Track::hasNoPoints);
         tracks.forEach(Track::close);
+    }
+
+    void addPoint(PointRegistry pointRegistry) {
+        if (cannotAddPoint(pointRegistry.timestamp())) {
+            return;
+        }
+
+        tracks.stream()
+                .filter(Track::isOpened)
+                .findFirst()
+                .ifPresent(track -> track.addPoint(pointRegistry.timestamp(), pointRegistry.x(), pointRegistry.y()));
+    }
+
+    private boolean cannotAddPoint(LocalDateTime timestamp) {
+        Optional<LocalDateTime> lastUpdate = tracks.stream()
+                .map(Track::getLastUpdate)
+                .flatMap(Optional::stream)
+                .max(LocalDateTime::compareTo);
+
+        return lastUpdate.map(lastTimestamp -> !lastTimestamp.isAfter(timestamp))
+                .orElse(false);
     }
 
     enum Status {

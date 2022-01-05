@@ -59,11 +59,8 @@ public class UserVessel {
 
         vessels.stream()
                 .filter(vessel -> vessel.isTracking(mmsi))
-                .filter(vessel -> vessel.canAddPoint(pointRegistry.timestamp()))
-                .flatMap(vessel -> vessel.tracks.stream())
-                .filter(Track::isOpened)
                 .findFirst()
-                .ifPresent(track -> track.addPoint(pointRegistry.timestamp(), pointRegistry.x(), pointRegistry.y()));
+                .ifPresent(vessel -> vessel.addPoint(pointRegistry));
     }
 
     public List<Integer> trackedMmsi() {
