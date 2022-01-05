@@ -10,4 +10,12 @@ public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
     @JsonIgnoreProperties(ignoreUnknown = true)
     record Geometry(String type, List<Double> coordinates) {
     }
+
+    public Double fetchX() {
+        return geometry.coordinates.get(0);
+    }
+
+    public Double fetchY() {
+        return geometry.coordinates.get(1);
+    }
 }
