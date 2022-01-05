@@ -25,6 +25,10 @@ public class Track {
         return status.equals(TrackStatus.OPENED);
     }
 
+    void close() {
+        status = TrackStatus.CLOSED;
+    }
+
     void addPoint(LocalDateTime timestamp, Double x, Double y) {
         Optional<Point> point = points.stream()
                 .max(Comparator.comparing(p -> p.timestamp));

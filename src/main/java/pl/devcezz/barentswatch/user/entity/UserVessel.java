@@ -25,6 +25,13 @@ public class UserVessel {
         vessels.add(Vessel.createNewVessel(mmsi));
     }
 
+    public void stopTrackingVessel(Integer mmsi) {
+        vessels.stream()
+                .filter(vessel -> vessel.isTracking(mmsi))
+                .findFirst()
+                .ifPresent(Vessel::stopTracking);
+    }
+
     public boolean containsVessel(Integer mmsi) {
         return vessels.stream()
                 .anyMatch(vessel -> vessel.mmsi.equals(mmsi));

@@ -21,6 +21,11 @@ public class Vessel {
         return this.status.equals(Vessel.Status.TRACKED) && this.mmsi.equals(mmsi);
     }
 
+    void stopTracking() {
+        status = Vessel.Status.SUSPENDED;
+        tracks.forEach(Track::close);
+    }
+
     enum Status {
         TRACKED, SUSPENDED
     }
