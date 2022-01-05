@@ -45,17 +45,17 @@ public class UserVesselsResource {
     @Path("/track/suspend")
     @RolesAllowed({ "user" })
     public void suspendTrackingVessel(Integer mmsi) {
-        UserVessel userVessel = userVesselRepository.find("email", token.getSubject()).firstResult();
-        userVessel.suspendTrackingVessel(mmsi);
-        userVesselRepository.update(userVessel);
+        UserVessel user = userVesselRepository.find("email", token.getSubject()).firstResult();
+        user.suspendTrackingVessel(mmsi);
+        userVesselRepository.update(user);
     }
 
     @DELETE
     @Path("/track")
     @RolesAllowed({ "user" })
     public void removeTrackingVessel(Integer mmsi) {
-        UserVessel userVessel = userVesselRepository.find("email", token.getSubject()).firstResult();
-        userVessel.removeTrackingVessel(mmsi);
-        userVesselRepository.update(userVessel);
+        UserVessel user = userVesselRepository.find("email", token.getSubject()).firstResult();
+        user.removeTrackingVessel(mmsi);
+        userVesselRepository.update(user);
     }
 }
