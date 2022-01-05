@@ -2,6 +2,7 @@ package pl.devcezz.barentswatch.user.entity;
 
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
+import pl.devcezz.barentswatch.user.VesselAlreadySuspendedException;
 import pl.devcezz.barentswatch.user.tracker.PointRegistry;
 
 import java.util.ArrayList;
@@ -33,20 +34,14 @@ public class UserVessel {
     }
 
     public void suspendTrackingVessel(Integer mmsi) {
+        if (vessels.stream().anyMatch(vessel -> vessel.isSuspended(mmsi))) {
+            throw new VesselAlreadySuspendedException();
+        }
+
         vessels.stream()
                 .filter(vessel -> vessel.isTracking(mmsi))
                 .findFirst()
                 .ifPresent(Vessel::suspendTracking);
-    }
-
-    public boolean isSuspended(Integer mmsi) {
-        return vessels.stream()
-                .anyMatch(vessel -> vessel.isSuspended(mmsi));
-    }
-
-    public boolean containsVessel(Integer mmsi) {
-        return vessels.stream()
-                .anyMatch(vessel -> vessel.mmsi.equals(mmsi));
     }
 
     public void addPointForVessel(Integer mmsi, PointRegistry pointRegistry) {

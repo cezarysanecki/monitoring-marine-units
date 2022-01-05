@@ -32,11 +32,6 @@ public class UserVesselsResource {
     @RolesAllowed({ "user" })
     public void suspendTrackingVessel(Integer mmsi) {
         UserVessel userVessel = userVesselRepository.find("email", token.getSubject()).firstResult();
-
-        if (userVessel.isSuspended(mmsi)) {
-            throw new VesselAlreadySuspendedException("Vessel is already suspended");
-        }
-
         userVessel.suspendTrackingVessel(mmsi);
         userVesselRepository.update(userVessel);
     }
