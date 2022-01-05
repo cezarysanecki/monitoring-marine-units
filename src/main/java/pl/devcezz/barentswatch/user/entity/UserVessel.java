@@ -4,7 +4,6 @@ import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
 import pl.devcezz.barentswatch.user.tracker.PointRegistry;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,11 +24,16 @@ public class UserVessel {
         vessels.add(Vessel.createNewVessel(mmsi));
     }
 
-    public void stopTrackingVessel(Integer mmsi) {
+    public void suspendTrackingVessel(Integer mmsi) {
         vessels.stream()
                 .filter(vessel -> vessel.isTracking(mmsi))
                 .findFirst()
                 .ifPresent(Vessel::stopTracking);
+    }
+
+    public boolean isSuspended(Integer mmsi) {
+        return vessels.stream()
+                .anyMatch(vessel -> vessel.isSuspended(mmsi));
     }
 
     public boolean containsVessel(Integer mmsi) {

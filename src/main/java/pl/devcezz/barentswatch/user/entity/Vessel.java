@@ -18,7 +18,11 @@ public class Vessel {
     }
 
     boolean isTracking(Integer mmsi) {
-        return this.status.equals(Vessel.Status.TRACKED) && this.mmsi.equals(mmsi);
+        return this.status.equals(Status.TRACKED) && this.mmsi.equals(mmsi);
+    }
+
+    boolean isSuspended(Integer mmsi) {
+        return this.status.equals(Status.SUSPENDED) && this.mmsi.equals(mmsi);
     }
 
     void stopTracking() {
