@@ -9,7 +9,7 @@ import java.util.Optional;
 public class Track {
 
     public TrackStatus status;
-    public List<Point> points = new ArrayList<>();
+    public List<Point> points;
 
     enum TrackStatus {
         OPENED, CLOSED
@@ -30,6 +30,10 @@ public class Track {
     }
 
     void addPoint(LocalDateTime timestamp, Double x, Double y) {
+        if (points == null) {
+            points = new ArrayList<>();
+        }
+
         Optional<Point> point = points.stream()
                 .max(Comparator.comparing(p -> p.timestamp));
 
