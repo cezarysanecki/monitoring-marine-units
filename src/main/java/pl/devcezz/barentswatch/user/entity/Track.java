@@ -21,6 +21,16 @@ public class Track {
         return track;
     }
 
+    Optional<LocalDateTime> getLastUpdate() {
+        if (points == null) {
+            return Optional.empty();
+        }
+
+        return points.stream()
+                .map(point -> point.timestamp)
+                .max(LocalDateTime::compareTo);
+    }
+
     boolean isOpened() {
         return status.equals(TrackStatus.OPENED);
     }

@@ -59,6 +59,7 @@ public class UserVessel {
 
         vessels.stream()
                 .filter(vessel -> vessel.isTracking(mmsi))
+                .filter(vessel -> vessel.canAddPoint(pointRegistry.timestamp()))
                 .flatMap(vessel -> vessel.tracks.stream())
                 .filter(Track::isOpened)
                 .findFirst()
