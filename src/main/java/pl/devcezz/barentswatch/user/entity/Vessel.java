@@ -1,6 +1,6 @@
 package pl.devcezz.barentswatch.user.entity;
 
-import pl.devcezz.barentswatch.user.VesselAlreadyTrackedException;
+import pl.devcezz.barentswatch.user.exception.VesselAlreadyTrackedException;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

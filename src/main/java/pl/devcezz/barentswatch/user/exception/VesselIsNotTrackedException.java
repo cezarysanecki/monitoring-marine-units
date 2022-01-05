@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch.user;
+package pl.devcezz.barentswatch.user.exception;
 
 import pl.devcezz.barentswatch.BarentsWatchException;
 

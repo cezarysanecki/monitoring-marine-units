@@ -2,8 +2,8 @@ package pl.devcezz.barentswatch.user.entity;
 
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
-import pl.devcezz.barentswatch.user.VesselAlreadySuspendedException;
-import pl.devcezz.barentswatch.user.VesselIsNotTrackedException;
+import pl.devcezz.barentswatch.user.exception.VesselAlreadySuspendedException;
+import pl.devcezz.barentswatch.user.exception.VesselIsNotTrackedException;
 import pl.devcezz.barentswatch.user.tracker.PointRegistry;
 
 import java.util.ArrayList;
