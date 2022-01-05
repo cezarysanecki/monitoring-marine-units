@@ -66,7 +66,7 @@ public class Vessel {
                 .flatMap(Optional::stream)
                 .max(LocalDateTime::compareTo);
 
-        return lastUpdate.map(lastTimestamp -> !lastTimestamp.isAfter(timestamp))
+        return lastUpdate.map(lastTimestamp -> !lastTimestamp.isBefore(timestamp))
                 .orElse(false);
     }
 
