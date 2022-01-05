@@ -39,6 +39,10 @@ public class Track {
         status = TrackStatus.CLOSED;
     }
 
+    boolean hasNoPoints() {
+        return points == null || points.isEmpty();
+    }
+
     void addPoint(LocalDateTime timestamp, Double x, Double y) {
         if (points == null) {
             points = new ArrayList<>();

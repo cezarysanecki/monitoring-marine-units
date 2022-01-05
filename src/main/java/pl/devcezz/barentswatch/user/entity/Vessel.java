@@ -54,6 +54,7 @@ public class Vessel {
 
     void suspendTracking() {
         status = Vessel.Status.SUSPENDED;
+        tracks.removeIf(Track::hasNoPoints);
         tracks.forEach(Track::close);
     }
 
