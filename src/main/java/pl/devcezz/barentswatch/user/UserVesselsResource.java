@@ -23,12 +23,7 @@ public class UserVesselsResource {
     @RolesAllowed({ "user" })
     public void addVesselToTrack(Integer mmsi) {
         UserVessel userVessel = userVesselRepository.find("email", token.getSubject()).firstResult();
-
-        if (userVessel.containsVessel(mmsi)) {
-            throw new VesselAlreadyTrackedException("Vessel is already tracked");
-        }
-
-        userVessel.trackNewVessel(mmsi);
+        userVessel.trackVessel(mmsi);
         userVesselRepository.update(userVessel);
     }
 

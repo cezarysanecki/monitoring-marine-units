@@ -6,8 +6,9 @@ import pl.devcezz.barentswatch.user.tracker.PointRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
-@MongoEntity(collection="userVessel")
+@MongoEntity(collection = "userVessel")
 public class UserVessel {
 
     public ObjectId id;
@@ -20,15 +21,22 @@ public class UserVessel {
         return userVessel;
     }
 
-    public void trackNewVessel(Integer mmsi) {
-        vessels.add(Vessel.createNewVessel(mmsi));
+    public void trackVessel(Integer mmsi) {
+        Optional<Vessel> containedVessel = vessels.stream()
+                .filter(vessel -> vessel.isFor(mmsi))
+                .findFirst();
+
+        containedVessel.ifPresentOrElse(
+                Vessel::resumeTracking,
+                () -> vessels.add(Vessel.createNewVessel(mmsi))
+        );
     }
 
     public void suspendTrackingVessel(Integer mmsi) {
         vessels.stream()
                 .filter(vessel -> vessel.isTracking(mmsi))
                 .findFirst()
-                .ifPresent(Vessel::stopTracking);
+                .ifPresent(Vessel::suspendTracking);
     }
 
     public boolean isSuspended(Integer mmsi) {
