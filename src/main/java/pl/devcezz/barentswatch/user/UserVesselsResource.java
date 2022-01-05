@@ -2,7 +2,6 @@ package pl.devcezz.barentswatch.user;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import pl.devcezz.barentswatch.user.entity.UserVessel;
-import pl.devcezz.barentswatch.user.entity.Vessel;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -28,7 +27,7 @@ public class UserVesselsResource {
             throw new VesselAlreadyTrackedException("Vessel is already tracked");
         }
 
-        userVessel.vessels.add(Vessel.createNewVessel(mmsi));
+        userVessel.trackNewVessel(mmsi);
         userVesselRepository.update(userVessel);
     }
 }

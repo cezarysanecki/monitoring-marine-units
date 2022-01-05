@@ -15,9 +15,7 @@ public class VesselService {
 
     @ConsumeEvent(value = "new-client")
     public void addNewClient(ClientAddedEvent event) {
-        UserVessel userVessel = new UserVessel();
-        userVessel.email = event.email();
-
+        UserVessel userVessel = UserVessel.createUser(event.email());
         userVesselRepository.persist(userVessel);
     }
 }

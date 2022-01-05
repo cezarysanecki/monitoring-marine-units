@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Vessel {
+
     public Integer mmsi;
     public Status status;
     public List<Track> tracks = new ArrayList<>();
 
-    public static Vessel createNewVessel(Integer mmsi) {
+    static Vessel createNewVessel(Integer mmsi) {
         Vessel vessel = new Vessel();
         vessel.mmsi = mmsi;
         vessel.status = Status.TRACKED;
@@ -16,7 +17,11 @@ public class Vessel {
         return vessel;
     }
 
-    public enum Status {
+    boolean isTracking(Integer mmsi) {
+        return this.status.equals(Vessel.Status.TRACKED) && this.mmsi.equals(mmsi);
+    }
+
+    enum Status {
         TRACKED, SUSPENDED
     }
 }
