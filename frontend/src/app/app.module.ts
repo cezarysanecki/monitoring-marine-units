@@ -1,18 +1,30 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import {AppComponent} from './app.component';
+import {
+  DataLabelService,
+  LegendService,
+  MapsComponent,
+  MapsModule,
+  MapsTooltipService
+} from "@syncfusion/ej2-angular-maps";
 
 @NgModule({
+  imports: [
+    BrowserModule, MapsModule
+  ],
   declarations: [
     AppComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
+  bootstrap: [
+    AppComponent
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    MapsComponent,
+    LegendService,
+    DataLabelService,
+    MapsTooltipService
+  ]
 })
 export class AppModule { }
