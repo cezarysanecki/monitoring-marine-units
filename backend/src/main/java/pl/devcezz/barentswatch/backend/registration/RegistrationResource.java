@@ -6,6 +6,7 @@ import pl.devcezz.barentswatch.backend.security.exception.ClientAlreadyRegistere
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -27,7 +28,7 @@ public class RegistrationResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response registerClient(RegistrationRequest request) {
+    public Response registerClient(@Valid RegistrationRequest request) {
         Optional<Client> foundedClient = clientRepository.find("email", request.email()).firstResultOptional();
 
         foundedClient.ifPresentOrElse(
@@ -39,4 +40,4 @@ public class RegistrationResource {
     }
 }
 
-record RegistrationRequest(@Email String email, @NotEmpty @Size(min = 4) String password) {}
+record RegistrationRequest(@Email(regexp = ".+@.+\\..+") String email, @NotEmpty @Size(min = 4) String password) {}
