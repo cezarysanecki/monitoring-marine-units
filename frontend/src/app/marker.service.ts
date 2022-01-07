@@ -15,7 +15,7 @@ export class MarkerService {
     return 20 * (val / maxVal);
   }
 
-  makeCapitalMarkers(map: L.Map): void {
+  makeCapitalMarkers(map: L.Map) {
     this.http.get(this.capitals).subscribe((res: any) => {
       for (const c of res.features) {
         const lon = c.geometry.coordinates[0];
@@ -27,7 +27,7 @@ export class MarkerService {
     })
   }
 
-  makeCapitalCircleMarkers(map: L.Map): void {
+  makeCapitalCircleMarkers(map: L.Map) {
     this.http.get(this.capitals).subscribe((res: any) => {
 
       const maxPop = Math.max(...res.features.map((x: any) => x.properties.population), 0);

@@ -26,7 +26,7 @@ export class MapComponent implements AfterViewInit {
 
   private map: any;
 
-  private initMap(): void {
+  private initMap() {
     this.map = L.map('map', {
       center: [ 39.8282, -98.5795 ],
       zoom: 3
@@ -43,7 +43,7 @@ export class MapComponent implements AfterViewInit {
 
   constructor(private markerService: MarkerService) { }
 
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     this.initMap();
     this.markerService.makeCapitalCircleMarkers(this.map);
   }
