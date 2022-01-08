@@ -1,6 +1,8 @@
-import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Injectable} from '@angular/core';
 import * as L from 'leaflet';
+import {VesselPositionService} from "./services/vessel-position.service";
+import {mergeMap, timer} from "rxjs";
+import {VesselRegistry} from "./types/vessel-position.type";
 import {PopupService} from "./popup.service";
 
 @Injectable({
@@ -8,42 +10,33 @@ import {PopupService} from "./popup.service";
 })
 export class MarkerService {
 
-  capitals: string = '/assets/data/usa-capitals.geojson';
+  markers: L.Marker[] = [];
 
-  constructor(private http: HttpClient, private popupService: PopupService) { }
+  constructor(private vesselPositionService: VesselPositionService, private popupService: PopupService) { }
 
   static scaledRadius(val: number, maxVal: number): number {
     return 20 * (val / maxVal);
   }
 
-  makeCapitalMarkers(map: L.Map) {
-    this.http.get(this.capitals).subscribe((res: any) => {
-      for (const c of res.features) {
-        const lon = c.geometry.coordinates[0];
-        const lat = c.geometry.coordinates[1];
-        const marker = L.marker([lat, lon]);
+  makeVesselsMarkers(map: L.Map) {
+    timer(0, 10 * 1000)
+      .pipe(
+        mergeMap(() => this.vesselPositionService.fetchVesselsPositions(map))
+      )
+      .subscribe((registries: VesselRegistry[]) => {
+        this.markers.forEach(marker => map.removeLayer(marker));
+        this.markers = [];
 
-        marker.addTo(map);
-      }
-    })
-  }
+        registries.forEach(registry => {
+          const lon = registry.point.x;
+          const lat = registry.point.y;
+          const marker = L.marker([lat, lon]);
 
-  makeCapitalCircleMarkers(map: L.Map) {
-    this.http.get(this.capitals).subscribe((res: any) => {
+          marker.bindPopup(this.popupService.makeVesselPopup(registry))
+          marker.addTo(map);
 
-      const maxPop = Math.max(...res.features.map((x: any) => x.properties.population), 0);
-
-      for (const c of res.features) {
-        const lon = c.geometry.coordinates[0];
-        const lat = c.geometry.coordinates[1];
-        const circle = L.circleMarker([lat, lon], {
-          radius: MarkerService.scaledRadius(c.properties.population, maxPop)
+          this.markers.push(marker);
         });
-
-        circle.bindPopup(this.popupService.makeCapitalPopup(c.properties));
-
-        circle.addTo(map);
-      }
-    });
+      });
   }
 }

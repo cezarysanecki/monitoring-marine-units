@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {VesselRegistry} from "./types/vessel-position.type";
 
 @Injectable({
   providedIn: 'root'
@@ -7,10 +8,10 @@ export class PopupService {
 
   constructor() { }
 
-  makeCapitalPopup(data: any): string {
+  makeVesselPopup(registry: VesselRegistry): string {
     return `` +
-      `<div>Capital: ${ data.name }</div>` +
-      `<div>State: ${ data.state }</div>` +
-      `<div>Population: ${ data.population }</div>`
+      `<div>MMSI: ${ registry.mmsi }</div>` +
+      `<div>x: ${ registry.point.x }</div>` +
+      `<div>y: ${ registry.point.y }</div>`;
   }
 }

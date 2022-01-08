@@ -1,7 +1,6 @@
 import {AfterViewInit, Component} from '@angular/core';
 import * as L from 'leaflet';
 import {MarkerService} from "../marker.service";
-import {ShapeService} from "../shape.service";
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -26,12 +25,13 @@ L.Marker.prototype.options.icon = iconDefault;
 export class MapComponent implements AfterViewInit {
 
   private map: any;
-  private states: any;
+
+  constructor(private markerService: MarkerService) { }
 
   private initMap() {
     this.map = L.map('map', {
-      center: [ 39.8282, -98.5795 ],
-      zoom: 3
+      center: [60.22551327883952, 5.4346041382692025],
+      zoom: 9
     });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -43,59 +43,8 @@ export class MapComponent implements AfterViewInit {
     tiles.addTo(this.map);
   }
 
-  private highlightFeature(e: any) {
-    const layer = e.target;
-
-    layer.setStyle({
-      weight: 10,
-      opacity: 1.0,
-      color: '#DFA612',
-      fillOpacity: 1.0,
-      fillColor: '#FAE042'
-    });
-  }
-
-  private resetFeature(e: any) {
-    const layer = e.target;
-
-    layer.setStyle({
-      weight: 3,
-      opacity: 0.5,
-      color: '#008f68',
-      fillOpacity: 0.8,
-      fillColor: '#6DB65B'
-    });
-  }
-
-  private initStatesLayer() {
-    const stateLayer = L.geoJSON(this.states, {
-      style: () => ({
-        weight: 3,
-        opacity: 0.5,
-        color: '#008f68',
-        fillOpacity: 0.8,
-        fillColor: '#6DB65B'
-      }),
-      onEachFeature: (feature, layer) => (
-        layer.on({
-          mouseover: (e) => (this.highlightFeature(e)),
-          mouseout: (e) => (this.resetFeature(e)),
-        })
-      )
-    });
-
-    this.map.addLayer(stateLayer);
-    stateLayer.bringToBack();
-  }
-
-  constructor(private markerService: MarkerService, private shapeService: ShapeService) { }
-
   ngAfterViewInit() {
     this.initMap();
-    this.markerService.makeCapitalCircleMarkers(this.map);
-    this.shapeService.getStateShapes().subscribe(states => {
-      this.states = states;
-      this.initStatesLayer();
-    });
+    this.markerService.makeVesselsMarkers(this.map);
   }
 }

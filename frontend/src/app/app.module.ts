@@ -6,7 +6,6 @@ import {MapComponent} from './map/map.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MarkerService} from "./marker.service";
 import {PopupService} from "./popup.service";
-import {ShapeService} from "./shape.service";
 import {environment} from "../environments/environment";
 import {NavbarComponent} from "./navbar/navbar.component";
 import {ToolbarComponent} from "./toolbar/toolbar.component";
@@ -35,7 +34,6 @@ import {ApiInterceptor} from "./auth/api.interceptor";
     },
     MarkerService,
     PopupService,
-    ShapeService,
   ],
   bootstrap: [AppComponent]
 })
