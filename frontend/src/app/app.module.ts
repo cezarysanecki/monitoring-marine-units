@@ -8,22 +8,27 @@ import {MarkerService} from "./marker.service";
 import {PopupService} from "./popup.service";
 import {ShapeService} from "./shape.service";
 import {environment} from "../environments/environment";
+import {NavbarComponent} from "./navbar/navbar.component";
+import {ToolbarComponent} from "./toolbar/toolbar.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    MapComponent
+    MapComponent,
+    NavbarComponent,
+    ToolbarComponent,
   ],
   imports: [
     BrowserModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
+    {provide: "BASE_API_URL", useValue: environment.apiUrl},
     MarkerService,
     PopupService,
     ShapeService,
-    { provide: "BASE_API_URL", useValue: environment.apiUrl }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
