@@ -3,13 +3,14 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
 import {MapComponent} from './map/map.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MarkerService} from "./marker.service";
 import {PopupService} from "./popup.service";
 import {ShapeService} from "./shape.service";
 import {environment} from "../environments/environment";
 import {NavbarComponent} from "./navbar/navbar.component";
 import {ToolbarComponent} from "./toolbar/toolbar.component";
+import {ApiInterceptor} from "./auth/api.interceptor";
 
 @NgModule({
   declarations: [
@@ -23,7 +24,15 @@ import {ToolbarComponent} from "./toolbar/toolbar.component";
     HttpClientModule,
   ],
   providers: [
-    {provide: "BASE_API_URL", useValue: environment.apiUrl},
+    {
+      provide: "BASE_API_URL",
+      useValue: environment.apiUrl
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiInterceptor,
+      multi: true
+    },
     MarkerService,
     PopupService,
     ShapeService,
