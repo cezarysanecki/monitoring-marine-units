@@ -1,6 +1,6 @@
 package pl.devcezz.barentswatch.backend.security.exception;
 
-import pl.devcezz.barentswatch.backend.BarentsWatchException;
+import pl.devcezz.barentswatch.backend.app.BarentsWatchException;
 
 public class ClientAlreadyRegisteredException extends BarentsWatchException {
 

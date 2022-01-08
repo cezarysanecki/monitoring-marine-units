@@ -1,9 +1,7 @@
 package pl.devcezz.barentswatch.backend.vessel;
 
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-import pl.devcezz.barentswatch.backend.Registry;
-import pl.devcezz.barentswatch.backend.externalapi.BarentsWatchExternalApi;
-import pl.devcezz.barentswatch.backend.externalapi.OpenPosition;
+import pl.devcezz.barentswatch.backend.common.Point;
+import pl.devcezz.barentswatch.backend.common.VesselRegistry;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -20,25 +18,36 @@ import java.util.List;
 public class VesselResource {
 
     @Inject
-    @RestClient
-    BarentsWatchExternalApi barentsWatchExternalApi;
+    VesselService vesselService;
 
     @GET
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/position")
-    public List<OpenPosition> getVesselsPositionFor(@QueryParam(value = "xMin") Double xMin,
-                                                    @QueryParam(value = "xMax") Double xMax,
-                                                    @QueryParam(value = "yMin") Double yMin,
-                                                    @QueryParam(value = "yMax") Double yMax) {
-        return barentsWatchExternalApi.getVesselsPositionsFor(Registry.accessToken.get(), xMin, xMax, yMin, yMax);
+    public List<VesselPointResponse> getVesselsPositionFor(@QueryParam(value = "xMin") Double xMin,
+                                                           @QueryParam(value = "xMax") Double xMax,
+                                                           @QueryParam(value = "yMin") Double yMin,
+                                                           @QueryParam(value = "yMax") Double yMax) {
+        return vesselService.fetchVesselsPositionsFor(new Area(xMin, xMax, yMin, yMax)).stream()
+                .map(this::convertToResponse)
+                .toList();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/position/{mmsi}")
     @RolesAllowed({ "user" })
-    public OpenPosition getVesselsPositionFor(@PathParam(value = "mmsi") Integer mmsi) {
-        return barentsWatchExternalApi.getVesselPositionFor(Registry.accessToken.get(), mmsi);
+    public VesselPointResponse getVesselsPositionFor(@PathParam(value = "mmsi") Integer mmsi) {
+        return convertToResponse(vesselService.fetchVesselPosition(mmsi));
+    }
+
+    private VesselPointResponse convertToResponse(VesselRegistry registry) {
+        return new VesselPointResponse(
+                registry.timestamp().toString(),
+                registry.mmsi(),
+                registry.point()
+        );
     }
 }
+
+record VesselPointResponse(String timestamp, Integer mmsi, Point point) {}

@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch.backend;
+package pl.devcezz.barentswatch.backend.app;
 
 public class BarentsWatchException extends RuntimeException {
 

@@ -34,9 +34,7 @@ public class UserVesselsResource {
         user.trackVessel(mmsi);
 
         OpenPosition openPosition = barentsWatchExternalApi.getVesselPositionFor(Registry.accessToken.get(), mmsi);
-        user.addPointForVessel(
-                openPosition.mmsi(),
-                openPosition.createPointRegistry());
+        user.addPointForVessel(openPosition.createVesselRegistry());
 
         userVesselRepository.update(user);
     }

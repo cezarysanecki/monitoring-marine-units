@@ -1,6 +1,6 @@
 package pl.devcezz.barentswatch.backend.user.entity;
 
-import pl.devcezz.barentswatch.backend.user.tracker.PointRegistry;
+import pl.devcezz.barentswatch.backend.common.VesselRegistry;
 import pl.devcezz.barentswatch.backend.user.exception.VesselAlreadyTrackedException;
 
 import java.time.LocalDateTime;
@@ -49,15 +49,15 @@ public class Vessel {
         tracks.forEach(Track::close);
     }
 
-    void addPoint(PointRegistry pointRegistry) {
-        if (cannotAddPoint(pointRegistry.timestamp())) {
+    void addPoint(VesselRegistry vesselRegistry) {
+        if (cannotAddPoint(vesselRegistry.timestamp())) {
             return;
         }
 
         tracks.stream()
                 .filter(Track::isOpened)
                 .findFirst()
-                .ifPresent(track -> track.addPoint(pointRegistry.timestamp(), pointRegistry.x(), pointRegistry.y()));
+                .ifPresent(track -> track.addPoint(vesselRegistry.timestamp(), vesselRegistry.point().x(), vesselRegistry.point().y()));
     }
 
     private boolean cannotAddPoint(LocalDateTime timestamp) {

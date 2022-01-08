@@ -34,9 +34,7 @@ public class VesselTrackerScheduler {
 
         users.forEach(
                 user -> mmsiOpenPositions.forEach(
-                        openPosition -> user.addPointForVessel(
-                                openPosition.mmsi(),
-                                openPosition.createPointRegistry())
+                        openPosition -> user.addPointForVessel(openPosition.createVesselRegistry())
                 )
         );
 

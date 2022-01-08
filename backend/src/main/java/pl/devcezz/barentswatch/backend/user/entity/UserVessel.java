@@ -2,7 +2,7 @@ package pl.devcezz.barentswatch.backend.user.entity;
 
 import pl.devcezz.barentswatch.backend.user.exception.VesselAlreadySuspendedException;
 import pl.devcezz.barentswatch.backend.user.exception.VesselIsNotTrackedException;
-import pl.devcezz.barentswatch.backend.user.tracker.PointRegistry;
+import pl.devcezz.barentswatch.backend.common.VesselRegistry;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
 
@@ -52,15 +52,15 @@ public class UserVessel {
         vessels.removeIf(vessel -> vessel.isFor(mmsi));
     }
 
-    public void addPointForVessel(Integer mmsi, PointRegistry pointRegistry) {
-        if (vessels.stream().noneMatch(vessel -> vessel.isTracking(mmsi))) {
+    public void addPointForVessel(VesselRegistry vesselRegistry) {
+        if (vessels.stream().noneMatch(vessel -> vessel.isTracking(vesselRegistry.mmsi()))) {
             return;
         }
 
         vessels.stream()
-                .filter(vessel -> vessel.isTracking(mmsi))
+                .filter(vessel -> vessel.isTracking(vesselRegistry.mmsi()))
                 .findFirst()
-                .ifPresent(vessel -> vessel.addPoint(pointRegistry));
+                .ifPresent(vessel -> vessel.addPoint(vesselRegistry));
     }
 
     public List<Integer> trackedMmsi() {

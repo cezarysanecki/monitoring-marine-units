@@ -1,7 +1,7 @@
 package pl.devcezz.barentswatch.backend.externalapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import pl.devcezz.barentswatch.backend.user.tracker.PointRegistry;
+import pl.devcezz.barentswatch.backend.common.VesselRegistry;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,11 +11,14 @@ import java.util.List;
 public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    record Geometry(String type, List<Double> coordinates) {
+    public record Geometry(String type, List<Double> coordinates) { }
+
+    public VesselRegistry createVesselRegistry() {
+        return new VesselRegistry(fetchTimestamp(), mmsi, fetchX(), fetchY());
     }
 
-    public PointRegistry createPointRegistry() {
-        return new PointRegistry(fetchTimestamp(), fetchX(), fetchY());
+    public boolean isPoint() {
+        return geometry.type.equals("Point");
     }
 
     private LocalDateTime fetchTimestamp() {
@@ -23,10 +26,10 @@ public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
     }
 
     private Double fetchX() {
-        return geometry.coordinates.get(0);
+        return geometry.coordinates().get(0);
     }
 
     private Double fetchY() {
-        return geometry.coordinates.get(1);
+        return geometry.coordinates().get(1);
     }
 }

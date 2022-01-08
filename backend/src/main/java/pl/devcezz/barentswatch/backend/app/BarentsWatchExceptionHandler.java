@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch.backend;
+package pl.devcezz.barentswatch.backend.app;
 
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
