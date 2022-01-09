@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as L from 'leaflet';
 import {VesselPositionService} from "./services/vessel-position.service";
-import {mergeMap, timer} from "rxjs";
 import {VesselRegistry} from "./types/vessel-position.type";
 import {PopupService} from "./popup.service";
 
@@ -10,7 +9,7 @@ import {PopupService} from "./popup.service";
 })
 export class MarkerService {
 
-  markers: L.Marker[] = [];
+  markers: L.CircleMarker[] = [];
 
   constructor(private vesselPositionService: VesselPositionService, private popupService: PopupService) { }
 
@@ -19,10 +18,7 @@ export class MarkerService {
   }
 
   makeVesselsMarkers(map: L.Map) {
-    timer(0, 10 * 1000)
-      .pipe(
-        mergeMap(() => this.vesselPositionService.fetchVesselsPositions(map))
-      )
+    this.vesselPositionService.fetchVesselsPositions(map)
       .subscribe((registries: VesselRegistry[]) => {
         this.markers.forEach(marker => map.removeLayer(marker));
         this.markers = [];
@@ -30,7 +26,7 @@ export class MarkerService {
         registries.forEach(registry => {
           const lon = registry.point.x;
           const lat = registry.point.y;
-          const marker = L.marker([lat, lon]);
+          const marker = L.circleMarker([lat, lon], {radius: 3});
 
           marker.bindPopup(this.popupService.makeVesselPopup(registry))
           marker.addTo(map);

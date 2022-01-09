@@ -1,6 +1,8 @@
 import {AfterViewInit, Component} from '@angular/core';
 import * as L from 'leaflet';
 import {MarkerService} from "../marker.service";
+import {Projection} from "leaflet";
+import LonLat = Projection.LonLat;
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -30,9 +32,18 @@ export class MapComponent implements AfterViewInit {
 
   private initMap() {
     this.map = L.map('map', {
-      center: [60.22551327883952, 5.4346041382692025],
-      zoom: 9
+      center: [ 60, 10.5 ],
+      zoom: 4,
+      maxBounds: [[ 85, -50 ], [ 20, 85 ]]
     });
+
+    this.map.on('zoomend', () => {
+      this.markerService.makeVesselsMarkers(this.map)
+    });
+
+    this.map.on('moveend', () => {
+      this.markerService.makeVesselsMarkers(this.map)
+    })
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
