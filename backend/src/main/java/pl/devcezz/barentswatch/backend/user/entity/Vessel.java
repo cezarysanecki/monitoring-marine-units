@@ -57,7 +57,10 @@ public class Vessel {
         tracks.stream()
                 .filter(Track::isOpened)
                 .findFirst()
-                .ifPresent(track -> track.addPoint(vesselRegistry.timestamp(), vesselRegistry.point().x(), vesselRegistry.point().y()));
+                .ifPresent(track -> track.addPoint(
+                        vesselRegistry.timestamp(),
+                        vesselRegistry.coordinates().longitude(),
+                        vesselRegistry.coordinates().latitude()));
     }
 
     private boolean cannotAddPoint(LocalDateTime timestamp) {

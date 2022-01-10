@@ -9,7 +9,7 @@ import java.util.Optional;
 public class Track {
 
     public TrackStatus status;
-    public List<Point> points;
+    public List<Coordinates> coordinates;
 
     enum TrackStatus {
         OPENED, CLOSED
@@ -22,12 +22,12 @@ public class Track {
     }
 
     Optional<LocalDateTime> getLastUpdate() {
-        if (points == null) {
+        if (coordinates == null) {
             return Optional.empty();
         }
 
-        return points.stream()
-                .map(point -> point.timestamp)
+        return coordinates.stream()
+                .map(coordinates -> coordinates.timestamp)
                 .max(LocalDateTime::compareTo);
     }
 
@@ -40,21 +40,21 @@ public class Track {
     }
 
     boolean hasNoPoints() {
-        return points == null || points.isEmpty();
+        return coordinates == null || coordinates.isEmpty();
     }
 
-    void addPoint(LocalDateTime timestamp, Double x, Double y) {
-        if (points == null) {
-            points = new ArrayList<>();
+    void addPoint(LocalDateTime timestamp, Double latitude, Double longitude) {
+        if (coordinates == null) {
+            coordinates = new ArrayList<>();
         }
 
-        Optional<Point> point = points.stream()
+        Optional<Coordinates> point = coordinates.stream()
                 .max(Comparator.comparing(p -> p.timestamp));
 
         point.ifPresentOrElse(p -> {
             if (timestamp.isAfter(p.timestamp)) {
-                points.add(Point.createPoint(timestamp, x, y));
+                coordinates.add(Coordinates.createPoint(timestamp, latitude, longitude));
             }
-        }, () -> points.add(Point.createPoint(timestamp, x, y)));
+        }, () -> coordinates.add(Coordinates.createPoint(timestamp, latitude, longitude)));
     }
 }

@@ -1,6 +1,6 @@
 package pl.devcezz.barentswatch.backend.vessel;
 
-import pl.devcezz.barentswatch.backend.common.Point;
+import pl.devcezz.barentswatch.backend.common.Coordinates;
 import pl.devcezz.barentswatch.backend.common.VesselRegistry;
 
 import javax.annotation.security.RolesAllowed;
@@ -45,9 +45,9 @@ public class VesselResource {
         return new VesselPointResponse(
                 registry.timestamp().toString(),
                 registry.mmsi(),
-                registry.point()
+                registry.coordinates()
         );
     }
 }
 
-record VesselPointResponse(String timestamp, Integer mmsi, Point point) {}
+record VesselPointResponse(String timestamp, Integer mmsi, Coordinates coordinates) {}

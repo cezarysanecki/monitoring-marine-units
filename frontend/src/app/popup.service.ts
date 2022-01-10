@@ -11,7 +11,7 @@ export class PopupService {
   makeVesselPopup(registry: VesselRegistry): string {
     return `` +
       `<div>MMSI: ${ registry.mmsi }</div>` +
-      `<div>x: ${ registry.point.x }</div>` +
-      `<div>y: ${ registry.point.y }</div>`;
+      `<div>Lat: ${ registry.coordinates.latitude }</div>` +
+      `<div>Lon: ${ registry.coordinates.longitude }</div>`;
   }
 }

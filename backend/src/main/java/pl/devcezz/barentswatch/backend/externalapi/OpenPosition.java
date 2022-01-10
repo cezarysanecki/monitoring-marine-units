@@ -14,7 +14,7 @@ public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
     public record Geometry(String type, List<Double> coordinates) { }
 
     public VesselRegistry createVesselRegistry() {
-        return new VesselRegistry(fetchTimestamp(), mmsi, fetchX(), fetchY());
+        return new VesselRegistry(fetchTimestamp(), mmsi, fetchLatitude(), fetchLongitude());
     }
 
     public boolean isPoint() {
@@ -25,11 +25,11 @@ public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
         return LocalDateTime.parse(timeStamp, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssVV"));
     }
 
-    private Double fetchX() {
-        return geometry.coordinates().get(0);
+    private Double fetchLatitude() {
+        return geometry.coordinates().get(1);
     }
 
-    private Double fetchY() {
-        return geometry.coordinates().get(1);
+    private Double fetchLongitude() {
+        return geometry.coordinates().get(0);
     }
 }

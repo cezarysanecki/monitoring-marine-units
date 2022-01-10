@@ -1,8 +1,8 @@
 export type VesselRegistry = {
   timestamp: string,
   mmsi: number,
-  point: {
-    x: number,
-    y: number
+  coordinates: {
+    latitude: number,
+    longitude: number
   }
 }
