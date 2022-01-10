@@ -25,7 +25,7 @@ import {ApiInterceptor} from "./auth/api.interceptor";
   providers: [
     {
       provide: "BASE_API_URL",
-      useValue: environment.apiUrl
+      useValue: environment.apiUrl,
     },
     {
       provide: HTTP_INTERCEPTORS,
