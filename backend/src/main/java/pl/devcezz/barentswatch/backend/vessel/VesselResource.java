@@ -12,6 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.Comparator;
 import java.util.List;
 
 @Path("/barentswatch/vessel")
@@ -30,6 +31,7 @@ public class VesselResource {
                                                            @QueryParam(value = "yMax") Double yMax) {
         return vesselService.fetchVesselsPositionsFor(new Area(xMin, xMax, yMin, yMax)).stream()
                 .map(this::convertToResponse)
+                .sorted(Comparator.comparing(VesselPointResponse::mmsi))
                 .toList();
     }
 
