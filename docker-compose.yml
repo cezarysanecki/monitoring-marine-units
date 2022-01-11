@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+    postgres-db:
+        image: postgres
+        environment:
+            POSTGRES_USER: barentswatch
+            POSTGRES_PASSWORD: barentswatch
+        ports:
+            - "5432:5432"
+
+    mongo-db:
+        image: mongo
+        ports:
+            - "27017:27017"
+        environment:
+            - MONGO_INITDB_DATABASE=barentswatch
