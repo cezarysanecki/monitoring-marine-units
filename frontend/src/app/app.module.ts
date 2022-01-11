@@ -10,6 +10,8 @@ import {environment} from "../environments/environment";
 import {NavbarComponent} from "./navbar/navbar.component";
 import {ToolbarComponent} from "./toolbar/toolbar.component";
 import {ApiInterceptor} from "./auth/api.interceptor";
+import {AppRoutingModule} from "./app-routing-module";
+import { LoginComponent } from './login/login.component';
 
 @NgModule({
   declarations: [
@@ -17,10 +19,12 @@ import {ApiInterceptor} from "./auth/api.interceptor";
     MapComponent,
     NavbarComponent,
     ToolbarComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
+    AppRoutingModule,
   ],
   providers: [
     {
