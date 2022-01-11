@@ -1,1 +1,30 @@
-<p>login works!</p>
+<div class="login">
+  <form class="login__form">
+
+  </form>
+</div>
+<form class="modal-content" action="/barentswatch/client/token">
+  <div class="imgcontainer">
+    <img src="assets/img/ship.jpg" alt="Vessel" class="avatar">
+  </div>
+
+  <div class="container">
+    <label for="email">
+      <strong>Email</strong>
+    </label>
+    <input type="text" placeholder="Enter Email" id="email" required>
+
+    <label for="password">
+      <strong>Password</strong>
+    </label>
+    <input type="password" placeholder="Enter Password" id="password" required>
+
+    <button type="submit">Login</button>
+  </div>
+
+  <div class="container" style="background-color:#f1f1f1">
+    <button type="button" onclick="document.getElementById('id01').style.display='none'" class="cancelbtn">Cancel
+    </button>
+    <span class="psw">Forgot <a href="#">password?</a></span>
+  </div>
+</form>
