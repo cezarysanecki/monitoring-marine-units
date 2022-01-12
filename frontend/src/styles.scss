@@ -1,3 +1,6 @@
+@import 'node_modules/material-icons/iconfont/material-icons.scss';
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&display=swap');
+
 body, html {
   margin: 0;
   padding: 0;
@@ -6,6 +9,7 @@ body, html {
   bottom: 0;
   left: 0;
   right: 0;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 body {

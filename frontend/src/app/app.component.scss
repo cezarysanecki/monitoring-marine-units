@@ -21,6 +21,26 @@ $panel-width: 300px;
     width: 100%;
     height: $navbar-width;
     background: #444554;
+    text-align: center;
+    color: white;
+    cursor: pointer;
+  }
+
+  &__item:hover {
+    background: #65667a;
+    transition: .2s ease;
+  }
+
+  &__link {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+  &__text {
+    font-size: 0.7rem;
   }
 }
 
