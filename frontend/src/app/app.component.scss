@@ -1,0 +1,24 @@
+$navbar-width: 50px;
+$panel-width: 300px;
+
+.app__navbar {
+  position: absolute;
+  width: $navbar-width;
+  height: 100%;
+  background: red;
+}
+
+.app__panel {
+  position: absolute;
+  width: $panel-width;
+  height: 100%;
+  left: $navbar-width;
+  background: yellow;
+}
+
+.app__map {
+  position: absolute;
+  width: calc(100% - (#{$navbar-width} + #{$panel-width}));
+  height: 100%;
+  left: calc(#{$navbar-width} + #{$panel-width});
+}
