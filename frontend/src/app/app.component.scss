@@ -5,7 +5,7 @@ $panel-width: 300px;
   position: absolute;
   width: $navbar-width;
   height: 100%;
-  background: red;
+  background: #65667a;
 
   display: flex;
   flex-wrap: wrap;
@@ -20,7 +20,7 @@ $panel-width: 300px;
   &__item {
     width: 100%;
     height: $navbar-width;
-    background: blue;
+    background: #444554;
   }
 }
 
@@ -29,7 +29,9 @@ $panel-width: 300px;
   width: $panel-width;
   height: 100%;
   left: $navbar-width;
-  background: yellow;
+  box-sizing: border-box;
+  border-left: 1px solid #444554;
+  background-image: linear-gradient(to right, #65667a, #444554);
 }
 
 .app__map {
