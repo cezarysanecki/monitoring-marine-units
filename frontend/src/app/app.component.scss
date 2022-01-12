@@ -6,6 +6,22 @@ $panel-width: 300px;
   width: $navbar-width;
   height: 100%;
   background: red;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+}
+
+.navbar {
+  display: table-column;
+  width: 100%;
+  justify-content: left;
+
+  &__item {
+    width: 100%;
+    height: $navbar-width;
+    background: blue;
+  }
 }
 
 .app__panel {
