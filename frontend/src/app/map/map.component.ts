@@ -1,8 +1,7 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, Input} from '@angular/core';
 import * as L from 'leaflet';
 import {MarkerService} from "../marker.service";
-import {Projection} from "leaflet";
-import LonLat = Projection.LonLat;
+import {Subject} from "rxjs";
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -27,6 +26,7 @@ L.Marker.prototype.options.icon = iconDefault;
 export class MapComponent implements AfterViewInit {
 
   private map: any;
+  @Input() resizeMap!: Subject<boolean>;
 
   constructor(private markerService: MarkerService) { }
 
@@ -38,12 +38,14 @@ export class MapComponent implements AfterViewInit {
     });
 
     this.map.on('zoomend', () => {
-      this.markerService.makeVesselsMarkers(this.map)
+      this.markerService.makeVesselsMarkers(this.map);
+      this.refreshMap();
     });
 
     this.map.on('moveend', () => {
-      this.markerService.makeVesselsMarkers(this.map)
-    })
+      this.markerService.makeVesselsMarkers(this.map);
+      this.refreshMap();
+    });
 
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
@@ -57,5 +59,17 @@ export class MapComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.initMap();
     this.markerService.makeVesselsMarkers(this.map);
+
+    this.resizeMap.subscribe(value => {
+      if (!value) {
+        this.refreshMap();
+      }
+    });
+  }
+
+  private refreshMap() {
+    setTimeout(() => {
+      this.map.invalidateSize(true)
+    }, 200);
   }
 }

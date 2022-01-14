@@ -1,6 +1,7 @@
 import {Component, LOCALE_ID} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localePl from '@angular/common/locales/pl';
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-root',
@@ -9,13 +10,15 @@ import localePl from '@angular/common/locales/pl';
 })
 export class AppComponent {
 
-  panelShown: boolean = true;
+  isPanelShown: boolean = true;
+  isPanelShownSubject: Subject<boolean> = new Subject();
 
   constructor() {
     registerLocaleData(localePl, LOCALE_ID);
   }
 
   togglePanel() {
-    this.panelShown = !this.panelShown;
+    this.isPanelShown = !this.isPanelShown;
+    this.isPanelShownSubject.next(this.isPanelShown);
   }
 }
