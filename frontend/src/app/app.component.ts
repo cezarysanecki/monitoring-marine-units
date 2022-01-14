@@ -9,7 +9,13 @@ import localePl from '@angular/common/locales/pl';
 })
 export class AppComponent {
 
+  panelShown: boolean = true;
+
   constructor() {
     registerLocaleData(localePl, LOCALE_ID);
+  }
+
+  togglePanel() {
+    this.panelShown = !this.panelShown;
   }
 }

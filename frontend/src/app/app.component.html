@@ -7,17 +7,24 @@
       </div>
     </div>
   </div>
-  <div class="navbar__item">
-    <div class="navbar__link">
-      <div class="material-icons-outlined md-24">person</div>
-      <div class="navbar__text">Login</div>
+  <div class="navbar__group">
+    <div class="navbar__item">
+      <div class="navbar__link">
+        <div class="material-icons-outlined md-24">person</div>
+        <div class="navbar__text">Login</div>
+      </div>
+    </div>
+    <div class="navbar__item" (click)="togglePanel()">
+      <div class="navbar__link">
+        <div  [ngClass]="panelShown ? 'panel-button-show' : 'panel-button-hide'" class="material-icons-outlined md-24">login</div>
+      </div>
     </div>
   </div>
 </div>
-<div class="app__panel">
+<div [ngClass]="panelShown ? 'app__panel-show' : 'app__panel-hide'">
 
 </div>
-<div class="app__map">
+<div [ngClass]="panelShown ? 'app__map-show' : 'app__map-hide'">
   <app-map></app-map>
 </div>
 

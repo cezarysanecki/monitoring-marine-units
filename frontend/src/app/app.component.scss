@@ -1,5 +1,6 @@
 $navbar-width: 50px;
 $panel-width: 300px;
+$hide-panel-timing: .5s;
 
 .app__navbar {
   position: absolute;
@@ -16,6 +17,10 @@ $panel-width: 300px;
   display: table-column;
   width: 100%;
   justify-content: left;
+
+  &__group {
+    width: 100%;
+  }
 
   &__item {
     width: 100%;
@@ -46,17 +51,52 @@ $panel-width: 300px;
 
 .app__panel {
   position: absolute;
-  width: $panel-width;
   height: 100%;
   left: $navbar-width;
   box-sizing: border-box;
   border-left: 1px solid #444554;
   background-image: linear-gradient(to right, #65667a, #444554);
+  transition: $hide-panel-timing;
+
+  &-show {
+    @extend .app__panel;
+    width: $panel-width;
+  }
+
+  &-hide {
+    @extend .app__panel;
+    width: 0;
+  }
 }
 
 .app__map {
   position: absolute;
-  width: calc(100% - (#{$navbar-width} + #{$panel-width}));
   height: 100%;
-  left: calc(#{$navbar-width} + #{$panel-width});
+  transition: $hide-panel-timing;
+
+  &-show {
+    @extend .app__map;
+    width: calc(100% - (#{$navbar-width} + #{$panel-width}));
+    left: calc(#{$navbar-width} + #{$panel-width});
+  }
+
+  &-hide {
+    @extend .app__map;
+    width: calc(100% - #{$navbar-width});
+    left: #{$navbar-width};
+  }
+}
+
+.panel-button {
+  transition: $hide-panel-timing;
+
+  &-show {
+    @extend .panel-button;
+    transform: rotate(-180deg);
+  }
+
+  &-hide {
+    @extend .panel-button;
+    transform: rotate(0deg);
+  }
 }
