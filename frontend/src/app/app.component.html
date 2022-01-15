@@ -22,7 +22,7 @@
   </div>
 </div>
 <div [ngClass]="isPanelShown ? 'app__panel-show' : 'app__panel-hide'">
-
+  <app-login></app-login>
 </div>
 <div [ngClass]="isPanelShown ? 'app__map-show' : 'app__map-hide'">
   <app-map [resizeMap]="isPanelShownSubject"></app-map>
