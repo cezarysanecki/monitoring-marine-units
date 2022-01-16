@@ -11,7 +11,7 @@ import {NavbarComponent} from "./navbar/navbar.component";
 import {ToolbarComponent} from "./toolbar/toolbar.component";
 import {ApiInterceptor} from "./auth/api.interceptor";
 import {AppRoutingModule} from "./app-routing-module";
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './panels/login/login.component';
 
 @NgModule({
   declarations: [
