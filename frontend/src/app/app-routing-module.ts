@@ -1,12 +1,12 @@
-import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
-import {MapComponent} from "./map/map.component";
+import {NgModule} from "@angular/core";
+import {RouterModule, Routes} from "@angular/router";
 import {LoginPanelComponent} from "./panels/login-panel/login-panel.component";
+import {MapPanelComponent} from "./panels/map-panel/map-panel.component";
 
 const routes: Routes = [
   {
     path: "",
-    component: MapComponent
+    component: MapPanelComponent
   },
   {
     path: "login",

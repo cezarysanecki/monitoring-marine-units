@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-map-panel',
   templateUrl: './map-panel.component.html',
   styleUrls: ['./map-panel.component.scss']
 })
-export class MapPanelComponent implements OnInit {
+export class MapPanelComponent {
 
   constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

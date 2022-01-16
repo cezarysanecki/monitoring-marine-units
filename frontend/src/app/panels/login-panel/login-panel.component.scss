@@ -1,3 +1,9 @@
+.login-panel {
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
 .login-form {
   display: table-cell;
   vertical-align: middle;
@@ -5,7 +11,6 @@
   height: 100%;
   max-width: 400px;
   text-align: center;
-  color: white;
   font-size: 1.5rem;
 
   &__email {
@@ -31,9 +36,9 @@
     max-width: 200px;
     background: #444554;
     border: 2px solid white;
-    color: white;
     font-size: 1.2rem;
     font-family: inherit !important;
+    color: white;
     cursor: pointer;
     font-weight: bold;
 
@@ -47,7 +52,6 @@
 .login-input {
   display: block;
   margin: 15px auto;
-  color: white;
   background: transparent;
   height: 40px;
   width: 70%;
