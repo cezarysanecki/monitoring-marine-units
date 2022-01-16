@@ -29,11 +29,11 @@ $hide-panel-timing: .5s;
     text-align: center;
     color: white;
     cursor: pointer;
-  }
 
-  &__item:hover {
-    background: #65667a;
-    transition: .2s ease;
+    &:hover {
+      background: #65667a;
+      transition: .2s ease;
+    }
   }
 
   &__link {
