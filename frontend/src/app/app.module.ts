@@ -11,7 +11,7 @@ import {NavbarComponent} from "./navbar/navbar.component";
 import {ToolbarComponent} from "./toolbar/toolbar.component";
 import {ApiInterceptor} from "./auth/api.interceptor";
 import {AppRoutingModule} from "./app-routing-module";
-import { LoginComponent } from './panels/login/login.component';
+import { LoginPanelComponent } from './panels/login-panel/login-panel.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,7 @@ import { LoginComponent } from './panels/login/login.component';
     MapComponent,
     NavbarComponent,
     ToolbarComponent,
-    LoginComponent,
+    LoginPanelComponent,
   ],
   imports: [
     BrowserModule,
