@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, Input} from '@angular/core';
 import * as L from 'leaflet';
-import {MarkerService} from "../marker.service";
 import {Subject} from "rxjs";
+import {MarkerService} from "./services/marker.service";
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -25,10 +25,21 @@ L.Marker.prototype.options.icon = iconDefault;
 })
 export class MapComponent implements AfterViewInit {
 
-  private map: any;
-  @Input() resizeMap!: Subject<void>;
+  @Input()
+  resizeMap!: Subject<void>;
+
+  private map!: L.Map;
 
   constructor(private markerService: MarkerService) { }
+
+  ngAfterViewInit() {
+    this.initMap();
+    this.markerService.makeVesselsMarkers(this.map);
+
+    this.resizeMap.subscribe(() => {
+      this.refreshMap();
+    });
+  }
 
   private initMap() {
     this.map = L.map('map', {
@@ -54,15 +65,6 @@ export class MapComponent implements AfterViewInit {
     });
 
     tiles.addTo(this.map);
-  }
-
-  ngAfterViewInit() {
-    this.initMap();
-    this.markerService.makeVesselsMarkers(this.map);
-
-    this.resizeMap.subscribe(() => {
-      this.refreshMap();
-    });
   }
 
   private refreshMap() {

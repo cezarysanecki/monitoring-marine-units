@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as L from 'leaflet';
-import {VesselHttpService} from "./services/vessel-http.service";
-import {VesselRegistry} from "./types/vessel-position.type";
+import {VesselHttpService} from "../../../services/vessel-http.service";
+import {VesselRegistry} from "../../../types/vessel-position.type";
 import {PopupService} from "./popup.service";
 
 @Injectable({

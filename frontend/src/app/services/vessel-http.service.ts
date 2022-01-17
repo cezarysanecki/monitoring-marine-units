@@ -13,8 +13,7 @@ export class VesselHttpService {
   fetchVesselsPositions(map: L.Map) {
     let bounds = map.getBounds();
 
-    return this.http.get<VesselRegistry[]>(
-      'barentswatch/vessel/position?' +
+    return this.http.get<VesselRegistry[]>('barentswatch/vessel/position?' +
       `xMin=${bounds.getNorthWest().lng}&` +
       `xMax=${bounds.getSouthEast().lng}&` +
       `yMin=${bounds.getSouthEast().lat}&` +

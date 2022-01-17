@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {VesselRegistry} from "./types/vessel-position.type";
+import {VesselRegistry} from "../../../types/vessel-position.type";
 
 @Injectable({
   providedIn: 'root'
