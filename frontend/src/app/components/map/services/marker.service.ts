@@ -40,18 +40,18 @@ export class MarkerService {
   private setRadius(registries: VesselRegistry[]): { color: string; radius: number, fillOpacity?: number } {
     let numberOfVessels = registries.length;
     switch (true) {
-      case (numberOfVessels < 5):
+      case (numberOfVessels <= 5):
         return  {
           radius: 3,
           color: 'purple',
           fillOpacity: 1
         };
-      case (numberOfVessels < 10):
+      case (numberOfVessels <= 10):
         return  {
           radius: 5,
           color: 'red'
         };
-      case (numberOfVessels < 20):
+      case (numberOfVessels <= 20):
         return {
           radius: 8,
           color: 'yellow'

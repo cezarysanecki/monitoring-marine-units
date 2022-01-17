@@ -1,11 +1,24 @@
 <div class="map-panel">
   <div class="map-info">
-    <span>On the map you can see tracked vessels</span>
-    <ul>
-      <li>blue</li>
-      <li>yellow</li>
-      <li>red</li>
-      <li>purple</li>
+    <h1>Barents watch</h1>
+    <p>
+      This app was created to track Norwegian vessels. On the map there are circles in different colors
+      which represent numbers of vessels in this region:
+    </p>
+    <ul class="map-colors">
+      <li class="map-colors__purple"><strong>purple</strong> - 1-5 vessels</li>
+      <li class="map-colors__red"><strong>red</strong> - 6-10 vessels</li>
+      <li class="map-colors__yellow"><strong>yellow</strong> - 11-20 vessels</li>
+      <li class="map-colors__blue"><strong>blue</strong> - above 20 vessels</li>
     </ul>
+    <p>
+      At closed range vessels are treated separately (not in groups). This allows to check if the
+      vessel position was registered more than 5 minutes ago (it is marked as
+      <span style="color: grey; font-weight: bold;">grey circle</span>, otherwise is
+      <span style="color: green; font-weight: bold;">green circle</span>).
+    </p>
+    <p>
+      Logged user can add single vessels to track them individually (having additional info about them).
+    </p>
   </div>
 </div>

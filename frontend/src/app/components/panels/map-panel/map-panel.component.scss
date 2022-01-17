@@ -6,8 +6,46 @@
 
 .map-info {
   display: table-cell;
+  padding: 10px;
   vertical-align: middle;
-  width: 80%;
-  height: 100%;
   text-align: center;
+}
+
+.map-colors {
+  list-style: none;
+
+  & li {
+    margin: 10px 0;
+
+    &::before {
+      content: ">";
+      display: inline-flex;
+      align-items: center;
+      height: 1.2rem;
+      width: 1.2rem;
+      margin-right: .5rem;
+      font-weight: bold;
+      justify-content: center;
+      border-radius: 50%;
+    }
+  }
+
+  &__blue::before {
+    background-color: blue;
+  }
+
+  &__yellow::before {
+    background-color: yellow;
+  }
+
+  &__red::before {
+    background-color: red;
+  }
+
+  &__purple::before {
+    background-color: purple;
+  }
+}
+
+ul li {
 }
