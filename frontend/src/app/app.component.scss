@@ -2,13 +2,20 @@ $toolbar-width: 50px;
 $panel-width: 300px;
 $hide-panel-timing: .5s;
 
+.app__toolbar {
+  position: absolute;
+  height: 100%;
+  background: #65667a;
+  width: $toolbar-width;
+}
+
 .app__panel {
   position: absolute;
   height: 100%;
+  background-image: linear-gradient(to right, #65667a, #444554);
   left: $toolbar-width;
   box-sizing: border-box;
   border-left: 1px solid #444554;
-  background-image: linear-gradient(to right, #65667a, #444554);
   transition: $hide-panel-timing;
 
   &-show {

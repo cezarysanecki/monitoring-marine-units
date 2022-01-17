@@ -1,11 +1,7 @@
-$toolbar-width: 50px;
-$hide-panel-timing: .5s;
-
-.app__toolbar {
+.main-toolbar {
   position: absolute;
-  width: $toolbar-width;
+  width: 100%;
   height: 100%;
-  background: #65667a;
 
   display: flex;
   flex-wrap: wrap;
@@ -23,7 +19,7 @@ $hide-panel-timing: .5s;
 
   &__item {
     width: 100%;
-    height: $toolbar-width;
+    height: 50px;
     background: #444554;
     text-align: center;
     cursor: pointer;
@@ -48,7 +44,7 @@ $hide-panel-timing: .5s;
 }
 
 .panel-button {
-  transition: $hide-panel-timing;
+  transition: .5s;
 
   &-show {
     @extend .panel-button;
