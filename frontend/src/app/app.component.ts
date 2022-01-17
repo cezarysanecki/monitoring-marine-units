@@ -11,14 +11,14 @@ import {Subject} from "rxjs";
 export class AppComponent {
 
   isPanelShown: boolean = true;
-  isPanelShownSubject: Subject<boolean> = new Subject();
+  isPanelShownSubject: Subject<void> = new Subject();
 
   constructor() {
     registerLocaleData(localePl, LOCALE_ID);
   }
 
-  togglePanel() {
-    this.isPanelShown = !this.isPanelShown;
-    this.isPanelShownSubject.next(this.isPanelShown);
+  handlePanelShownEvent(value: boolean) {
+    this.isPanelShown = value;
+    this.isPanelShownSubject.next();
   }
 }

@@ -1,0 +1,62 @@
+$toolbar-width: 50px;
+$hide-panel-timing: .5s;
+
+.app__toolbar {
+  position: absolute;
+  width: $toolbar-width;
+  height: 100%;
+  background: #65667a;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-between;
+}
+
+.toolbar {
+  display: table-column;
+  width: 100%;
+  justify-content: left;
+
+  &__group {
+    width: 100%;
+  }
+
+  &__item {
+    width: 100%;
+    height: $toolbar-width;
+    background: #444554;
+    text-align: center;
+    cursor: pointer;
+
+    &:hover {
+      background: #65667a;
+      transition: .2s ease;
+    }
+  }
+
+  &__link {
+    position: relative;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+  &__text {
+    font-size: 0.7rem;
+  }
+}
+
+.panel-button {
+  transition: $hide-panel-timing;
+
+  &-show {
+    @extend .panel-button;
+    transform: rotate(-180deg);
+  }
+
+  &-hide {
+    @extend .panel-button;
+    transform: rotate(0deg);
+  }
+}

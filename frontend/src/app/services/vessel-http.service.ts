@@ -6,7 +6,7 @@ import * as L from 'leaflet';
 @Injectable({
   providedIn: 'root'
 })
-export class VesselPositionService {
+export class VesselHttpService {
 
   constructor(private http: HttpClient) { }
 

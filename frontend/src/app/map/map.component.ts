@@ -26,7 +26,7 @@ L.Marker.prototype.options.icon = iconDefault;
 export class MapComponent implements AfterViewInit {
 
   private map: any;
-  @Input() resizeMap!: Subject<boolean>;
+  @Input() resizeMap!: Subject<void>;
 
   constructor(private markerService: MarkerService) { }
 
@@ -60,10 +60,8 @@ export class MapComponent implements AfterViewInit {
     this.initMap();
     this.markerService.makeVesselsMarkers(this.map);
 
-    this.resizeMap.subscribe(value => {
-      if (!value) {
-        this.refreshMap();
-      }
+    this.resizeMap.subscribe(() => {
+      this.refreshMap();
     });
   }
 

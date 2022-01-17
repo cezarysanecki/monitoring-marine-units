@@ -1,33 +1,7 @@
-<div class="app__navbar">
-  <div class="navbar">
-    <div class="navbar__item">
-      <div class="navbar__link" routerLink="/">
-        <div class="material-icons-outlined md-24">map</div>
-        <div class="navbar__text">Mapa</div>
-      </div>
-    </div>
-  </div>
-  <div class="navbar__group">
-    <div class="navbar__item">
-      <div class="navbar__link" routerLink="/login">
-        <div class="material-icons-outlined md-24">person</div>
-        <div class="navbar__text">Login</div>
-      </div>
-    </div>
-    <div class="navbar__item" (click)="togglePanel()">
-      <div class="navbar__link">
-        <div [ngClass]="isPanelShown ? 'panel-button-show' : 'panel-button-hide'" class="material-icons-outlined md-24">login</div>
-      </div>
-    </div>
-  </div>
-</div>
+<app-toolbar (panelShownEvent)="handlePanelShownEvent($event)"></app-toolbar>
 <div [ngClass]="isPanelShown ? 'app__panel-show' : 'app__panel-hide'">
   <router-outlet></router-outlet>
 </div>
 <div [ngClass]="isPanelShown ? 'app__map-show' : 'app__map-hide'">
   <app-map [resizeMap]="isPanelShownSubject"></app-map>
 </div>
-
-
-<!--<app-navbar></app-navbar>-->
-<!---->

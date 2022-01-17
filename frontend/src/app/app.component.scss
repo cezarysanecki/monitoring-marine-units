@@ -1,57 +1,11 @@
-$navbar-width: 50px;
+$toolbar-width: 50px;
 $panel-width: 300px;
 $hide-panel-timing: .5s;
-
-.app__navbar {
-  position: absolute;
-  width: $navbar-width;
-  height: 100%;
-  background: #65667a;
-
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-between;
-}
-
-.navbar {
-  display: table-column;
-  width: 100%;
-  justify-content: left;
-
-  &__group {
-    width: 100%;
-  }
-
-  &__item {
-    width: 100%;
-    height: $navbar-width;
-    background: #444554;
-    text-align: center;
-    cursor: pointer;
-
-    &:hover {
-      background: #65667a;
-      transition: .2s ease;
-    }
-  }
-
-  &__link {
-    position: relative;
-    top: 50%;
-    -webkit-transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-    transform: translateY(-50%);
-  }
-
-  &__text {
-    font-size: 0.7rem;
-  }
-}
 
 .app__panel {
   position: absolute;
   height: 100%;
-  left: $navbar-width;
+  left: $toolbar-width;
   box-sizing: border-box;
   border-left: 1px solid #444554;
   background-image: linear-gradient(to right, #65667a, #444554);
@@ -75,27 +29,13 @@ $hide-panel-timing: .5s;
 
   &-show {
     @extend .app__map;
-    width: calc(100% - (#{$navbar-width} + #{$panel-width}));
-    left: calc(#{$navbar-width} + #{$panel-width});
+    width: calc(100% - (#{$toolbar-width} + #{$panel-width}));
+    left: calc(#{$toolbar-width} + #{$panel-width});
   }
 
   &-hide {
     @extend .app__map;
-    width: calc(100% - #{$navbar-width});
-    left: #{$navbar-width};
-  }
-}
-
-.panel-button {
-  transition: $hide-panel-timing;
-
-  &-show {
-    @extend .panel-button;
-    transform: rotate(-180deg);
-  }
-
-  &-hide {
-    @extend .panel-button;
-    transform: rotate(0deg);
+    width: calc(100% - #{$toolbar-width});
+    left: #{$toolbar-width};
   }
 }
