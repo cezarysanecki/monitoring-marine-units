@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {LoginHttpService} from "../../../http-services/login-http.service";
 
 @Component({
   selector: 'app-login-panel',
@@ -7,5 +8,15 @@ import {Component} from '@angular/core';
 })
 export class LoginPanelComponent {
 
-  constructor() { }
+  email = '';
+  password = '';
+
+  constructor(private loginHttpService: LoginHttpService) { }
+
+  login() {
+    this.loginHttpService.login({
+      email: this.email,
+      password: this.password
+    }).subscribe();
+  }
 }

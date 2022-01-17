@@ -16,3 +16,12 @@ body, html {
 body {
   background: #444554;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition-delay: 50000s;
+  -webkit-box-shadow: 0 0 0 50px red inset;
+  -webkit-text-fill-color: white;
+}

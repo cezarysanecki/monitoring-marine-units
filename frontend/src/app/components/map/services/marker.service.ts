@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import * as L from 'leaflet';
-import {VesselHttpService} from "../../../services/vessel-http.service";
+import {VesselHttpService} from "../../../http-services/vessel-http.service";
 import {VesselRegistry} from "../../../types/vessel-position.type";
 import {PopupService} from "./popup.service";
 

@@ -12,6 +12,7 @@ import {MapComponent} from "./components/map/map.component";
 import {ToolbarComponent} from "./components/toolbar/toolbar.component";
 import {LoginPanelComponent} from "./components/panels/login-panel/login-panel.component";
 import {MapPanelComponent} from "./components/panels/map-panel/map-panel.component";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -25,6 +26,7 @@ import {MapPanelComponent} from "./components/panels/map-panel/map-panel.compone
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    FormsModule,
   ],
   providers: [
     {
