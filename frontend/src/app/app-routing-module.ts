@@ -4,6 +4,7 @@ import {LoginPanelComponent} from "./components/panels/login-panel/login-panel.c
 import {MapPanelComponent} from "./components/panels/map-panel/map-panel.component";
 import {AuthGuard} from "./auth/guards/auth.guard";
 import {NoLoggedGuard} from "./auth/guards/no-logged.guard";
+import {AppPanelComponent} from "./components/panels/app-panel/app-panel.component";
 
 const routes: Routes = [
   {
@@ -16,8 +17,8 @@ const routes: Routes = [
     canActivate: [NoLoggedGuard]
   },
   {
-    path: "app/**",
-    component: MapPanelComponent,
+    path: "app",
+    component: AppPanelComponent,
     canActivate: [AuthGuard]
   },
   {
