@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
-import {LoginHttpService} from "../../../http-services/login-http.service";
+import {AuthenticationService} from "../../../services/authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login-panel',
@@ -11,12 +12,16 @@ export class LoginPanelComponent {
   email = '';
   password = '';
 
-  constructor(private loginHttpService: LoginHttpService) { }
+  constructor(private authenticationService: AuthenticationService,
+              private router: Router) {
+  }
 
   login() {
-    this.loginHttpService.login({
+    this.authenticationService.login({
       email: this.email,
       password: this.password
-    }).subscribe();
+    }).subscribe(() => {
+      void this.router.navigate(['']);
+    });
   }
 }

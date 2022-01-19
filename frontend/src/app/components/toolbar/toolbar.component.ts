@@ -1,4 +1,6 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {AuthenticationService} from "../../services/authentication.service";
+import {LoggedUser} from "../../types/login-credentials.type";
 
 @Component({
   selector: 'app-toolbar',
@@ -10,10 +12,21 @@ export class ToolbarComponent {
   @Output()
   panelShownEvent = new EventEmitter<boolean>();
 
-  isPanelShown: boolean = true;
+  loggedUser: LoggedUser | null = null;
+  isPanelShown = true;
+
+  constructor(private authenticationService: AuthenticationService) {
+    this.authenticationService.loggedUser$.subscribe(loggedUser => {
+      this.loggedUser = loggedUser;
+    });
+  }
 
   togglePanel() {
     this.isPanelShown = !this.isPanelShown;
     this.panelShownEvent.emit(this.isPanelShown);
+  }
+
+  logout() {
+    this.authenticationService.logout();
   }
 }

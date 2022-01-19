@@ -3,7 +3,11 @@ export type LoginCredentials = {
   password: string
 }
 
-export type LoginToken = {
-  apiToken: string,
-  expiresAtSeconds: number
+export type ApiToken = {
+  token: string
+}
+
+export type LoggedUser = {
+  email: string,
+  groups: string[]
 }
