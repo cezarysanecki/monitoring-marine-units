@@ -1,6 +1,6 @@
 package pl.devcezz.barentswatch.backend.user.entity;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -21,14 +21,14 @@ public class Track {
         return track;
     }
 
-    Optional<LocalDateTime> getLastUpdate() {
+    Optional<ZonedDateTime> getLastUpdate() {
         if (coordinates == null) {
             return Optional.empty();
         }
 
         return coordinates.stream()
                 .map(coordinates -> coordinates.timestamp)
-                .max(LocalDateTime::compareTo);
+                .max(ZonedDateTime::compareTo);
     }
 
     boolean isOpened() {
@@ -43,7 +43,7 @@ public class Track {
         return coordinates == null || coordinates.isEmpty();
     }
 
-    void addPoint(LocalDateTime timestamp, Double latitude, Double longitude) {
+    void addPoint(ZonedDateTime timestamp, Double latitude, Double longitude) {
         if (coordinates == null) {
             coordinates = new ArrayList<>();
         }

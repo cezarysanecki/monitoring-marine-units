@@ -1,10 +1,10 @@
 package pl.devcezz.barentswatch.backend.common;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
-public record VesselRegistry(LocalDateTime timestamp, Integer mmsi, Coordinates coordinates) {
+public record VesselRegistry(ZonedDateTime timestamp, Integer mmsi, Coordinates coordinates) {
 
-    public VesselRegistry(LocalDateTime timestamp, Integer mmsi, Double latitude, Double longitude) {
+    public VesselRegistry(ZonedDateTime timestamp, Integer mmsi, Double latitude, Double longitude) {
         this(timestamp, mmsi, new Coordinates(latitude, longitude));
     }
 }

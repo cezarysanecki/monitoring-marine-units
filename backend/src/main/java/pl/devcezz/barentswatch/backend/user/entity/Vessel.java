@@ -3,7 +3,7 @@ package pl.devcezz.barentswatch.backend.user.entity;
 import pl.devcezz.barentswatch.backend.common.VesselRegistry;
 import pl.devcezz.barentswatch.backend.user.exception.VesselAlreadyTrackedException;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -63,11 +63,11 @@ public class Vessel {
                         vesselRegistry.coordinates().latitude()));
     }
 
-    private boolean cannotAddPoint(LocalDateTime timestamp) {
-        Optional<LocalDateTime> lastUpdate = tracks.stream()
+    private boolean cannotAddPoint(ZonedDateTime timestamp) {
+        Optional<ZonedDateTime> lastUpdate = tracks.stream()
                 .map(Track::getLastUpdate)
                 .flatMap(Optional::stream)
-                .max(LocalDateTime::compareTo);
+                .max(ZonedDateTime::compareTo);
 
         return lastUpdate.map(lastTimestamp -> !lastTimestamp.isBefore(timestamp))
                 .orElse(false);

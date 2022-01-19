@@ -3,7 +3,7 @@ package pl.devcezz.barentswatch.backend.externalapi;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import pl.devcezz.barentswatch.backend.common.VesselRegistry;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -21,8 +21,8 @@ public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
         return geometry.type.equals("Point");
     }
 
-    private LocalDateTime fetchTimestamp() {
-        return LocalDateTime.parse(timeStamp, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssVV"));
+    private ZonedDateTime fetchTimestamp() {
+        return ZonedDateTime.parse(timeStamp, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssVV"));
     }
 
     private Double fetchLatitude() {

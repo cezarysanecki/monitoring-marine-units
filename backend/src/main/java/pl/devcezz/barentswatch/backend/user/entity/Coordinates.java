@@ -1,14 +1,14 @@
 package pl.devcezz.barentswatch.backend.user.entity;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public class Coordinates {
 
-    public LocalDateTime timestamp;
+    public ZonedDateTime timestamp;
     public Double latitude;
     public Double longitude;
 
-    static Coordinates createPoint(LocalDateTime timestamp, Double latitude, Double longitude) {
+    static Coordinates createPoint(ZonedDateTime timestamp, Double latitude, Double longitude) {
         Coordinates coordinates = new Coordinates();
         coordinates.timestamp = timestamp;
         coordinates.latitude = latitude;
