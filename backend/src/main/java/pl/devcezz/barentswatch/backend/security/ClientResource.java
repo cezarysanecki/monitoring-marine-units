@@ -1,7 +1,6 @@
 package pl.devcezz.barentswatch.backend.security;
 
 import io.smallrye.jwt.build.Jwt;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -16,9 +15,6 @@ public class ClientResource {
     @Inject
     ClientRepository clientRepository;
 
-    @ConfigProperty(name = "smallrye.jwt.new-token.lifespan")
-    public Integer lifespan;
-
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -31,10 +27,10 @@ public class ClientResource {
                 .groups(client.role)
                 .sign();
 
-        return new TokenResponse(token, lifespan);
+        return new TokenResponse(token);
     }
 }
 
 record LoginRequest(String email, String password) {}
 
-record TokenResponse(String apiToken, Integer expiresAtSeconds) {}
+record TokenResponse(String token) {}
