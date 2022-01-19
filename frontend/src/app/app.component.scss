@@ -7,6 +7,7 @@ $hide-panel-timing: .5s;
   height: 100%;
   background: #65667a;
   width: $toolbar-width;
+  z-index: 10000;
 }
 
 .app__panel {
@@ -18,15 +19,15 @@ $hide-panel-timing: .5s;
   box-sizing: border-box;
   border-left: 1px solid #444554;
   transition: $hide-panel-timing;
+  width: $panel-width;
 
   &-show {
     @extend .app__panel;
-    width: $panel-width;
   }
 
   &-hide {
     @extend .app__panel;
-    width: 0;
+    left: calc(#{$toolbar-width} - #{$panel-width});
   }
 }
 
