@@ -2,8 +2,8 @@ import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {LoginPanelComponent} from "./components/panels/login-panel/login-panel.component";
 import {MapPanelComponent} from "./components/panels/map-panel/map-panel.component";
-import {AuthGuard} from "./auth/auth.guard";
-import {NoLoggedGuard} from "./auth/no-logged.guard";
+import {AuthGuard} from "./auth/guards/auth.guard";
+import {NoLoggedGuard} from "./auth/guards/no-logged.guard";
 
 const routes: Routes = [
   {

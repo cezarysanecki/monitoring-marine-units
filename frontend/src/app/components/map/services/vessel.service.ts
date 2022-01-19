@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {VesselRegistry} from "../types/vessel-position.type";
+import {VesselRegistry} from "../model/vessel-position.type";
 import * as L from 'leaflet';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VesselHttpService {
+export class VesselService {
 
   constructor(private http: HttpClient) { }
 

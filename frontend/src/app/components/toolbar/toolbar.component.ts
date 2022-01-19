@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {AuthenticationService} from "../../services/authentication.service";
-import {LoggedUser} from "../../types/login-credentials.type";
+import {AuthenticationService} from "../../auth/services/authentication.service";
+import {LoggedUser} from "../../auth/model/login-credentials.type";
 
 @Component({
   selector: 'app-toolbar',

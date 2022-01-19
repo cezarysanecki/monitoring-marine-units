@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import * as L from 'leaflet';
-import {VesselHttpService} from "../../../http-services/vessel-http.service";
-import {VesselRegistry} from "../../../types/vessel-position.type";
+import {VesselService} from "./vessel.service";
+import {VesselRegistry} from "../model/vessel-position.type";
 import {PopupService} from "./popup.service";
 
 @Injectable({
@@ -11,7 +11,7 @@ export class MarkerService {
 
   markers: L.CircleMarker[] = [];
 
-  constructor(private vesselPositionService: VesselHttpService, private popupService: PopupService) { }
+  constructor(private vesselPositionService: VesselService, private popupService: PopupService) { }
 
   makeVesselsMarkers(map: L.Map) {
     this.vesselPositionService.fetchVesselsPositions(map)

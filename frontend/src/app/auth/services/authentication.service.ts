@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, map, Observable} from "rxjs";
-import {ApiToken, LoggedUser, LoginCredentials} from "../types/login-credentials.type";
+import {ApiToken, LoggedUser, LoginCredentials} from "../model/login-credentials.type";
 import {JwtTokenService} from "./jwt-token.service";
 
 @Injectable({

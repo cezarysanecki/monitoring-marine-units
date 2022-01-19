@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ApiToken, LoggedUser} from "../types/login-credentials.type";
+import {ApiToken, LoggedUser} from "../model/login-credentials.type";
 import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Injectable({

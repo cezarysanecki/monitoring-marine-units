@@ -6,7 +6,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MarkerService} from "./components/map/services/marker.service";
 import {PopupService} from "./components/map/services/popup.service";
 import {environment} from "../environments/environment";
-import {ApiInterceptor} from "./auth/api.interceptor";
+import {ApiInterceptor} from "./auth/interceptors/api.interceptor";
 import {AppRoutingModule} from "./app-routing-module";
 import {MapComponent} from "./components/map/map.component";
 import {ToolbarComponent} from "./components/toolbar/toolbar.component";
