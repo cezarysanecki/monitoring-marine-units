@@ -1,3 +1,20 @@
 <div class="app-panel">
   <h1>Tracked Vessels</h1>
+  <table style="width: 90%; margin: 0 auto;">
+    <tr>
+      <th>MMSI</th>
+      <th>Name</th>
+      <th>Actions</th>
+    </tr>
+    <tr *ngFor="let vessel of vessels">
+      <td>{{ vessel.mmsi }}</td>
+      <td>{{ vessel.mmsi }}</td>
+      <td>
+        <a title="Info" class="material-icons-outlined md-24">info</a>
+        <a title="Adjust" class="material-icons-outlined md-24">adjust</a>
+        <a title="Suspend" class="material-icons-outlined md-24">remove_circle</a>
+        <a title="Remove" class="material-icons-outlined md-24">delete_forever</a>
+      </td>
+    </tr>
+  </table>
 </div>

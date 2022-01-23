@@ -13,6 +13,7 @@ import {ToolbarComponent} from "./components/toolbar/toolbar.component";
 import {LoginPanelComponent} from "./components/panels/login-panel/login-panel.component";
 import {MapPanelComponent} from "./components/panels/map-panel/map-panel.component";
 import {FormsModule} from "@angular/forms";
+import {AppPanelComponent} from "./components/panels/app-panel/app-panel.component";
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {FormsModule} from "@angular/forms";
     ToolbarComponent,
     LoginPanelComponent,
     MapPanelComponent,
+    AppPanelComponent,
   ],
   imports: [
     BrowserModule,

@@ -21,7 +21,7 @@ export class LoginPanelComponent {
       email: this.email,
       password: this.password
     }).subscribe(() => {
-      void this.router.navigate(['']);
+      void this.router.navigate(['/app']);
     });
   }
 }
