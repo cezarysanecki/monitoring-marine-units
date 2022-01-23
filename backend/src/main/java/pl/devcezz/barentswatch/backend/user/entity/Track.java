@@ -28,6 +28,7 @@ public class Track {
 
         return coordinates.stream()
                 .map(coordinates -> coordinates.timestamp)
+                .map(ZonedDateTime::parse)
                 .max(ZonedDateTime::compareTo);
     }
 
@@ -43,7 +44,7 @@ public class Track {
         return coordinates == null || coordinates.isEmpty();
     }
 
-    void addPoint(ZonedDateTime timestamp, Double latitude, Double longitude) {
+    void addPoint(String timestamp, Double latitude, Double longitude) {
         if (coordinates == null) {
             coordinates = new ArrayList<>();
         }
@@ -52,7 +53,7 @@ public class Track {
                 .max(Comparator.comparing(p -> p.timestamp));
 
         point.ifPresentOrElse(p -> {
-            if (timestamp.isAfter(p.timestamp)) {
+            if (ZonedDateTime.parse(timestamp).isAfter(ZonedDateTime.parse(p.timestamp))) {
                 coordinates.add(Coordinates.createPoint(timestamp, latitude, longitude));
             }
         }, () -> coordinates.add(Coordinates.createPoint(timestamp, latitude, longitude)));

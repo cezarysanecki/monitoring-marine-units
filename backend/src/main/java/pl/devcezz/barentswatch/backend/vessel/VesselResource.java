@@ -3,12 +3,10 @@ package pl.devcezz.barentswatch.backend.vessel;
 import pl.devcezz.barentswatch.backend.common.Coordinates;
 import pl.devcezz.barentswatch.backend.common.VesselRegistry;
 
-import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -33,14 +31,6 @@ public class VesselResource {
                 .map(this::convertToResponse)
                 .sorted(Comparator.comparing(VesselPointResponse::mmsi))
                 .toList();
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("/position/{mmsi}")
-    @RolesAllowed({ "user" })
-    public VesselPointResponse getVesselsPositionFor(@PathParam(value = "mmsi") Integer mmsi) {
-        return convertToResponse(vesselService.fetchVesselPosition(mmsi));
     }
 
     private VesselPointResponse convertToResponse(VesselRegistry registry) {

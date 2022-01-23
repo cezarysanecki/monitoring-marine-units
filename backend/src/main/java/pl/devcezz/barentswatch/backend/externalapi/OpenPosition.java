@@ -21,8 +21,9 @@ public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
         return geometry.type.equals("Point");
     }
 
-    private ZonedDateTime fetchTimestamp() {
-        return ZonedDateTime.parse(timeStamp, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssVV"));
+    private String fetchTimestamp() {
+        return ZonedDateTime.parse(timeStamp, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssVV"))
+                .toString();
     }
 
     private Double fetchLatitude() {

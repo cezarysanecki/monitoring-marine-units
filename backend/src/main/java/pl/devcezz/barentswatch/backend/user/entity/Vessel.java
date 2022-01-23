@@ -63,13 +63,13 @@ public class Vessel {
                         vesselRegistry.coordinates().latitude()));
     }
 
-    private boolean cannotAddPoint(ZonedDateTime timestamp) {
+    private boolean cannotAddPoint(String timestamp) {
         Optional<ZonedDateTime> lastUpdate = tracks.stream()
                 .map(Track::getLastUpdate)
                 .flatMap(Optional::stream)
                 .max(ZonedDateTime::compareTo);
 
-        return lastUpdate.map(lastTimestamp -> !lastTimestamp.isBefore(timestamp))
+        return lastUpdate.map(lastTimestamp -> !lastTimestamp.isBefore(ZonedDateTime.parse(timestamp)))
                 .orElse(false);
     }
 
