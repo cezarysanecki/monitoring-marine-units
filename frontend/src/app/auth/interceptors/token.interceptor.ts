@@ -3,13 +3,15 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode} fr
 import {catchError, Observable, switchMap, throwError} from "rxjs";
 import {AuthenticationService} from "../services/authentication.service";
 import {LoggedUser} from "../model/login-credentials.type";
+import {Router} from "@angular/router";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
   private isRefreshing = false;
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(private authenticationService: AuthenticationService,
+              private router: Router) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -30,6 +32,10 @@ export class TokenInterceptor implements HttpInterceptor {
               }),
               catchError(error => {
                 this.isRefreshing = false;
+
+                this.authenticationService.logout();
+                void this.router.navigate(['/']);
+
                 return throwError(error);
               })
             );
