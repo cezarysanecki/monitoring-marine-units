@@ -2,7 +2,8 @@ package pl.devcezz.barentswatch.backend.externalapi;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import pl.devcezz.barentswatch.backend.common.Coordinates;
-import pl.devcezz.barentswatch.backend.common.VesselRegistry;
+import pl.devcezz.barentswatch.backend.common.CurrentVesselRegistry;
+import pl.devcezz.barentswatch.backend.common.PointInTime;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,8 +15,8 @@ public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
     @JsonIgnoreProperties(ignoreUnknown = true)
     public record Geometry(String type, List<Double> coordinates) { }
 
-    VesselRegistry toVesselRegistry() {
-        return new VesselRegistry(parseTimestamp(), mmsi, new Coordinates(parseLatitude(), parseLongitude()));
+    CurrentVesselRegistry toVesselRegistry() {
+        return new CurrentVesselRegistry(mmsi, new PointInTime(parseTimestamp(), new Coordinates(parseLatitude(), parseLongitude())));
     }
 
     boolean isPoint() {

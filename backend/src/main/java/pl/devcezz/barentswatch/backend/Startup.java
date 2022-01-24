@@ -3,7 +3,7 @@ package pl.devcezz.barentswatch.backend;
 import io.quarkus.arc.Priority;
 import io.quarkus.runtime.StartupEvent;
 import pl.devcezz.barentswatch.backend.authentication.repositories.UserRepository;
-import pl.devcezz.barentswatch.backend.user.UserVesselRepository;
+import pl.devcezz.barentswatch.backend.monitoring.repositories.MonitoringRepository;
 
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
@@ -17,11 +17,11 @@ public class Startup {
     UserRepository userRepository;
 
     @Inject
-    UserVesselRepository userVesselRepository;
+    MonitoringRepository monitoringRepository;
 
     @Priority(value = 100)
     public void deleteUserVessels(@Observes StartupEvent evt) {
-        userVesselRepository.deleteAll();
+        monitoringRepository.deleteAll();
     }
 
     @Priority(value = 101)

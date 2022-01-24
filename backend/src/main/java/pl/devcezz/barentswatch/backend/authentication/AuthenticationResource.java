@@ -42,7 +42,7 @@ public class AuthenticationResource {
     @Path("/login")
     @VerifyClient
     public UserTokens generateAccessToken(UserCredentials request) {
-        return tokenFacade.generateTokenFor(new UserCredentials(request.email(), request.password()));
+        return tokenFacade.generateTokenFor(request);
     }
 
     @POST
@@ -50,7 +50,7 @@ public class AuthenticationResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/refreshtoken")
     public UserTokens refreshToken(String refreshToken) {
-        return tokenFacade.generateApiTokenFor(refreshToken);
+        return tokenFacade.generateApiTokenForRefreshToken(refreshToken);
     }
 
     record RegistrationRequest(@Email(regexp = ".+@.+\\..+") String email, @NotEmpty @Size(min = 4) String password) {

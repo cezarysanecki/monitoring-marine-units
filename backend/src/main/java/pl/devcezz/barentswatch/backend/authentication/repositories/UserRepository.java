@@ -3,8 +3,8 @@ package pl.devcezz.barentswatch.backend.authentication.repositories;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import io.vertx.mutiny.core.eventbus.EventBus;
-import pl.devcezz.barentswatch.backend.common.Events;
-import pl.devcezz.barentswatch.backend.security.UserAddedEvent;
+import pl.devcezz.barentswatch.backend.common.constants.Events;
+import pl.devcezz.barentswatch.backend.common.events.UserAddedEvent;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

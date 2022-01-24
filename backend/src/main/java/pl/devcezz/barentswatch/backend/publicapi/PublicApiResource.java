@@ -1,7 +1,7 @@
 package pl.devcezz.barentswatch.backend.publicapi;
 
 import pl.devcezz.barentswatch.backend.common.Area;
-import pl.devcezz.barentswatch.backend.common.VesselRegistry;
+import pl.devcezz.barentswatch.backend.common.CurrentVesselRegistry;
 import pl.devcezz.barentswatch.backend.externalapi.BarentsWatchFacade;
 
 import javax.inject.Inject;
@@ -24,12 +24,12 @@ public class PublicApiResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/vessels")
-    public List<VesselRegistry> getVessels(@QueryParam(value = "xMin") Double xMin,
-                                           @QueryParam(value = "xMax") Double xMax,
-                                           @QueryParam(value = "yMin") Double yMin,
-                                           @QueryParam(value = "yMax") Double yMax) {
+    public List<CurrentVesselRegistry> getVessels(@QueryParam(value = "xMin") Double xMin,
+                                                  @QueryParam(value = "xMax") Double xMax,
+                                                  @QueryParam(value = "yMin") Double yMin,
+                                                  @QueryParam(value = "yMax") Double yMax) {
         return barentsWatchFacade.getVesselsRegistryFor(new Area(xMin, xMax, yMin, yMax)).stream()
-                .sorted(Comparator.comparing(VesselRegistry::mmsi))
+                .sorted(Comparator.comparing(CurrentVesselRegistry::mmsi))
                 .toList();
     }
 }

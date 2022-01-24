@@ -2,12 +2,11 @@ package pl.devcezz.barentswatch.backend.authentication;
 
 import pl.devcezz.barentswatch.backend.authentication.repositories.UserRepository;
 import pl.devcezz.barentswatch.backend.common.UserInfo;
-import pl.devcezz.barentswatch.backend.security.exception.UserAlreadyRegisteredException;
-import pl.devcezz.barentswatch.backend.token.TokenFacade;
+import pl.devcezz.barentswatch.backend.authentication.exceptions.UserAlreadyRegisteredException;
+import pl.devcezz.barentswatch.backend.authentication.exceptions.UserNotFoundException;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import java.util.Optional;
 
 @ApplicationScoped
 public class UserService {
@@ -15,12 +14,10 @@ public class UserService {
     @Inject
     UserRepository userRepository;
 
-    @Inject
-    TokenFacade tokenFacade;
-
-    public Optional<UserInfo> findUserByEmail(String email) {
+    public UserInfo findUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .map(entity -> new UserInfo(entity.email, entity.role));
+                .map(entity -> new UserInfo(entity.email, entity.role))
+                .orElseThrow(() -> new UserNotFoundException(email));
     }
 
     public void registerUser(UserCredentials credentials) {

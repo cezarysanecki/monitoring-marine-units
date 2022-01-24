@@ -1,5 +1,10 @@
 package pl.devcezz.barentswatch.backend.token;
 
+import pl.devcezz.barentswatch.backend.token.exceptions.RefreshTokenExpiredException;
+import pl.devcezz.barentswatch.backend.token.exceptions.RefreshTokenNotFoundException;
+import pl.devcezz.barentswatch.backend.token.repositories.RefreshTokenEntity;
+import pl.devcezz.barentswatch.backend.token.repositories.RefreshTokenRepository;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -11,12 +16,17 @@ public class RefreshTokenService {
     @Inject
     RefreshTokenRepository refreshTokenRepository;
 
-    public Optional<RefreshTokenEntity> findByRefreshToken(String token) {
-        return refreshTokenRepository.findByToken(token);
-    }
+    @Transactional
+    public Optional<RefreshingProcessed> processRefreshing(String refreshToken) {
+        RefreshTokenEntity entity = refreshTokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(RefreshTokenNotFoundException::new);
 
-    public void deleteByRefreshToken(String refreshToken) {
-        refreshTokenRepository.deleteByRefreshToken(refreshToken);
+        if (entity.isExpired()) {
+            refreshTokenRepository.deleteByRefreshToken(refreshToken);
+            return Optional.empty();
+        }
+
+        return Optional.of(new RefreshingProcessed(entity.isValid(), entity.email, entity.token));
     }
 
     @Transactional
@@ -33,15 +43,5 @@ public class RefreshTokenService {
                 );
 
         return refreshToken.token;
-    }
-
-    @Transactional
-    public RefreshTokenEntity verifyExpiration(RefreshTokenEntity refreshTokenEntity) {
-        if (refreshTokenEntity.isExpired()) {
-            refreshTokenRepository.deleteByRefreshToken(refreshTokenEntity.token);
-            throw new RefreshTokenExpiredException();
-        }
-
-        return refreshTokenEntity;
     }
 }

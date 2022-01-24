@@ -3,7 +3,6 @@ package pl.devcezz.barentswatch.backend.authentication.verification;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import pl.devcezz.barentswatch.backend.authentication.UserCredentials;
 import pl.devcezz.barentswatch.backend.authentication.repositories.UserRepository;
-import pl.devcezz.barentswatch.backend.security.FailedUserVerificationException;
 
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;

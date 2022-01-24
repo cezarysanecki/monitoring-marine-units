@@ -4,10 +4,12 @@ import io.smallrye.jwt.build.Jwt;
 import pl.devcezz.barentswatch.backend.authentication.UserCredentials;
 import pl.devcezz.barentswatch.backend.authentication.UserService;
 import pl.devcezz.barentswatch.backend.common.UserInfo;
-import pl.devcezz.barentswatch.backend.security.exception.UserNotFoundException;
+import pl.devcezz.barentswatch.backend.token.exceptions.RefreshTokenExpiredException;
+import pl.devcezz.barentswatch.backend.token.repositories.RefreshTokenEntity;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.util.Optional;
 
 @ApplicationScoped
 public class TokenFacade {
@@ -19,23 +21,21 @@ public class TokenFacade {
     RefreshTokenService refreshTokenService;
 
     public UserTokens generateTokenFor(UserCredentials userCredentials) {
-        return userService.findUserByEmail(userCredentials.email())
-                .map(this::generateUserTokens)
-                .orElseThrow(() -> new UserNotFoundException(userCredentials.email()));
+        UserInfo user = userService.findUserByEmail(userCredentials.email());
+        return generateUserTokens(user);
     }
 
-    public UserTokens generateApiTokenFor(String refreshToken) {
-        RefreshTokenEntity entity = refreshTokenService.findByRefreshToken(refreshToken)
-                .orElseThrow(RefreshTokenNotFoundException::new);
+    public UserTokens generateApiTokenForRefreshToken(String refreshToken) {
+        RefreshingProcessed refreshingProcessed = refreshTokenService.processRefreshing(refreshToken)
+                .orElseThrow(RefreshTokenExpiredException::new);
 
-        if (entity.isExpired()) {
-            refreshTokenService.deleteByRefreshToken(refreshToken);
-            throw new RefreshTokenExpiredException();
+        UserInfo userInfo = userService.findUserByEmail(refreshingProcessed.email());
+
+        if (refreshingProcessed.isValid()) {
+            return new UserTokens(generateApiToken(userInfo), refreshingProcessed.refreshToken());
         }
 
-        return userService.findUserByEmail(entity.email)
-                .map(this::generateUserTokens)
-                .orElseThrow(() -> new UserNotFoundException(entity.email));
+        return generateUserTokens(userInfo);
     }
 
     private UserTokens generateUserTokens(UserInfo userInfo) {
