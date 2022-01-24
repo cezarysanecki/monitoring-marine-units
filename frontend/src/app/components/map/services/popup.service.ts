@@ -18,7 +18,7 @@ export class PopupService {
                     font-size: 0.8rem"
             >MMSI: ${registry.mmsi}</div>
             <div style="text-align: center; text-decoration: underline;">Last position update:</div>
-            <div style="text-align: center">${moment(registry.timestamp).format('DD-MM-YYYY HH:mm:ss')}</div>`;
+            <div style="text-align: center">${moment(registry.pointInTime.timestamp).format('DD-MM-YYYY HH:mm:ss')}</div>`;
   }
 
   makeVesselsPopup(registries: VesselRegistry[]): string {

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, map, Observable} from "rxjs";
-import {ApiToken, LoggedUser, LoginCredentials} from "../model/login-credentials.type";
+import {BehaviorSubject, map, Observable, of} from "rxjs";
+import {LoggedUser, LoginCredentials, UserTokens} from "../model/login-credentials.type";
 import {JwtTokenService} from "./jwt-token.service";
 
 @Injectable({
@@ -23,7 +23,7 @@ export class AuthenticationService {
   }
 
   login(credentials: LoginCredentials): Observable<LoggedUser> {
-    return this.http.post<ApiToken>('barentswatch/client/token', credentials)
+    return this.http.post<UserTokens>('barentswatch/authentication/login', credentials)
       .pipe(map(apiToken => {
         const loggedUser = this.jwtTokenService.registerToken(apiToken);
         this.loggedUserSubject.next(loggedUser);
@@ -31,14 +31,19 @@ export class AuthenticationService {
       }));
   }
 
-  refreshToken() {
+  refreshToken(): Observable<LoggedUser | null> {
     if (this.loggedUser) {
-      this.http.post<ApiToken>('barentswatch/client/token/refresh', this.loggedUser.tokens.refreshToken)
-        .subscribe(apiToken => {
-          const loggedUser = this.jwtTokenService.registerToken(apiToken);
-          this.loggedUserSubject.next(loggedUser);
-        });
+      return this.http.post<UserTokens>('barentswatch/authentication/refreshtoken', this.loggedUser.tokens.refreshToken, {
+        headers: {'Content-Type': 'application/json'}
+      })
+        .pipe(
+          map(apiToken => {
+            const loggedUser = this.jwtTokenService.registerToken(apiToken);
+            this.loggedUserSubject.next(loggedUser);
+            return loggedUser;
+          }));
     }
+    return of(null);
   }
 
   logout() {

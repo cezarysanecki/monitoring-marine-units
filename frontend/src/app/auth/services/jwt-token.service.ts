@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {ApiToken, LoggedUser} from "../model/login-credentials.type";
+import {UserTokens, LoggedUser} from "../model/login-credentials.type";
 import {JwtHelperService} from "@auth0/angular-jwt";
 
 @Injectable({
@@ -14,7 +14,7 @@ export class JwtTokenService {
     this.jwtHelperService = new JwtHelperService();
   }
 
-  registerToken(apiToken: ApiToken): LoggedUser {
+  registerToken(apiToken: UserTokens): LoggedUser {
     localStorage.setItem(this.userTokensKey, JSON.stringify(apiToken));
     return this.decodeLoggedUser(apiToken);
   }
@@ -26,14 +26,14 @@ export class JwtTokenService {
   getLoggedUser(): LoggedUser | null {
     const userTokensString = localStorage.getItem(this.userTokensKey);
     if (userTokensString) {
-      const userTokens = JSON.parse(userTokensString) as ApiToken;
+      const userTokens = JSON.parse(userTokensString) as UserTokens;
       return this.decodeLoggedUser(userTokens);
     }
     return null;
   }
 
-  private decodeLoggedUser(apiToken: ApiToken): LoggedUser {
-    const decodedToken = this.jwtHelperService.decodeToken(apiToken.token);
+  private decodeLoggedUser(apiToken: UserTokens): LoggedUser {
+    const decodedToken = this.jwtHelperService.decodeToken(apiToken.apiToken);
     return {
       email: decodedToken.sub,
       groups: decodedToken.groups,

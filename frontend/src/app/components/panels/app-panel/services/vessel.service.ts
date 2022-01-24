@@ -12,6 +12,6 @@ export class VesselService {
   }
 
   getUserVessels(): Observable<Vessel[]> {
-    return this.http.get<Vessel[]>('barentswatch/user/vessels');
+    return this.http.get<Vessel[]>('barentswatch/monitoring/vessels');
   }
 }

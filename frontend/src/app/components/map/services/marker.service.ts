@@ -62,8 +62,8 @@ export class MarkerService {
 
     registries.forEach(registry => {
       let closestMarker = vesselMarkers.filter(marker =>
-        Math.abs(marker.latitude - registry.coordinates.latitude) <= widthPart &&
-        Math.abs(marker.longitude - registry.coordinates.longitude) <= heightPart);
+        Math.abs(marker.latitude - registry.pointInTime.coordinates.latitude) <= widthPart &&
+        Math.abs(marker.longitude - registry.pointInTime.coordinates.longitude) <= heightPart);
 
       if (closestMarker.length > 0) {
         closestMarker[0].vessels.push(registry);
@@ -71,8 +71,8 @@ export class MarkerService {
         vesselMarkers.push({
           vessels: [registry],
           timestamp: null,
-          latitude: registry.coordinates.latitude,
-          longitude: registry.coordinates.longitude
+          latitude: registry.pointInTime.coordinates.latitude,
+          longitude: registry.pointInTime.coordinates.longitude
         });
       }
     });
@@ -119,14 +119,14 @@ export class MarkerService {
     const limitTimestamp = moment().subtract(5, 'minutes');
 
     return registries.map(registry => {
-      const registryTimestamp = moment(registry.timestamp);
+      const registryTimestamp = moment(registry.pointInTime.timestamp);
 
       return {
         data: {
           vessels: [registry],
-          timestamp: registry.timestamp,
-          latitude: registry.coordinates.latitude,
-          longitude: registry.coordinates.longitude
+          timestamp: registry.pointInTime.timestamp,
+          latitude: registry.pointInTime.coordinates.latitude,
+          longitude: registry.pointInTime.coordinates.longitude
         },
         markerOptions: {
           color: (registryTimestamp < limitTimestamp) ? 'grey' : 'green',

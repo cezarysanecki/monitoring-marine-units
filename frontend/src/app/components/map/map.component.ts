@@ -3,21 +3,6 @@ import * as L from 'leaflet';
 import {Subject} from "rxjs";
 import {MarkerService} from "./services/marker.service";
 
-const iconRetinaUrl = 'assets/marker-icon-2x.png';
-const iconUrl = 'assets/marker-icon.png';
-const shadowUrl = 'assets/marker-shadow.png';
-const iconDefault = L.icon({
-  iconRetinaUrl,
-  iconUrl,
-  shadowUrl,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  tooltipAnchor: [16, -28],
-  shadowSize: [41, 41]
-});
-L.Marker.prototype.options.icon = iconDefault;
-
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
@@ -30,7 +15,8 @@ export class MapComponent implements AfterViewInit {
 
   private map!: L.Map;
 
-  constructor(private markerService: MarkerService) { }
+  constructor(private markerService: MarkerService) {
+  }
 
   ngAfterViewInit() {
     this.initMap();
@@ -43,14 +29,9 @@ export class MapComponent implements AfterViewInit {
 
   private initMap() {
     this.map = L.map('map', {
-      center: [ 60, 10.5 ],
+      center: [60, 10.5],
       zoom: 4,
-      maxBounds: [[ 85, -50 ], [ 20, 85 ]]
-    });
-
-    this.map.on('zoomend', () => {
-      this.markerService.makeVesselsMarkers(this.map);
-      this.refreshMap();
+      maxBounds: [[85, -50], [20, 85]]
     });
 
     this.map.on('moveend', () => {

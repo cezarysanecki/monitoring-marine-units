@@ -1,7 +1,8 @@
-import {Inject, Injectable} from "@angular/core";
-import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
+import {Injectable} from "@angular/core";
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode} from "@angular/common/http";
+import {catchError, Observable, switchMap, throwError} from "rxjs";
 import {AuthenticationService} from "../services/authentication.service";
+import {LoggedUser} from "../model/login-credentials.type";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -12,31 +13,26 @@ export class TokenInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const loggedUser = this.authenticationService.loggedUser;
-
-    if (loggedUser && request.url.startsWith('barentswatch/user')) {
-      const tokenReq = request.clone({
-        setHeaders: {
-          Authorization: `Bearer ${loggedUser.tokens.token}`
-        }
-      });
+    if (request.url.startsWith('barentswatch/monitoring')) {
+      const tokenReq = this.updateHeaders(request, this.authenticationService.loggedUser);
 
       return next.handle(tokenReq).pipe(catchError(error => {
-        if (error.status === 401) {
-          if (loggedUser && !this.isRefreshing) {
-            this.isRefreshing = true;
+        if (!this.isRefreshing && error.status === HttpStatusCode.Unauthorized) {
+          this.isRefreshing = true;
 
-            this.authenticationService.refreshToken();
+          return this.authenticationService.refreshToken()
+            .pipe(
+              switchMap(loggedUser => {
+                const tokenReq = this.updateHeaders(request, loggedUser);
+                this.isRefreshing = false;
 
-            const tokenReq = request.clone({
-              setHeaders: {
-                Authorization: `Bearer ${loggedUser.tokens.token}`
-              }
-            });
-            this.isRefreshing = false;
-
-            return next.handle(tokenReq);
-          }
+                return next.handle(tokenReq);
+              }),
+              catchError(error => {
+                this.isRefreshing = false;
+                return throwError(error);
+              })
+            );
         }
 
         return throwError(error);
@@ -44,5 +40,16 @@ export class TokenInterceptor implements HttpInterceptor {
     }
 
     return next.handle(request);
+  }
+
+  private updateHeaders(request: HttpRequest<any>, loggedUser: LoggedUser | null): HttpRequest<any> {
+    if (loggedUser) {
+      return request.clone({
+        setHeaders: {
+          Authorization: `Bearer ${loggedUser.tokens.apiToken}`
+        }
+      });
+    }
+    return request;
   }
 }

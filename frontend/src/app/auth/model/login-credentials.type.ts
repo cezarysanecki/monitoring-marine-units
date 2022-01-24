@@ -3,13 +3,13 @@ export type LoginCredentials = {
   password: string
 }
 
-export type ApiToken = {
-  token: string,
+export type UserTokens = {
+  apiToken: string,
   refreshToken: string
 }
 
 export type LoggedUser = {
   email: string,
   groups: string[],
-  tokens: ApiToken
+  tokens: UserTokens
 }
