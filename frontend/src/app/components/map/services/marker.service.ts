@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {ElementRef, Injectable} from '@angular/core';
 import * as L from 'leaflet';
 import {VesselService} from "./vessel.service";
 import {VesselRegistry} from "../model/vessel-position.type";
@@ -12,12 +12,12 @@ export class MarkerService {
 
   markers: L.CircleMarker[] = [];
 
-  constructor(private vesselPositionService: VesselService,
+  constructor(private vesselService: VesselService,
               private popupService: PopupService) {
   }
 
-  makeVesselsMarkers(map: L.Map) {
-    this.vesselPositionService.fetchVesselsPositions(map)
+  makeVesselsMarkers(map: L.Map, elementRef: ElementRef) {
+    this.vesselService.fetchVesselsPositions(map)
       .subscribe((registries: VesselRegistry[]) => {
         this.markers.forEach(marker => map.removeLayer(marker));
         this.markers = [];
@@ -32,7 +32,15 @@ export class MarkerService {
             {
               ...vesselMarker.markerOptions
             });
-          marker.bindPopup(vesselMarker.popupTemplate);
+          marker.bindPopup(vesselMarker.popupTemplate)
+            .on("popupopen", () => {
+              elementRef.nativeElement
+                .querySelector(".add-vessel")
+                .addEventListener("click", () => {
+                  this.vesselService.trackVessel(vesselMarker.data.vessels[0].mmsi)
+                    .subscribe();
+                })
+            });
 
           return marker;
         });

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {animate, state, style, transition} from "@angular/animations";
-import {VesselService} from "./services/vessel.service";
 import {Vessel} from "./model/vessel.type";
+import {VesselService} from "../../map/services/vessel.service";
 
 @Component({
   selector: 'app-app-panel',
@@ -22,7 +22,8 @@ export class AppPanelComponent implements OnInit {
 
   vessels: Vessel[] = [];
 
-  constructor(private vesselService: VesselService) { }
+  constructor(private vesselService: VesselService) {
+  }
 
   ngOnInit() {
     this.vesselService.getUserVessels()

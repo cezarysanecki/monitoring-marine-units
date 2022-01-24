@@ -1,7 +1,8 @@
-import {AfterViewInit, Component, Input} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input} from '@angular/core';
 import * as L from 'leaflet';
 import {Subject} from "rxjs";
 import {MarkerService} from "./services/marker.service";
+import {AuthenticationService} from "../../auth/services/authentication.service";
 
 @Component({
   selector: 'app-map',
@@ -15,15 +16,22 @@ export class MapComponent implements AfterViewInit {
 
   private map!: L.Map;
 
-  constructor(private markerService: MarkerService) {
+  constructor(private markerService: MarkerService,
+              private authenticationService: AuthenticationService,
+              private elementRef: ElementRef) {
   }
 
   ngAfterViewInit() {
     this.initMap();
-    this.markerService.makeVesselsMarkers(this.map);
+    this.markerService.makeVesselsMarkers(this.map, this.elementRef);
 
     this.resizeMap.subscribe(() => {
       this.refreshMap();
+    });
+
+    this.authenticationService.loggedUser$.subscribe(() => {
+      this.map.closePopup();
+      this.markerService.makeVesselsMarkers(this.map, this.elementRef);
     });
   }
 
@@ -35,7 +43,7 @@ export class MapComponent implements AfterViewInit {
     });
 
     this.map.on('moveend', () => {
-      this.markerService.makeVesselsMarkers(this.map);
+      this.markerService.makeVesselsMarkers(this.map, this.elementRef);
       this.refreshMap();
     });
 

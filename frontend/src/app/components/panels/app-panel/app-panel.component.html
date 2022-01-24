@@ -1,13 +1,15 @@
 <div class="app-panel">
   <h1>Tracked Vessels</h1>
-  <table style="width: 90%; margin: 0 auto;">
+  <div *ngIf="vessels.length == 0">
+    <div>No tracked vessels</div>
+    <div style="margin-top: 5px;">Choose vessel on map and add some.</div>
+  </div>
+  <table *ngIf="vessels.length > 0" style="width: 90%; margin: 0 auto;">
     <tr>
       <th>MMSI</th>
-      <th>Name</th>
       <th>Actions</th>
     </tr>
     <tr *ngFor="let vessel of vessels">
-      <td>{{ vessel.mmsi }}</td>
       <td>{{ vessel.mmsi }}</td>
       <td>
         <a title="Info" class="material-icons-outlined md-24">info</a>
