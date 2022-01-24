@@ -1,6 +1,7 @@
 package pl.devcezz.barentswatch.backend.user;
 
-import pl.devcezz.barentswatch.backend.security.ClientAddedEvent;
+import pl.devcezz.barentswatch.backend.common.Events;
+import pl.devcezz.barentswatch.backend.security.UserAddedEvent;
 import pl.devcezz.barentswatch.backend.user.entity.UserVessel;
 import io.quarkus.vertx.ConsumeEvent;
 
@@ -13,8 +14,8 @@ public class VesselService {
     @Inject
     UserVesselRepository userVesselRepository;
 
-    @ConsumeEvent(value = "new-client")
-    public void addNewClient(ClientAddedEvent event) {
+    @ConsumeEvent(value = Events.NEW_USER)
+    public void addNewUser(UserAddedEvent event) {
         UserVessel userVessel = UserVessel.createUser(event.email());
         userVesselRepository.persist(userVessel);
     }

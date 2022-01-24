@@ -1,10 +1,7 @@
 package pl.devcezz.barentswatch.backend.user;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
-import org.eclipse.microprofile.rest.client.inject.RestClient;
-import pl.devcezz.barentswatch.backend.Registry;
-import pl.devcezz.barentswatch.backend.externalapi.BarentsWatchExternalApi;
-import pl.devcezz.barentswatch.backend.externalapi.OpenPosition;
+import pl.devcezz.barentswatch.backend.externalapi.BarentsWatchFacade;
 import pl.devcezz.barentswatch.backend.user.entity.UserVessel;
 import pl.devcezz.barentswatch.backend.user.entity.Vessel;
 
@@ -26,8 +23,7 @@ public class UserVesselsResource {
     UserVesselRepository userVesselRepository;
 
     @Inject
-    @RestClient
-    BarentsWatchExternalApi barentsWatchExternalApi;
+    BarentsWatchFacade barentsWatchFacade;
 
     @Inject
     JsonWebToken token;
@@ -51,8 +47,7 @@ public class UserVesselsResource {
         UserVessel user = userVesselRepository.find("email", token.getSubject()).firstResult();
         user.trackVessel(mmsi);
 
-        OpenPosition openPosition = barentsWatchExternalApi.getVesselPositionFor(Registry.accessToken.get(), mmsi);
-        user.addPointForVessel(openPosition.createVesselRegistry());
+        user.addPointForVessel(barentsWatchFacade.getVesselRegistryFor(mmsi));
 
         userVesselRepository.update(user);
     }
@@ -87,8 +82,11 @@ public class UserVesselsResource {
     }
 }
 
-record UserVesselResponse(Integer mmsi, List<VesselTrackResponse> tracks) {}
+record UserVesselResponse(Integer mmsi, List<VesselTrackResponse> tracks) {
+}
 
-record VesselTrackResponse(List<VesselCoordinatesResponse> coordinates) {}
+record VesselTrackResponse(List<VesselCoordinatesResponse> coordinates) {
+}
 
-record VesselCoordinatesResponse(String timestamp, Double latitude, Double longitude) {}
+record VesselCoordinatesResponse(String timestamp, Double latitude, Double longitude) {
+}

@@ -2,7 +2,7 @@ package pl.devcezz.barentswatch.backend;
 
 import io.quarkus.arc.Priority;
 import io.quarkus.runtime.StartupEvent;
-import pl.devcezz.barentswatch.backend.security.ClientRepository;
+import pl.devcezz.barentswatch.backend.authentication.repositories.UserRepository;
 import pl.devcezz.barentswatch.backend.user.UserVesselRepository;
 
 import javax.enterprise.event.Observes;
@@ -14,7 +14,7 @@ import javax.transaction.Transactional;
 public class Startup {
 
     @Inject
-    ClientRepository clientRepository;
+    UserRepository userRepository;
 
     @Inject
     UserVesselRepository userVesselRepository;
@@ -27,8 +27,8 @@ public class Startup {
     @Priority(value = 101)
     @Transactional
     public void loadUsers(@Observes StartupEvent evt) {
-        clientRepository.deleteAll();
+        userRepository.deleteAll();
 
-        clientRepository.add("user@user.pl", "user", "user");
+        userRepository.save("user@user.pl", "user", "user");
     }
 }

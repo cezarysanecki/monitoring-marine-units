@@ -5,10 +5,10 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class FailedClientVerificationHandler implements ExceptionMapper<FailedClientVerificationException> {
+public class FailedUserVerificationHandler implements ExceptionMapper<FailedUserVerificationException> {
 
     @Override
-    public Response toResponse(FailedClientVerificationException exception) {
+    public Response toResponse(FailedUserVerificationException exception) {
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity(new Issue(exception.getMessage()))
                 .build();

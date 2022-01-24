@@ -14,15 +14,15 @@ public interface BarentsWatchExternalApi {
 
     @GET
     @Path(value = "/openpositions")
-    List<OpenPosition> getVesselsPositionsFor(@HeaderParam("Authorization") String token,
-                                              @QueryParam(value = "Xmin") double xMin,
-                                              @QueryParam(value = "Xmax") double xMax,
-                                              @QueryParam(value = "Ymin") double yMin,
-                                              @QueryParam(value = "Ymax") double yMax);
+    List<OpenPosition> fetchOpenPositionsFor(@HeaderParam("Authorization") String token,
+                                             @QueryParam(value = "Xmin") double xMin,
+                                             @QueryParam(value = "Xmax") double xMax,
+                                             @QueryParam(value = "Ymin") double yMin,
+                                             @QueryParam(value = "Ymax") double yMax);
 
     @GET
     @Path("/openposition/{mmsi}")
-    OpenPosition getVesselPositionFor(@HeaderParam("Authorization") String token,
+    OpenPosition fetchOpenPositionFor(@HeaderParam("Authorization") String token,
                                       @PathParam(value = "mmsi") Integer mmsi);
 }
 

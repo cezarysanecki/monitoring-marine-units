@@ -5,7 +5,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import javax.inject.Singleton;
 
 @Singleton
-public class AccessTokenProperties {
+class AccessTokenProperties {
 
     @ConfigProperty(name = "barents-watch.access.client-id")
     public String clientId;

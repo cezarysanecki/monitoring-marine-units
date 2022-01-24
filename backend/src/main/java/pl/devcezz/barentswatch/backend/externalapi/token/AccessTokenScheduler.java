@@ -16,7 +16,7 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Form;
 
 @ApplicationScoped
-public class AccessTokenScheduler {
+class AccessTokenScheduler {
 
     Logger logger = LoggerFactory.getLogger(AccessTokenScheduler.class);
 
@@ -46,7 +46,7 @@ public class AccessTokenScheduler {
             throw exception;
         }
     }
-}
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-record Token(@JsonProperty(value = "access_token") String value) {}
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    record Token(@JsonProperty(value = "access_token") String value) {}
+}

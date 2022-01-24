@@ -4,10 +4,12 @@ export type LoginCredentials = {
 }
 
 export type ApiToken = {
-  token: string
+  token: string,
+  refreshToken: string
 }
 
 export type LoggedUser = {
   email: string,
-  groups: string[]
+  groups: string[],
+  tokens: ApiToken
 }

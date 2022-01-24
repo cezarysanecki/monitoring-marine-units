@@ -9,9 +9,9 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class ExternalApiHandler implements ExceptionMapper<WebApplicationException> {
+public class ExternalApiExceptionHandler implements ExceptionMapper<WebApplicationException> {
 
-    Logger logger = LoggerFactory.getLogger(ExternalApiHandler.class);
+    Logger logger = LoggerFactory.getLogger(ExternalApiExceptionHandler.class);
 
     @Override
     public Response toResponse(WebApplicationException exception) {

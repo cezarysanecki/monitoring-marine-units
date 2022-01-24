@@ -7,7 +7,7 @@ import {JwtHelperService} from "@auth0/angular-jwt";
 })
 export class JwtTokenService {
 
-  private jwtTokenKey = 'token';
+  private userTokensKey = 'userTokens';
   private jwtHelperService: JwtHelperService;
 
   constructor() {
@@ -15,26 +15,29 @@ export class JwtTokenService {
   }
 
   registerToken(apiToken: ApiToken): LoggedUser {
-    localStorage.setItem(this.jwtTokenKey, apiToken.token);
-    return this.decodeLoggedUser(apiToken.token);
+    localStorage.setItem(this.userTokensKey, JSON.stringify(apiToken));
+    return this.decodeLoggedUser(apiToken);
   }
 
   invalidateToken() {
-    localStorage.removeItem(this.jwtTokenKey);
+    localStorage.removeItem(this.userTokensKey);
   }
 
   getLoggedUser(): LoggedUser | null {
-    if (localStorage.getItem(this.jwtTokenKey)) {
-      return this.decodeLoggedUser(localStorage.getItem(this.jwtTokenKey) as string);
+    const userTokensString = localStorage.getItem(this.userTokensKey);
+    if (userTokensString) {
+      const userTokens = JSON.parse(userTokensString) as ApiToken;
+      return this.decodeLoggedUser(userTokens);
     }
     return null;
   }
 
-  private decodeLoggedUser(token: string): LoggedUser {
-    const decodedToken = this.jwtHelperService.decodeToken(token);
+  private decodeLoggedUser(apiToken: ApiToken): LoggedUser {
+    const decodedToken = this.jwtHelperService.decodeToken(apiToken.token);
     return {
       email: decodedToken.sub,
-      groups: decodedToken.groups
+      groups: decodedToken.groups,
+      tokens: apiToken
     };
   }
 }

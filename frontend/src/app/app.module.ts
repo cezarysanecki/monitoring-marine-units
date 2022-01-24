@@ -14,6 +14,7 @@ import {LoginPanelComponent} from "./components/panels/login-panel/login-panel.c
 import {MapPanelComponent} from "./components/panels/map-panel/map-panel.component";
 import {FormsModule} from "@angular/forms";
 import {AppPanelComponent} from "./components/panels/app-panel/app-panel.component";
+import {TokenInterceptor} from "./auth/interceptors/token.interceptor";
 
 @NgModule({
   declarations: [
@@ -34,6 +35,11 @@ import {AppPanelComponent} from "./components/panels/app-panel/app-panel.compone
     {
       provide: "BASE_API_URL",
       useValue: environment.apiUrl,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptor,
+      multi: true
     },
     {
       provide: HTTP_INTERCEPTORS,

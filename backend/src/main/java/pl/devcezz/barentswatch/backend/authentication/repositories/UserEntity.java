@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch.backend.security;
+package pl.devcezz.barentswatch.backend.authentication.repositories;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,8 +6,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "client")
-public class Client {
+@Table(name = "app_user")
+public class UserEntity {
 
     @Id
     @GeneratedValue

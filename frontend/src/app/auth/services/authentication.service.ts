@@ -31,6 +31,16 @@ export class AuthenticationService {
       }));
   }
 
+  refreshToken() {
+    if (this.loggedUser) {
+      this.http.post<ApiToken>('barentswatch/client/token/refresh', this.loggedUser.tokens.refreshToken)
+        .subscribe(apiToken => {
+          const loggedUser = this.jwtTokenService.registerToken(apiToken);
+          this.loggedUserSubject.next(loggedUser);
+        });
+    }
+  }
+
   logout() {
     this.jwtTokenService.invalidateToken();
     this.loggedUserSubject.next(null);

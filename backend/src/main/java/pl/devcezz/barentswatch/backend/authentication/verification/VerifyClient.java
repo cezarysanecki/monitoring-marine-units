@@ -1,4 +1,4 @@
-package pl.devcezz.barentswatch.backend.security;
+package pl.devcezz.barentswatch.backend.authentication.verification;
 
 import javax.interceptor.InterceptorBinding;
 import java.lang.annotation.ElementType;
