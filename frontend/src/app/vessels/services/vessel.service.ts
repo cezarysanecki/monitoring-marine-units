@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {VesselRegistry} from "../model/vessel.type";
+import {MonitoredVessel, VesselRegistry} from "../model/vessel.type";
 import {BehaviorSubject, map, mergeMap, Observable} from "rxjs";
-import {Vessel} from "../../components/panels/app-panel/model/vessel.type";
 import {Bounds} from "../../components/map/type/marker.type";
 
 @Injectable({
@@ -10,11 +9,11 @@ import {Bounds} from "../../components/map/type/marker.type";
 })
 export class VesselService {
 
-  private trackedVesselsSubject: BehaviorSubject<Vessel[]>;
-  public trackedVessels$: Observable<Vessel[]>;
+  private trackedVesselsSubject: BehaviorSubject<MonitoredVessel[]>;
+  public trackedVessels$: Observable<MonitoredVessel[]>;
 
   constructor(private http: HttpClient) {
-    this.trackedVesselsSubject = new BehaviorSubject<Vessel[]>([]);
+    this.trackedVesselsSubject = new BehaviorSubject<MonitoredVessel[]>([]);
     this.trackedVessels$ = this.trackedVesselsSubject.asObservable();
   }
 
@@ -27,8 +26,8 @@ export class VesselService {
     );
   }
 
-  getUserVessels(): Observable<Vessel[]> {
-    return this.http.get<Vessel[]>('barentswatch/monitoring/vessels')
+  getUserVessels(): Observable<MonitoredVessel[]> {
+    return this.http.get<MonitoredVessel[]>('barentswatch/monitoring/vessels')
       .pipe(
         map(trackedVessels => {
           this.trackedVesselsSubject.next(trackedVessels);
@@ -37,26 +36,19 @@ export class VesselService {
       );
   }
 
-  trackVessel(mmsi: number): Observable<Vessel[]> {
-    return this.http.post<void>('barentswatch/monitoring/track', mmsi)
-      .pipe(
-        mergeMap(() => this.getUserVessels())
-      );
+  trackVessel(mmsi: number): Observable<void> {
+    return this.http.post<void>('barentswatch/monitoring/track', mmsi);
   }
 
-  suspendTrackingVessel(mmsi: number): Observable<Vessel[]> {
+  suspendTrackingVessel(mmsi: number): Observable<void> {
     return this.http.delete<void>('barentswatch/monitoring/track/suspend', {
       body: mmsi
-    }).pipe(
-      mergeMap(() => this.getUserVessels())
-    );
+    });
   }
 
-  removeTrackedVessel(mmsi: number): Observable<Vessel[]> {
+  removeTrackedVessel(mmsi: number): Observable<void> {
     return this.http.delete<void>('barentswatch/monitoring/track', {
       body: mmsi
-    }).pipe(
-      mergeMap(() => this.getUserVessels())
-    );
+    });
   }
 }

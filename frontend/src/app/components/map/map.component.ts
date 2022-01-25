@@ -1,7 +1,5 @@
-import {AfterViewInit, Component, Input} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, Output} from '@angular/core';
 import {Subject} from "rxjs";
-import {MarkerService} from "./services/marker.service";
-import {AuthenticationService} from "../../auth/services/authentication.service";
 import {MapService} from "./services/map.service";
 
 @Component({
@@ -14,20 +12,17 @@ export class MapComponent implements AfterViewInit {
   @Input()
   resizeMapSubject!: Subject<void>;
 
-  constructor(private mapService: MapService,
-              private markerService: MarkerService,
-              private authenticationService: AuthenticationService) {
+  @Output()
+  isMapReadyEvent = new EventEmitter<boolean>();
+
+  constructor(private mapService: MapService) {
   }
 
   ngAfterViewInit() {
-    this.mapService.initMap();
+    this.isMapReadyEvent.emit(this.mapService.initMap());
 
     this.resizeMapSubject.subscribe(() => {
-      this.mapService.markVesselsOnMap();
-    });
-
-    this.authenticationService.loggedUser$.subscribe(() => {
-      this.mapService.markVesselsOnMap();
+      this.mapService.refreshMap();
     });
   }
 }

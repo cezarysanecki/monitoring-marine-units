@@ -1,23 +1,23 @@
 import {Injectable} from "@angular/core";
 import * as L from 'leaflet';
-import {MarkerService} from "./marker.service";
-import {MarkerPreparerService} from "./marker-preparer.service";
-import {Bounds} from "../type/marker.type";
-import {map} from "rxjs";
+import {CurrentMapParameters} from "../type/marker.type";
+import {BehaviorSubject, Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
 
+  private mapMoveEndSubject!: BehaviorSubject<CurrentMapParameters>;
+  public mapMoveEnd$!: Observable<CurrentMapParameters>;
+
   map!: L.Map;
   markers: L.CircleMarker[] = [];
 
-  constructor(private markerPreparerService: MarkerPreparerService,
-              private markerService: MarkerService) {
+  constructor() {
   }
 
-  initMap() {
+  initMap(): boolean {
     this.map = L.map('map', {
       center: [60, 10.5],
       zoom: 4,
@@ -32,26 +32,29 @@ export class MapService {
 
     tiles.addTo(this.map);
 
+    this.mapMoveEndSubject = new BehaviorSubject<CurrentMapParameters>(this.getCurrentMapParameters());
+    this.mapMoveEnd$ = this.mapMoveEndSubject.asObservable();
+
     this.map.on('moveend', () => {
-      this.markVesselsOnMap();
+      this.mapMoveEndSubject.next(this.getCurrentMapParameters())
     });
+
+    return true;
   }
 
-  markVesselsOnMap() {
-    this.markerPreparerService.prepareVesselsMarkers(this.getBounds(), this.map.getZoom())
-      .pipe(
-        map(markers => {
-          return this.markerService.convertToMapCircleMarkers(markers)
-        })
-      )
-      .subscribe(markers => {
-        this.markers.forEach(marker => this.map.removeLayer(marker));
-        this.markers = markers;
+  clearMarkers() {
+    this.markers.forEach(marker => this.map.removeLayer(marker));
+    this.markers = [];
+  }
 
-        this.markers.forEach(mapMarker => {
-          mapMarker.addTo(this.map);
-        })
-      });
+  attachMarkersOnMap(markers: L.CircleMarker[]) {
+    this.markers.forEach(marker => this.map.removeLayer(marker));
+    this.markers = markers;
+
+    this.markers.forEach(mapMarker => {
+      mapMarker.addTo(this.map);
+    });
+
     this.refreshMap();
   }
 
@@ -61,13 +64,21 @@ export class MapService {
     }, 200);
   }
 
-  private getBounds(): Bounds {
+  centerOn(latitude: number, longitude: number) {
+    this.map.flyTo([latitude, longitude], 10);
+  }
+
+  private getCurrentMapParameters(): CurrentMapParameters {
     const bounds = this.map.getBounds();
+
     return {
-      northWestLongitude: bounds.getNorthWest().lng,
-      northWestLatitude: bounds.getNorthWest().lat,
-      southEastLongitude: bounds.getSouthEast().lng,
-      southEastLatitude: bounds.getSouthEast().lng
+      bounds: {
+        northWestLongitude: bounds.getNorthWest().lng,
+        northWestLatitude: bounds.getNorthWest().lat,
+        southEastLongitude: bounds.getSouthEast().lng,
+        southEastLatitude: bounds.getSouthEast().lng
+      },
+      zoom: this.map.getZoom()
     }
   }
 }

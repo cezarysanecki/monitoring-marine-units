@@ -1,7 +1,5 @@
 import {Injectable} from "@angular/core";
-import {VesselService} from "../../../vessels/services/vessel.service";
-import {Bounds, GroupMarker, SingleMarker} from "../type/marker.type";
-import {iif, mergeMap, Observable, of} from "rxjs";
+import {Bounds, CurrentMapParameters, GroupMarker, SingleMarker} from "../type/marker.type";
 import {VesselRegistry} from "../../../vessels/model/vessel.type";
 import * as moment from "moment";
 import {environment} from "../../../../environments/environment";
@@ -12,20 +10,14 @@ import DurationConstructor = moment.unitOfTime.DurationConstructor;
 })
 export class MarkerPreparerService {
 
-  constructor(private vesselService: VesselService) {
+  constructor() {
   }
 
-  prepareVesselsMarkers(bounds: Bounds, zoom: number): Observable<GroupMarker[] | SingleMarker[]> {
-    return this.vesselService.fetchVesselsPositions(bounds)
-      .pipe(
-        mergeMap(registries =>
-          iif(
-            () => zoom < environment.zoomThreshold,
-            of(this.mapToGroupMarkers(bounds, registries)),
-            of(this.mapToSingleMarkers(registries))
-          )
-        )
-      );
+  prepareVesselsMarkersFor(registries: VesselRegistry[], markersGroupOptions: CurrentMapParameters): GroupMarker[] | SingleMarker[] {
+    if (markersGroupOptions.zoom < environment.zoomThreshold) {
+      return this.mapToGroupMarkers(markersGroupOptions.bounds, registries);
+    }
+    return this.mapToSingleMarkers(registries);
   }
 
   private mapToGroupMarkers(bounds: Bounds, registries: VesselRegistry[]): GroupMarker[] {

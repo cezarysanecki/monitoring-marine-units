@@ -13,6 +13,11 @@ export type MarkerCoordinates = {
   longitude: number
 }
 
+export type CurrentMapParameters = {
+  zoom: number,
+  bounds: Bounds
+}
+
 export type Bounds = {
   northWestLongitude: number,
   northWestLatitude: number,

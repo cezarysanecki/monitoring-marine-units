@@ -1,6 +1,5 @@
 import {Component, Input} from '@angular/core';
 import {AuthenticationService} from "../../auth/services/authentication.service";
-import {VesselRegistry} from "../../vessels/model/vessel.type";
 import {LoggedUser} from "../../auth/model/login-credentials.type";
 import * as moment from 'moment';
 import {VesselService} from "../../vessels/services/vessel.service";
