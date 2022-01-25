@@ -22,18 +22,12 @@ export class MapComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.mapService.initMap();
 
-    this.mapService.map.on('moveend', () => {
-      this.markerService.makeVesselsMarkers(this.mapService.map);
-      this.mapService.refreshMap();
-    });
-
     this.resizeMapSubject.subscribe(() => {
-      this.mapService.refreshMap();
+      this.mapService.markVesselsOnMap();
     });
 
     this.authenticationService.loggedUser$.subscribe(() => {
-      this.mapService.map.closePopup();
-      this.markerService.makeVesselsMarkers(this.mapService.map);
+      this.mapService.markVesselsOnMap();
     });
   }
 }

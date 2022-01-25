@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {VesselRegistry} from "../model/vessel.type";
-import * as L from 'leaflet';
 import {BehaviorSubject, map, mergeMap, Observable} from "rxjs";
 import {Vessel} from "../../components/panels/app-panel/model/vessel.type";
+import {Bounds} from "../../components/map/type/marker.type";
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +18,12 @@ export class VesselService {
     this.trackedVessels$ = this.trackedVesselsSubject.asObservable();
   }
 
-  fetchVesselsPositions(map: L.Map): Observable<VesselRegistry[]> {
-    let bounds = map.getBounds();
-
+  fetchVesselsPositions(bounds: Bounds): Observable<VesselRegistry[]> {
     return this.http.get<VesselRegistry[]>('barentswatch/public/vessels?' +
-      `xMin=${bounds.getNorthWest().lng}&` +
-      `xMax=${bounds.getSouthEast().lng}&` +
-      `yMin=${bounds.getSouthEast().lat}&` +
-      `yMax=${bounds.getNorthWest().lat}`
+      `xMin=${bounds.northWestLongitude}&` +
+      `xMax=${bounds.southEastLongitude}&` +
+      `yMin=${bounds.southEastLatitude}&` +
+      `yMax=${bounds.northWestLatitude}`
     );
   }
 

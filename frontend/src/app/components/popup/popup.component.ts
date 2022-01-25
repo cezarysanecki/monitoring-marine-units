@@ -4,6 +4,7 @@ import {VesselRegistry} from "../../vessels/model/vessel.type";
 import {LoggedUser} from "../../auth/model/login-credentials.type";
 import * as moment from 'moment';
 import {VesselService} from "../../vessels/services/vessel.service";
+import {GroupMarker, SingleMarker} from "../map/type/marker.type";
 
 @Component({
   selector: 'app-popup',
@@ -15,7 +16,10 @@ export class PopupComponent {
   moment = moment;
 
   @Input()
-  registries: VesselRegistry[] = [];
+  singleMarker: SingleMarker | null = null;
+
+  @Input()
+  groupMarker: GroupMarker | null = null;
 
   loggedUser: LoggedUser | null;
 

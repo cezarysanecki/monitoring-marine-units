@@ -15,6 +15,8 @@ export class AppPanelComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.vesselService.getUserVessels()
+      .subscribe();
     this.vesselService.trackedVessels$
       .subscribe(vessels => this.vessels = vessels);
   }

@@ -4,7 +4,13 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080'
+  zoomThreshold: 9,
+  apiUrl: 'http://localhost:8080',
+  activeThreshold: {
+    value: 5,
+    unit: 'minutes'
+  },
+  netPart: 20
 };
 
 /*

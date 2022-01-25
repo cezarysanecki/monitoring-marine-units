@@ -1,16 +1,23 @@
-import {VesselRegistry} from "../../../vessels/model/vessel.type";
+export type GroupMarker = {
+  mmsis: number[]
+} & MarkerCoordinates
 
-export type VesselMarker = {
-  data: VesselData,
-  markerOptions: MarkerOptions,
-  popupTemplate: string
-}
+export type SingleMarker = {
+  mmsi: number,
+  timestamp: string,
+  active: boolean
+} & MarkerCoordinates
 
-export type VesselData = {
-  vessels: VesselRegistry[],
-  timestamp: string | null,
+export type MarkerCoordinates = {
   latitude: number,
   longitude: number
+}
+
+export type Bounds = {
+  northWestLongitude: number,
+  northWestLatitude: number,
+  southEastLongitude: number,
+  southEastLatitude: number,
 }
 
 export type MarkerOptions = {
