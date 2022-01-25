@@ -1,1 +1,22 @@
-<p>popup works!</p>
+<div class="popup-map">
+  <ng-container [ngTemplateOutlet]="registries.length > 1 ? registries_template : registry_template"></ng-container>
+</div>
+
+<ng-template #registry_template>
+  <div class="popup-map__title">MMSI: {{ registries[0].mmsi }}</div>
+  <div class="popup-map__timestamp">Last position update:</div>
+  <div>{{ moment(registries[0].pointInTime.timestamp).format('DD-MM-YYYY HH:mm:ss') }}</div>
+  <a
+    *ngIf="loggedUser"
+    title="Track vessel"
+    (click)="trackVessel(registries[0].mmsi)"
+    class="popup-map__track material-icons-outlined md-24"
+  >add</a>
+</ng-template>
+
+<ng-template #registries_template>
+  <div class="popup-map__title">Ships in region ({{ registries.length }}):</div>
+  <div class="popup-map__list">
+    <div *ngFor="let registry of registries">{{ registry.mmsi }}</div>
+  </div>
+</ng-template>

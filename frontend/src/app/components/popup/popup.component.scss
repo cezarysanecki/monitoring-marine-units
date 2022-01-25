@@ -1,0 +1,22 @@
+.popup-map {
+  text-align: center;
+
+  &__title {
+    margin-bottom: 10px;
+    border-bottom: 2px solid #444554;
+    font-size: 0.8rem;
+  }
+
+  &__timestamp {
+    text-decoration: underline;
+  }
+
+  &__track {
+    cursor: pointer;
+  }
+
+  &__list {
+    max-height: 150px;
+    overflow: auto;
+  }
+}

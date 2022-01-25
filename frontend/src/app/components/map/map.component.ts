@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input} from '@angular/core';
+import {AfterViewInit, Component, Input} from '@angular/core';
 import {Subject} from "rxjs";
 import {MarkerService} from "./services/marker.service";
 import {AuthenticationService} from "../../auth/services/authentication.service";
@@ -16,15 +16,14 @@ export class MapComponent implements AfterViewInit {
 
   constructor(private mapService: MapService,
               private markerService: MarkerService,
-              private authenticationService: AuthenticationService,
-              private elementRef: ElementRef) {
+              private authenticationService: AuthenticationService) {
   }
 
   ngAfterViewInit() {
     this.mapService.initMap();
 
     this.mapService.map.on('moveend', () => {
-      this.markerService.makeVesselsMarkers(this.mapService.map, this.elementRef);
+      this.markerService.makeVesselsMarkers(this.mapService.map);
       this.mapService.refreshMap();
     });
 
@@ -34,7 +33,7 @@ export class MapComponent implements AfterViewInit {
 
     this.authenticationService.loggedUser$.subscribe(() => {
       this.mapService.map.closePopup();
-      this.markerService.makeVesselsMarkers(this.mapService.map, this.elementRef);
+      this.markerService.makeVesselsMarkers(this.mapService.map);
     });
   }
 }

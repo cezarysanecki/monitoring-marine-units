@@ -1,10 +1,10 @@
-import {ElementRef, Injectable} from '@angular/core';
+import {ComponentFactoryResolver, ComponentRef, ElementRef, Injectable, Injector} from '@angular/core';
 import * as L from 'leaflet';
 import {VesselService} from "../../../vessels/services/vessel.service";
-import {PopupService} from "./popup.service";
 import * as moment from "moment";
 import {VesselRegistry} from "../../../vessels/model/vessel.type";
 import {MarkerOptions, VesselData, VesselMarker} from "../type/marker.type";
+import {PopupComponent} from "../../popup/popup.component";
 
 @Injectable({
   providedIn: 'root'
@@ -12,9 +12,13 @@ import {MarkerOptions, VesselData, VesselMarker} from "../type/marker.type";
 export class MarkerService {
 
   markers: L.CircleMarker[] = [];
+  compRef: ComponentRef<PopupComponent>;
 
-  constructor(private vesselService: VesselService,
-              private popupService: PopupService) {
+  constructor(private injector: Injector,
+              private vesselService: VesselService,
+              private resolver: ComponentFactoryResolver) {
+    const compFactory = this.resolver.resolveComponentFactory(PopupComponent);
+    this.compRef = compFactory.create(this.injector);
   }
 
   foo(vesselsRegistries: VesselRegistry[]): L.Marker[] {
@@ -23,7 +27,7 @@ export class MarkerService {
     return [];
   }
 
-  makeVesselsMarkers(map: L.Map, elementRef: ElementRef) {
+  makeVesselsMarkers(map: L.Map) {
     this.vesselService.fetchVesselsPositions(map)
       .subscribe((registries: VesselRegistry[]) => {
         this.markers.forEach(marker => map.removeLayer(marker));
@@ -39,15 +43,7 @@ export class MarkerService {
             {
               ...vesselMarker.markerOptions
             });
-          marker.bindPopup(vesselMarker.popupTemplate)
-            .on("popupopen", () => {
-              elementRef.nativeElement
-                .querySelector(".add-vessel")
-                .addEventListener("click", () => {
-                  this.vesselService.trackVessel(vesselMarker.data.vessels[0].mmsi)
-                    .subscribe();
-                })
-            });
+          marker.bindPopup(vesselMarker.popupTemplate);
 
           return marker;
         });
@@ -93,12 +89,16 @@ export class MarkerService {
     });
 
     return vesselMarkers.map(marker => {
+      const component = this.resolver.resolveComponentFactory(PopupComponent).create(this.injector);
+      component.instance.registries = marker.vessels;
+      component.changeDetectorRef.detectChanges();
+
       return {
         data: marker,
         markerOptions: {
           ...this.prepareMarkerOptions(marker.vessels)
         },
-        popupTemplate: this.popupService.makeVesselsPopup(marker.vessels)
+        popupTemplate: component.location.nativeElement
       }
     });
   }
@@ -130,6 +130,9 @@ export class MarkerService {
 
     return registries.map(registry => {
       const registryTimestamp = moment(registry.pointInTime.timestamp);
+      const component = this.resolver.resolveComponentFactory(PopupComponent).create(this.injector);
+      component.instance.registries = [ registry ];
+      component.changeDetectorRef.detectChanges();
 
       return {
         data: {
@@ -139,7 +142,7 @@ export class MarkerService {
           longitude: registry.pointInTime.coordinates.longitude
         },
         markerOptions: this.prepareMarker(2, (registryTimestamp < limitTimestamp) ? 'grey' : 'green', 1),
-        popupTemplate: this.popupService.makeVesselPopup(registry)
+        popupTemplate: component.location.nativeElement
       }
     });
   }

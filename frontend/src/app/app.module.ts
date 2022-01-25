@@ -4,7 +4,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MarkerService} from "./components/map/services/marker.service";
-import {PopupService} from "./components/map/services/popup.service";
 import {environment} from "../environments/environment";
 import {ApiInterceptor} from "./auth/interceptors/api.interceptor";
 import {AppRoutingModule} from "./app-routing-module";
@@ -26,6 +25,9 @@ import { PopupComponent } from './components/popup/popup.component';
     MapPanelComponent,
     AppPanelComponent,
     PopupComponent,
+  ],
+  entryComponents: [
+    PopupComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +51,6 @@ import { PopupComponent } from './components/popup/popup.component';
       multi: true
     },
     MarkerService,
-    PopupService,
   ],
   bootstrap: [AppComponent]
 })
