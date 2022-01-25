@@ -3,38 +3,36 @@ import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode} fr
 import {catchError, Observable, switchMap, throwError} from "rxjs";
 import {AuthenticationService} from "../services/authentication.service";
 import {LoggedUser} from "../model/login-credentials.type";
-import {Router} from "@angular/router";
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
 
+  private static URL_WITH_TOKEN = 'barentswatch/monitoring';
+
   private isRefreshing = false;
 
-  constructor(private authenticationService: AuthenticationService,
-              private router: Router) {
+  constructor(private authenticationService: AuthenticationService) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (request.url.startsWith('barentswatch/monitoring')) {
-      const tokenReq = this.updateHeaders(request, this.authenticationService.loggedUser);
+    if (request.url.startsWith(TokenInterceptor.URL_WITH_TOKEN)) {
+      const apiRequest = this.updateHeaders(request, this.authenticationService.loggedUser);
 
-      return next.handle(tokenReq).pipe(catchError(error => {
+      return next.handle(apiRequest).pipe(catchError(error => {
         if (!this.isRefreshing && error.status === HttpStatusCode.Unauthorized) {
           this.isRefreshing = true;
 
           return this.authenticationService.refreshToken()
             .pipe(
               switchMap(loggedUser => {
-                const tokenReq = this.updateHeaders(request, loggedUser);
+                const apiRequest = this.updateHeaders(request, loggedUser);
                 this.isRefreshing = false;
 
-                return next.handle(tokenReq);
+                return next.handle(apiRequest);
               }),
               catchError(error => {
                 this.isRefreshing = false;
-
                 this.authenticationService.logout();
-                void this.router.navigate(['/']);
 
                 return throwError(error);
               })

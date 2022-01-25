@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {VesselRegistry} from "../model/vessel-position.type";
 import * as moment from "moment";
 import {AuthenticationService} from "../../../auth/services/authentication.service";
+import {VesselRegistry} from "../../../vessels/model/vessel.type";
 
 @Injectable({
   providedIn: 'root'

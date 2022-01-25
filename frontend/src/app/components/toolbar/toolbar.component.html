@@ -1,12 +1,12 @@
 <div class="main-toolbar">
   <div class="toolbar">
     <div class="toolbar__item">
-      <div class="toolbar__link" routerLink="/">
+      <div class="toolbar__link" routerLink="/" (click)="showPanel()">
         <div class="material-icons-outlined md-24">map</div>
         <div class="toolbar__text">Map</div>
       </div>
     </div>
-    <div class="toolbar__item" *ngIf="loggedUser">
+    <div class="toolbar__item" *ngIf="loggedUser" (click)="showPanel()">
       <div class="toolbar__link" routerLink="/app">
         <div class="material-icons-outlined md-24">computer</div>
         <div class="toolbar__text">App</div>
@@ -14,7 +14,7 @@
     </div>
   </div>
   <div class="toolbar">
-    <div class="toolbar__item" *ngIf="!loggedUser">
+    <div class="toolbar__item" *ngIf="!loggedUser" (click)="showPanel()">
       <div class="toolbar__link" routerLink="/login">
         <div class="material-icons-outlined md-24">person</div>
         <div class="toolbar__text">Login</div>

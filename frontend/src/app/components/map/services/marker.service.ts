@@ -1,9 +1,10 @@
 import {ElementRef, Injectable} from '@angular/core';
 import * as L from 'leaflet';
-import {VesselService} from "./vessel.service";
-import {VesselRegistry} from "../model/vessel-position.type";
+import {VesselService} from "../../../vessels/services/vessel.service";
 import {PopupService} from "./popup.service";
 import * as moment from "moment";
+import {VesselRegistry} from "../../../vessels/model/vessel.type";
+import {MarkerOptions, VesselData, VesselMarker} from "../type/marker.type";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,12 @@ export class MarkerService {
 
   constructor(private vesselService: VesselService,
               private popupService: PopupService) {
+  }
+
+  foo(vesselsRegistries: VesselRegistry[]): L.Marker[] {
+
+
+    return [];
   }
 
   makeVesselsMarkers(map: L.Map, elementRef: ElementRef) {
@@ -96,31 +103,26 @@ export class MarkerService {
     });
   }
 
-  private prepareMarkerOptions(registries: VesselRegistry[]): { color: string; radius: number, fillOpacity?: number } {
+  private prepareMarkerOptions(registries: VesselRegistry[]): MarkerOptions {
     let numberOfVessels = registries.length;
     switch (true) {
       case (numberOfVessels <= 5):
-        return {
-          radius: 3,
-          color: 'purple',
-          fillOpacity: 1
-        };
+        return this.prepareMarker(3, 'purple', 1);
       case (numberOfVessels <= 10):
-        return {
-          radius: 5,
-          color: 'red'
-        };
+        return this.prepareMarker(5, 'red');
       case (numberOfVessels <= 20):
-        return {
-          radius: 8,
-          color: 'yellow'
-        };
+        return this.prepareMarker(8, 'yellow');
       default:
-        return {
-          radius: 10,
-          color: 'blue'
-        };
+        return this.prepareMarker(10, 'blue');
     }
+  }
+
+  private prepareMarker(radius: number, color: string, opacity: number = 0.3): MarkerOptions {
+    return {
+      radius: radius,
+      color: color,
+      fillOpacity: opacity
+    };
   }
 
   private mapToRegistriesMarkers(registries: VesselRegistry[]): VesselMarker[] {
@@ -136,30 +138,9 @@ export class MarkerService {
           latitude: registry.pointInTime.coordinates.latitude,
           longitude: registry.pointInTime.coordinates.longitude
         },
-        markerOptions: {
-          color: (registryTimestamp < limitTimestamp) ? 'grey' : 'green',
-          radius: 1,
-          fillOpacity: 1
-        },
+        markerOptions: this.prepareMarker(2, (registryTimestamp < limitTimestamp) ? 'grey' : 'green', 1),
         popupTemplate: this.popupService.makeVesselPopup(registry)
       }
     });
   }
-}
-
-type VesselMarker = {
-  data: VesselData,
-  markerOptions: {
-    color: string;
-    radius: number,
-    fillOpacity?: number
-  },
-  popupTemplate: string
-}
-
-type VesselData = {
-  vessels: VesselRegistry[],
-  timestamp: string | null,
-  latitude: number,
-  longitude: number
 }

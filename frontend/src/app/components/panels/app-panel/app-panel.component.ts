@@ -1,22 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {animate, state, style, transition} from "@angular/animations";
 import {Vessel} from "./model/vessel.type";
-import {VesselService} from "../../map/services/vessel.service";
+import {VesselService} from "../../../vessels/services/vessel.service";
 
 @Component({
   selector: 'app-app-panel',
   templateUrl: './app-panel.component.html',
-  styleUrls: ['./app-panel.component.scss'],
-  animations: [
-    state('open', style({
-      height: '200px',
-      opacity: 1,
-      backgroundColor: 'yellow'
-    })),
-    transition('open => closed', [
-      animate('1s')
-    ]),
-  ]
+  styleUrls: ['./app-panel.component.scss']
 })
 export class AppPanelComponent implements OnInit {
 
@@ -26,7 +15,7 @@ export class AppPanelComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.vesselService.getUserVessels()
+    this.vesselService.trackedVessels$
       .subscribe(vessels => this.vessels = vessels);
   }
 }

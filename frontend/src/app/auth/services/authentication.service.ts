@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, map, Observable, of} from "rxjs";
 import {LoggedUser, LoginCredentials, UserTokens} from "../model/login-credentials.type";
 import {JwtTokenService} from "./jwt-token.service";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ export class AuthenticationService {
   public loggedUser$: Observable<LoggedUser | null>;
 
   constructor(private http: HttpClient,
+              private router: Router,
               private jwtTokenService: JwtTokenService) {
     this.loggedUserSubject = new BehaviorSubject<LoggedUser | null>(this.jwtTokenService.getLoggedUser());
     this.loggedUser$ = this.loggedUserSubject.asObservable();
@@ -31,6 +33,12 @@ export class AuthenticationService {
       }));
   }
 
+  logout() {
+    this.jwtTokenService.invalidateToken();
+    this.loggedUserSubject.next(null);
+    void this.router.navigate(['/']);
+  }
+
   refreshToken(): Observable<LoggedUser | null> {
     if (this.loggedUser) {
       return this.http.post<UserTokens>('barentswatch/authentication/refreshtoken', this.loggedUser.tokens.refreshToken, {
@@ -44,10 +52,5 @@ export class AuthenticationService {
           }));
     }
     return of(null);
-  }
-
-  logout() {
-    this.jwtTokenService.invalidateToken();
-    this.loggedUserSubject.next(null);
   }
 }
