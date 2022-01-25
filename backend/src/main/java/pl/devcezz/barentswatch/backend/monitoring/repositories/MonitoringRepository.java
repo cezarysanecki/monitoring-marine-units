@@ -14,6 +14,6 @@ public class MonitoringRepository implements PanacheMongoRepository<MonitoringEn
     }
 
     public List<MonitoringEntity> getTrackVessels() {
-        return find("vessels.status", "TRACKED").stream().toList();
+        return find("trackedVessels.status", "TRACKED").stream().toList();
     }
 }

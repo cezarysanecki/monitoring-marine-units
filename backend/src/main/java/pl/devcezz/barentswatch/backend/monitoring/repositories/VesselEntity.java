@@ -59,8 +59,8 @@ public class VesselEntity {
                 .findFirst()
                 .ifPresent(track -> track.addPoint(
                         currentVesselRegistry.pointInTime().timestamp(),
-                        currentVesselRegistry.pointInTime().coordinates().longitude(),
-                        currentVesselRegistry.pointInTime().coordinates().latitude()));
+                        currentVesselRegistry.pointInTime().coordinates().latitude(),
+                        currentVesselRegistry.pointInTime().coordinates().longitude()));
     }
 
     private boolean cannotAddPoint(String timestamp) {
