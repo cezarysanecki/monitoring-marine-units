@@ -1,9 +1,8 @@
 import {Injectable} from "@angular/core";
 import * as L from 'leaflet';
-import {CurrentMapParameters, MapState} from "../type/map.type";
+import {LatLngTuple} from 'leaflet';
+import {AppMarkers, CurrentMapParameters, MapState} from "../type/map.type";
 import {BehaviorSubject, Observable} from "rxjs";
-import {LatLngExpression, LatLngTuple, point} from "leaflet";
-import {MonitoredVessel} from "../../../vessels/model/vessel.type";
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +20,9 @@ export class MapService {
 
   map!: L.Map;
   markers: L.CircleMarker[] = [];
+
+  polylines: L.Polyline[] = [];
+  points: L.CircleMarker[] = [];
 
   constructor() {
   }
@@ -50,67 +52,38 @@ export class MapService {
     this.mapStateSubject.next(MapState.Ready);
   }
 
-  foo(monitoredVessels: MonitoredVessel[]) {
-    monitoredVessels.forEach(monitoredVessel => {
-      let polylineObjects: PolylineObject[] = monitoredVessel.tracks.filter(track => track.pointsInTime.length > 0)
-        .map(track => {
-        let firstPoint = track.pointsInTime[0];
-        let lastPoint = track.pointsInTime[track.pointsInTime.length - 1];
-
-        let polylinePoints = track.pointsInTime.map(point => {
-          return {
-            latitude: point.coordinates.latitude,
-            longitude: point.coordinates.longitude
-          }
-        });
-
-        const polylineObject: PolylineObject = {
-          firstPoint: {
-            latitude: firstPoint.coordinates.latitude,
-            longitude: firstPoint.coordinates.longitude
-          },
-          lastPoint: {
-            latitude: lastPoint.coordinates.latitude,
-            longitude: lastPoint.coordinates.longitude
-          },
-          polylinePoints: polylinePoints
-        }
-
-        return polylineObject;
-      });
-
-      polylineObjects.forEach(polylineObject => {
-        new L.Polyline(polylineObject.polylinePoints.map(point => [point.latitude, point.longitude]) as LatLngExpression[])
-          .addTo(this.map);
-      })
-
-      for (let i = 0; i < polylineObjects.length - 1; i++) {
-        let previousPoint = polylineObjects[i];
-        let nextPoint = polylineObjects[i + 1];
-
-        new L.Polyline([[previousPoint.lastPoint.latitude, previousPoint.lastPoint.longitude],
-          [nextPoint.firstPoint.latitude, nextPoint.firstPoint.longitude]] as LatLngExpression[], {
-          color: 'red',
-          dashArray: '5,10'
-        }).addTo(this.map);
-      }
-
-      let lastPolylineObject = polylineObjects[polylineObjects.length - 1];
-
-      new L.CircleMarker([lastPolylineObject.lastPoint.latitude, lastPolylineObject.lastPoint.longitude],
-        {
-          radius: 2,
-          color: 'green'
-        }).addTo(this.map);
-    });
-  }
-
   attachMarkersOnMap(markers: L.CircleMarker[]) {
+    if (this.mapStateSubject.value !== MapState.PublicMode) {
+      return;
+    }
+
     this.markers.forEach(marker => this.map.removeLayer(marker));
     this.markers = markers;
 
     this.markers.forEach(mapMarker => {
       mapMarker.addTo(this.map);
+    });
+
+    this.refreshMap();
+  }
+
+  attachLinesOnMap(appMarkers: AppMarkers) {
+    if (this.mapStateSubject.value !== MapState.AppMode) {
+      return;
+    }
+
+    this.polylines.forEach(polyline => this.map.removeLayer(polyline));
+    this.polylines = appMarkers.polylines;
+
+    this.polylines.forEach(mapPolyline => {
+      mapPolyline.addTo(this.map);
+    });
+
+    this.points.forEach(point => this.map.removeLayer(point));
+    this.points = appMarkers.points;
+
+    this.points.forEach(point => {
+      point.addTo(this.map);
     });
 
     this.refreshMap();
@@ -136,6 +109,12 @@ export class MapService {
         this.markers.forEach(marker => this.map.removeLayer(marker));
         this.markers = [];
         break;
+      case MapState.PublicMode:
+        this.polylines.forEach(polyline => this.map.removeLayer(polyline));
+        this.polylines = [];
+        this.points.forEach(point => this.map.removeLayer(point));
+        this.points = [];
+        break;
     }
     this.mapStateSubject.next(mapState);
   }
@@ -152,20 +131,5 @@ export class MapService {
       },
       zoom: this.map.getZoom()
     }
-  }
-}
-
-type PolylineObject = {
-  polylinePoints: {
-    latitude: number,
-    longitude: number
-  }[],
-  firstPoint: {
-    latitude: number,
-    longitude: number
-  },
-  lastPoint: {
-    latitude: number,
-    longitude: number
   }
 }

@@ -18,6 +18,11 @@ export type CurrentMapParameters = {
   bounds: Bounds
 }
 
+export type AppMarkers = {
+  polylines: L.Polyline[],
+  points: L.CircleMarker[]
+}
+
 export type Bounds = {
   northWestLongitude: number,
   northWestLatitude: number,

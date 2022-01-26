@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Output} from '@angular/core';
 import {AuthenticationService} from "../../auth/services/authentication.service";
 import {LoggedUser} from "../../auth/model/login-credentials.type";
+import {MapService} from "../map/services/map.service";
 
 @Component({
   selector: 'app-toolbar',
@@ -15,7 +16,8 @@ export class ToolbarComponent {
   loggedUser: LoggedUser | null = null;
   isPanelShown = true;
 
-  constructor(private authenticationService: AuthenticationService) {
+  constructor(private authenticationService: AuthenticationService,
+              private mapService: MapService) {
     this.authenticationService.loggedUser$.subscribe(loggedUser => {
       this.loggedUser = loggedUser;
     });
@@ -33,5 +35,9 @@ export class ToolbarComponent {
 
   logout() {
     this.authenticationService.logout();
+  }
+
+  centerMap() {
+    this.mapService.centerOnInitialPlace();
   }
 }

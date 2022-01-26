@@ -30,7 +30,8 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.mapService.mapState$.subscribe(mapState => {
       switch (mapState) {
-        case MapState.Ready | MapState.PublicMode:
+        case MapState.Ready:
+        case MapState.PublicMode:
           this.mapMoveEndSubscription = this.mapService.mapMoveEnd$.subscribe(markersGroupOptions => {
             this.prepareMarkersForVessels(markersGroupOptions);
           });

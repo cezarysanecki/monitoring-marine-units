@@ -5,6 +5,7 @@ import * as moment from "moment";
 import {MonitoredVessel} from "../../../vessels/model/vessel.type";
 import {mergeMap, Subscription, timer} from "rxjs";
 import {MapState} from "../../map/type/map.type";
+import {PolylineMarkerService} from "../../map/services/polyline-marker.service";
 
 @Component({
   selector: 'app-app-panel',
@@ -16,7 +17,8 @@ export class AppPanelComponent implements OnInit, OnDestroy {
   vessels: MonitoredVessel[] = [];
 
   constructor(private mapService: MapService,
-              private vesselService: VesselService) {
+              private vesselService: VesselService,
+              private polylineMarkerService: PolylineMarkerService) {
   }
 
   private userVesselsSubscription!: Subscription;
@@ -29,12 +31,10 @@ export class AppPanelComponent implements OnInit, OnDestroy {
         .subscribe(vessels => {
           this.vessels = vessels;
 
-
-          this.mapService.foo(this.vessels);
+          let appMarkers = this.polylineMarkerService.convertToAppMarkers(vessels);
+          this.mapService.attachLinesOnMap(appMarkers);
         });
     });
-
-    this.mapService.centerOnInitialPlace();
   }
 
   ngOnDestroy() {

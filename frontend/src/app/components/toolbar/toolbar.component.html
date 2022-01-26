@@ -26,6 +26,12 @@
         <div class="toolbar__text">Logout</div>
       </div>
     </div>
+    <div class="toolbar__item" (click)="centerMap()">
+      <div class="toolbar__link">
+        <div class="material-icons-outlined md-24">control_camera</div>
+        <div class="toolbar__text">Center</div>
+      </div>
+    </div>
     <div class="toolbar__item" (click)="togglePanel()">
       <div class="toolbar__link">
         <div [ngClass]="isPanelShown ? 'panel-button-show' : 'panel-button-hide'" class="material-icons-outlined md-24">login</div>
