@@ -70,8 +70,8 @@ export class MapService {
     this.map.flyTo(this.initialCenter, this.initialZoom);
   }
 
-  centerOn(latitude: number, longitude: number) {
-    this.map.flyTo([latitude, longitude], 10);
+  centerOn(latitude: number, longitude: number, zoom: number = 10) {
+    this.map.flyTo([latitude, longitude], zoom);
   }
 
   changeState(mapState: MapState) {

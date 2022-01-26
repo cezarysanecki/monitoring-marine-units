@@ -3,7 +3,7 @@ import {VesselService} from "../../../vessels/services/vessel.service";
 import {MapService} from "../../map/services/map.service";
 import * as moment from "moment";
 import {MonitoredVessel} from "../../../vessels/model/vessel.type";
-import {Subscription, timer} from "rxjs";
+import {mergeMap, Subscription, timer} from "rxjs";
 import {MapState} from "../../map/type/map.type";
 
 @Component({
@@ -38,6 +38,15 @@ export class AppPanelComponent implements OnInit, OnDestroy {
     this.mapService.changeState(MapState.PublicMode);
   }
 
+  track(mmsi: number) {
+    this.vesselService.trackVessel(mmsi)
+      .pipe(
+        mergeMap(
+          () => this.vesselService.getUserVessels()
+        )
+      ).subscribe(vessels => this.assignSortedVessels(vessels));
+  }
+
   adjust(vessel: MonitoredVessel) {
     let latestPoint = vessel.tracks.flatMap(
       track => track.pointsInTime
@@ -45,14 +54,29 @@ export class AppPanelComponent implements OnInit, OnDestroy {
       return moment(point1.timestamp) < moment(point2.timestamp) ? 1 : -1
     })[0];
 
-    this.mapService.centerOn(latestPoint.coordinates.latitude, latestPoint.coordinates.longitude);
+    this.mapService.centerOn(latestPoint.coordinates.latitude, latestPoint.coordinates.longitude, 8);
   }
 
   suspend(mmsi: number) {
-
+    this.vesselService.suspendTrackingVessel(mmsi)
+      .pipe(
+        mergeMap(
+          () => this.vesselService.getUserVessels()
+        )
+      ).subscribe(vessels => this.assignSortedVessels(vessels));
   }
 
   remove(mmsi: number) {
+    this.vesselService.removeTrackedVessel(mmsi)
+      .pipe(
+        mergeMap(
+          () => this.vesselService.getUserVessels()
+        )
+      ).subscribe(vessels => this.assignSortedVessels(vessels));
+  }
 
+  private assignSortedVessels(monitoredVessels: MonitoredVessel[]) {
+    this.vessels = monitoredVessels
+      .sort((v1, v2) => v1.isSuspended ? 1 : -1);
   }
 }

@@ -11,6 +11,7 @@ export type VesselRegistry = {
 
 export type MonitoredVessel = {
   mmsi: number,
+  isSuspended: boolean,
   tracks: Track[]
 }
 
