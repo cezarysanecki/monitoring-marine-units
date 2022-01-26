@@ -1,6 +1,10 @@
 package pl.devcezz.barentswatch.backend.monitoring.repositories;
 
+import pl.devcezz.barentswatch.backend.common.Coordinates;
 import pl.devcezz.barentswatch.backend.common.CurrentVesselRegistry;
+import pl.devcezz.barentswatch.backend.common.PointInTime;
+import pl.devcezz.barentswatch.backend.common.Track;
+import pl.devcezz.barentswatch.backend.common.UserMonitoring;
 import pl.devcezz.barentswatch.backend.monitoring.exceptions.VesselAlreadyTrackedException;
 
 import java.time.ZonedDateTime;
@@ -61,6 +65,19 @@ public class VesselEntity {
                         currentVesselRegistry.pointInTime().timestamp(),
                         currentVesselRegistry.pointInTime().coordinates().latitude(),
                         currentVesselRegistry.pointInTime().coordinates().longitude()));
+    }
+
+    UserMonitoring convertToUserMonitoring() {
+        return new UserMonitoring(
+                mmsi,
+                status.equals(Status.SUSPENDED),
+                tracks.stream()
+                        .map(track -> track.coordinates.stream()
+                                .map(coordinates -> new PointInTime(coordinates.timestamp,
+                                        new Coordinates(coordinates.latitude, coordinates.longitude))).toList())
+                        .map(Track::new)
+                        .toList()
+        );
     }
 
     private boolean cannotAddPoint(String timestamp) {

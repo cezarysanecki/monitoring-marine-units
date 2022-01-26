@@ -9,7 +9,7 @@ import java.util.Optional;
 public class TrackEntity {
 
     public TrackStatus status;
-    public List<CoordinatesEntity> coordinates;
+    public List<CoordinatesEntity> coordinates = new ArrayList<>();
 
     enum TrackStatus {
         OPENED, CLOSED

@@ -3,6 +3,7 @@ package pl.devcezz.barentswatch.backend.monitoring.repositories;
 import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.types.ObjectId;
 import pl.devcezz.barentswatch.backend.common.CurrentVesselRegistry;
+import pl.devcezz.barentswatch.backend.common.UserMonitoring;
 import pl.devcezz.barentswatch.backend.monitoring.exceptions.VesselAlreadySuspendedException;
 import pl.devcezz.barentswatch.backend.monitoring.exceptions.VesselIsNotTrackedException;
 
@@ -32,6 +33,12 @@ public class MonitoringEntity {
                 VesselEntity::resumeTracking,
                 () -> trackedVessels.add(VesselEntity.createNewVessel(mmsi))
         );
+    }
+
+    public List<UserMonitoring> convertToMonitoringList() {
+        return trackedVessels.stream()
+                .map(VesselEntity::convertToUserMonitoring)
+                .toList();
     }
 
     public void suspendTrackingVessel(Integer mmsi) {

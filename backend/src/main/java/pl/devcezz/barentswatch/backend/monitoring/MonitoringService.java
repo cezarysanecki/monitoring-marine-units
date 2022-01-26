@@ -27,9 +27,7 @@ public class MonitoringService {
         MonitoringEntity entity = monitoringRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
 
-        return entity.trackedVessels.stream()
-                .map(this::convertToMonitoringList)
-                .toList();
+        return entity.convertToMonitoringList();
     }
 
     void trackVessel(String email, Integer mmsi) {
@@ -58,18 +56,5 @@ public class MonitoringService {
         user.removeTrackingVessel(mmsi);
 
         monitoringRepository.update(user);
-    }
-
-
-    private UserMonitoring convertToMonitoringList(VesselEntity entity) {
-        return new UserMonitoring(
-                entity.mmsi,
-                entity.tracks.stream()
-                        .map(track -> track.coordinates.stream()
-                                .map(coordinates -> new PointInTime(coordinates.timestamp,
-                                        new Coordinates(coordinates.latitude, coordinates.longitude))).toList())
-                        .map(Track::new)
-                        .toList()
-        );
     }
 }
