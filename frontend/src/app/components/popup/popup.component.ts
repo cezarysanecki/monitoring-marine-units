@@ -3,7 +3,8 @@ import {AuthenticationService} from "../../auth/services/authentication.service"
 import {LoggedUser} from "../../auth/model/login-credentials.type";
 import * as moment from 'moment';
 import {VesselService} from "../../vessels/services/vessel.service";
-import {GroupMarker, SingleMarker} from "../map/type/marker.type";
+import {GroupMarker, SingleMarker} from "../map/type/map.type";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-popup',
@@ -23,12 +24,13 @@ export class PopupComponent {
   loggedUser: LoggedUser | null;
 
   constructor(private authenticationService: AuthenticationService,
-              private vesselService: VesselService) {
+              private vesselService: VesselService,
+              private router: Router) {
     this.loggedUser = this.authenticationService.loggedUser;
   }
 
   trackVessel(mmsi: number) {
     this.vesselService.trackVessel(mmsi)
-      .subscribe();
+      .subscribe(() => void this.router.navigate(["/app"]));
   }
 }

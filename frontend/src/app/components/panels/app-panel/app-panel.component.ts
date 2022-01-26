@@ -1,16 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {VesselService} from "../../../vessels/services/vessel.service";
 import {MapService} from "../../map/services/map.service";
 import * as moment from "moment";
 import {MonitoredVessel} from "../../../vessels/model/vessel.type";
-import {interval} from "rxjs";
+import {Subscription, timer} from "rxjs";
+import {MapState} from "../../map/type/map.type";
 
 @Component({
   selector: 'app-app-panel',
   templateUrl: './app-panel.component.html',
   styleUrls: ['./app-panel.component.scss']
 })
-export class AppPanelComponent implements OnInit {
+export class AppPanelComponent implements OnInit, OnDestroy {
 
   vessels: MonitoredVessel[] = [];
 
@@ -18,16 +19,23 @@ export class AppPanelComponent implements OnInit {
               private vesselService: VesselService) {
   }
 
-  private readonly intervalUserVessels = interval(10_000);
+  private userVesselsSubscription!: Subscription;
 
   ngOnInit() {
-    this.intervalUserVessels.subscribe(() => {
-      this.vesselService.getUserVessels()
-        .subscribe();
-    })
+    this.mapService.changeState(MapState.AppMode);
 
-    this.vesselService.trackedVessels$
-      .subscribe(vessels => this.vessels = vessels);
+    this.userVesselsSubscription = timer(0, 10_000).subscribe(() => {
+      this.vesselService.getUserVessels()
+        .subscribe(vessels => this.vessels = vessels);
+    });
+
+    this.mapService.centerOnInitialPlace();
+  }
+
+  ngOnDestroy() {
+    this.userVesselsSubscription.unsubscribe();
+    this.vessels = [];
+    this.mapService.changeState(MapState.PublicMode);
   }
 
   adjust(vessel: MonitoredVessel) {

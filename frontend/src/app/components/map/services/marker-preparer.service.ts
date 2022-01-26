@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Bounds, CurrentMapParameters, GroupMarker, SingleMarker} from "../type/marker.type";
+import {Bounds, CurrentMapParameters, GroupMarker, SingleMarker} from "../type/map.type";
 import {VesselRegistry} from "../../../vessels/model/vessel.type";
 import * as moment from "moment";
 import {environment} from "../../../../environments/environment";

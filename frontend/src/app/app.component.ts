@@ -1,22 +1,24 @@
-import {Component, LOCALE_ID} from '@angular/core';
+import {Component, LOCALE_ID, OnInit} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localePl from '@angular/common/locales/pl';
-import {map, Subject} from "rxjs";
+import {map, Subject, Subscription} from "rxjs";
 import {VesselService} from "./vessels/services/vessel.service";
 import {MapService} from "./components/map/services/map.service";
 import {MarkerPreparerService} from "./components/map/services/marker-preparer.service";
 import {MarkerService} from "./components/map/services/marker.service";
-import {CurrentMapParameters} from "./components/map/type/marker.type";
+import {CurrentMapParameters, MapState} from "./components/map/type/map.type";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   isPanelShown: boolean = true;
   isPanelShownSubject: Subject<void> = new Subject();
+
+  private mapMoveEndSubscription: Subscription | null = null;
 
   constructor(private vesselService: VesselService,
               private markerPreparerService: MarkerPreparerService,
@@ -25,17 +27,26 @@ export class AppComponent {
     registerLocaleData(localePl, LOCALE_ID);
   }
 
+  ngOnInit() {
+    this.mapService.mapState$.subscribe(mapState => {
+      switch (mapState) {
+        case MapState.Ready | MapState.PublicMode:
+          this.mapMoveEndSubscription = this.mapService.mapMoveEnd$.subscribe(markersGroupOptions => {
+            this.prepareMarkersForVessels(markersGroupOptions);
+          });
+          break;
+        case MapState.AppMode:
+          if (this.mapMoveEndSubscription) {
+            this.mapMoveEndSubscription.unsubscribe();
+          }
+          break;
+      }
+    })
+  }
+
   handlePanelShownEvent(value: boolean) {
     this.isPanelShown = value;
     this.isPanelShownSubject.next();
-  }
-
-  subscribeToMapReadiness(mapReady: boolean) {
-    if (mapReady) {
-      this.mapService.mapMoveEnd$.subscribe(markersGroupOptions => {
-        this.prepareMarkersForVessels(markersGroupOptions);
-      });
-    }
   }
 
   prepareMarkersForVessels(mapParameters: CurrentMapParameters) {

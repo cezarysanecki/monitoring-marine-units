@@ -1,12 +1,19 @@
 import {Injectable} from "@angular/core";
 import * as L from 'leaflet';
-import {CurrentMapParameters} from "../type/marker.type";
+import {CurrentMapParameters, MapState} from "../type/map.type";
 import {BehaviorSubject, Observable} from "rxjs";
+import {LatLngTuple} from "leaflet";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapService {
+
+  private initialCenter: LatLngTuple = [60, 10.5];
+  private initialZoom = 4;
+
+  private mapStateSubject: BehaviorSubject<MapState> = new BehaviorSubject<MapState>(MapState.Idle);
+  public mapState$: Observable<MapState> = this.mapStateSubject.asObservable();
 
   private mapMoveEndSubject!: BehaviorSubject<CurrentMapParameters>;
   public mapMoveEnd$!: Observable<CurrentMapParameters>;
@@ -17,10 +24,10 @@ export class MapService {
   constructor() {
   }
 
-  initMap(): boolean {
+  initMap() {
     this.map = L.map('map', {
-      center: [60, 10.5],
-      zoom: 4,
+      center: this.initialCenter,
+      zoom: this.initialZoom,
       maxBounds: [[85, -50], [20, 85]]
     });
 
@@ -39,12 +46,7 @@ export class MapService {
       this.mapMoveEndSubject.next(this.getCurrentMapParameters())
     });
 
-    return true;
-  }
-
-  clearMarkers() {
-    this.markers.forEach(marker => this.map.removeLayer(marker));
-    this.markers = [];
+    this.mapStateSubject.next(MapState.Ready);
   }
 
   attachMarkersOnMap(markers: L.CircleMarker[]) {
@@ -64,8 +66,22 @@ export class MapService {
     }, 200);
   }
 
+  centerOnInitialPlace() {
+    this.map.flyTo(this.initialCenter, this.initialZoom);
+  }
+
   centerOn(latitude: number, longitude: number) {
     this.map.flyTo([latitude, longitude], 10);
+  }
+
+  changeState(mapState: MapState) {
+    switch (mapState) {
+      case MapState.AppMode:
+        this.markers.forEach(marker => this.map.removeLayer(marker));
+        this.markers = [];
+        break;
+    }
+    this.mapStateSubject.next(mapState);
   }
 
   private getCurrentMapParameters(): CurrentMapParameters {

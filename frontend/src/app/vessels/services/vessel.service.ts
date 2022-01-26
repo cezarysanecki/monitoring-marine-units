@@ -1,20 +1,15 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {MonitoredVessel, VesselRegistry} from "../model/vessel.type";
-import {BehaviorSubject, map, mergeMap, Observable} from "rxjs";
-import {Bounds} from "../../components/map/type/marker.type";
+import {mergeMap, Observable} from "rxjs";
+import {Bounds} from "../../components/map/type/map.type";
 
 @Injectable({
   providedIn: 'root'
 })
 export class VesselService {
 
-  private trackedVesselsSubject: BehaviorSubject<MonitoredVessel[]>;
-  public trackedVessels$: Observable<MonitoredVessel[]>;
-
   constructor(private http: HttpClient) {
-    this.trackedVesselsSubject = new BehaviorSubject<MonitoredVessel[]>([]);
-    this.trackedVessels$ = this.trackedVesselsSubject.asObservable();
   }
 
   fetchVesselsPositions(bounds: Bounds): Observable<VesselRegistry[]> {
@@ -27,13 +22,7 @@ export class VesselService {
   }
 
   getUserVessels(): Observable<MonitoredVessel[]> {
-    return this.http.get<MonitoredVessel[]>('barentswatch/monitoring/vessels')
-      .pipe(
-        map(trackedVessels => {
-          this.trackedVesselsSubject.next(trackedVessels);
-          return trackedVessels;
-        })
-      );
+    return this.http.get<MonitoredVessel[]>('barentswatch/monitoring/vessels');
   }
 
   trackVessel(mmsi: number): Observable<void> {

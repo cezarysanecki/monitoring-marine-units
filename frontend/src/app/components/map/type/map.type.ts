@@ -30,3 +30,10 @@ export type MarkerOptions = {
   radius: number,
   fillOpacity?: number
 }
+
+export enum MapState {
+  Idle,
+  Ready,
+  AppMode,
+  PublicMode
+}

@@ -1,6 +1,6 @@
 import {ComponentFactoryResolver, ComponentRef, Injectable, Injector} from '@angular/core';
 import * as L from 'leaflet';
-import {GroupMarker, MarkerOptions, SingleMarker} from "../type/marker.type";
+import {GroupMarker, MarkerOptions, SingleMarker} from "../type/map.type";
 import {PopupComponent} from "../../popup/popup.component";
 
 @Injectable({
