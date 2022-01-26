@@ -29,10 +29,7 @@ export class AppPanelComponent implements OnInit, OnDestroy {
     this.userVesselsSubscription = timer(0, 10_000).subscribe(() => {
       this.vesselService.getUserVessels()
         .subscribe(vessels => {
-          this.assignSortedVessels(vessels);
-
-          let appMarkers = this.polylineMarkerService.convertToAppMarkers(vessels);
-          this.mapService.attachLinesOnMap(appMarkers);
+          this.markUserMarkers(vessels);
         });
     });
   }
@@ -43,15 +40,6 @@ export class AppPanelComponent implements OnInit, OnDestroy {
     this.mapService.changeState(MapState.PublicMode);
   }
 
-  track(mmsi: number) {
-    this.vesselService.trackVessel(mmsi)
-      .pipe(
-        mergeMap(
-          () => this.vesselService.getUserVessels()
-        )
-      ).subscribe(vessels => this.assignSortedVessels(vessels));
-  }
-
   adjust(vessel: MonitoredVessel) {
     let latestPoint = vessel.tracks.flatMap(
       track => track.pointsInTime
@@ -59,7 +47,16 @@ export class AppPanelComponent implements OnInit, OnDestroy {
       return moment(point1.timestamp) < moment(point2.timestamp) ? 1 : -1
     })[0];
 
-    this.mapService.centerOn(latestPoint.coordinates.latitude, latestPoint.coordinates.longitude, 8);
+    this.mapService.centerOn(latestPoint.coordinates.latitude, latestPoint.coordinates.longitude, 10);
+  }
+
+  track(mmsi: number) {
+    this.vesselService.trackVessel(mmsi)
+      .pipe(
+        mergeMap(
+          () => this.vesselService.getUserVessels()
+        )
+      ).subscribe(vessels => this.markUserMarkers(vessels));
   }
 
   suspend(mmsi: number) {
@@ -68,7 +65,7 @@ export class AppPanelComponent implements OnInit, OnDestroy {
         mergeMap(
           () => this.vesselService.getUserVessels()
         )
-      ).subscribe(vessels => this.assignSortedVessels(vessels));
+      ).subscribe(vessels => this.markUserMarkers(vessels));
   }
 
   remove(mmsi: number) {
@@ -77,7 +74,14 @@ export class AppPanelComponent implements OnInit, OnDestroy {
         mergeMap(
           () => this.vesselService.getUserVessels()
         )
-      ).subscribe(vessels => this.assignSortedVessels(vessels));
+      ).subscribe(vessels => this.markUserMarkers(vessels));
+  }
+
+  private markUserMarkers(vessels: MonitoredVessel[]) {
+    this.assignSortedVessels(vessels);
+
+    let appMarkers = this.polylineMarkerService.convertToAppMarkers(vessels);
+    this.mapService.attachLinesOnMap(appMarkers);
   }
 
   private assignSortedVessels(monitoredVessels: MonitoredVessel[]) {

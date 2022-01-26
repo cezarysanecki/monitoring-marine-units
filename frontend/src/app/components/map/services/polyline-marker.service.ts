@@ -46,7 +46,7 @@ export class PolylineMarkerService {
 
       polylineObjects.forEach(polylineObject => {
         polylines.push(new L.Polyline(polylineObject.polylinePoints.map(point => [point.latitude, point.longitude]) as LatLngExpression[], {
-          color: 'blue'
+          color: monitoredVessel.isSuspended ? 'grey' : 'blue'
         }));
       })
 
@@ -56,8 +56,8 @@ export class PolylineMarkerService {
 
         polylines.push(new L.Polyline([[previousPoint.lastPoint.latitude, previousPoint.lastPoint.longitude],
           [nextPoint.firstPoint.latitude, nextPoint.firstPoint.longitude]] as LatLngExpression[], {
-          color: 'red',
-          dashArray: '5,10'
+          color: monitoredVessel.isSuspended ? 'pink' : 'red',
+          dashArray: '3,8'
         }));
       }
 
@@ -66,7 +66,7 @@ export class PolylineMarkerService {
       points.push(new L.CircleMarker([lastPolylineObject.lastPoint.latitude, lastPolylineObject.lastPoint.longitude],
         {
           radius: 2,
-          color: 'blue'
+          color: monitoredVessel.isSuspended ? 'grey' : 'blue'
         }));
     });
 
