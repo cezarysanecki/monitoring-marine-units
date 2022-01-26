@@ -11,14 +11,12 @@
     </tr>
     <tr *ngFor="let vessel of vessels">
       <td>{{ vessel.mmsi }}</td>
-      <td *ngIf="!vessel.isSuspended">
+      <td>
         <a title="Info" class="material-icons-outlined md-24">info</a>
         <a (click)="adjust(vessel)" title="Adjust" class="material-icons-outlined md-24">adjust</a>
-        <a (click)="suspend(vessel.mmsi)" title="Suspend" class="material-icons-outlined md-24">remove_circle</a>
+        <a *ngIf="!vessel.isSuspended" (click)="suspend(vessel.mmsi)" title="Suspend" class="material-icons-outlined md-24">remove_circle</a>
+        <a *ngIf="vessel.isSuspended" (click)="track(vessel.mmsi)" title="Resume tracking" class="material-icons-outlined md-24">play_arrow</a>
         <a (click)="remove(vessel.mmsi)" title="Remove" class="material-icons-outlined md-24">delete_forever</a>
-      </td>
-      <td *ngIf="vessel.isSuspended">
-        <a (click)="track(vessel.mmsi)" title="Resume tracking" class="material-icons-outlined md-24">play_arrow</a>
       </td>
     </tr>
   </table>

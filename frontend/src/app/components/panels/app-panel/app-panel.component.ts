@@ -29,7 +29,7 @@ export class AppPanelComponent implements OnInit, OnDestroy {
     this.userVesselsSubscription = timer(0, 10_000).subscribe(() => {
       this.vesselService.getUserVessels()
         .subscribe(vessels => {
-          this.vessels = vessels;
+          this.assignSortedVessels(vessels);
 
           let appMarkers = this.polylineMarkerService.convertToAppMarkers(vessels);
           this.mapService.attachLinesOnMap(appMarkers);
