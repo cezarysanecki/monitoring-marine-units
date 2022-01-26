@@ -26,7 +26,12 @@ export class AppPanelComponent implements OnInit, OnDestroy {
 
     this.userVesselsSubscription = timer(0, 10_000).subscribe(() => {
       this.vesselService.getUserVessels()
-        .subscribe(vessels => this.vessels = vessels);
+        .subscribe(vessels => {
+          this.vessels = vessels;
+
+
+          this.mapService.foo(this.vessels);
+        });
     });
 
     this.mapService.centerOnInitialPlace();
