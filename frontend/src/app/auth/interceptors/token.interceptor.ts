@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode} from "@angular/common/http";
-import {catchError, Observable, switchMap, throwError} from "rxjs";
+import {catchError, EMPTY, Observable, switchMap, throwError} from "rxjs";
 import {AuthenticationService} from "../services/authentication.service";
 import {LoggedUser} from "../model/login-credentials.type";
 
@@ -18,29 +18,30 @@ export class TokenInterceptor implements HttpInterceptor {
     if (request.url.startsWith(TokenInterceptor.URL_WITH_TOKEN)) {
       const apiRequest = this.updateHeaders(request, this.authenticationService.loggedUser);
 
-      return next.handle(apiRequest).pipe(catchError(error => {
-        if (!this.isRefreshing && error.status === HttpStatusCode.Unauthorized) {
-          this.isRefreshing = true;
+      return next.handle(apiRequest).pipe(
+        catchError(error => {
+          if (!this.isRefreshing && error.status === HttpStatusCode.Unauthorized) {
+            this.isRefreshing = true;
 
-          return this.authenticationService.refreshToken()
-            .pipe(
-              switchMap(loggedUser => {
-                const apiRequest = this.updateHeaders(request, loggedUser);
-                this.isRefreshing = false;
+            return this.authenticationService.refreshToken()
+              .pipe(
+                switchMap(loggedUser => {
+                  const apiRequest = this.updateHeaders(request, loggedUser);
+                  this.isRefreshing = false;
 
-                return next.handle(apiRequest);
-              }),
-              catchError(error => {
-                this.isRefreshing = false;
-                this.authenticationService.logout();
+                  return next.handle(apiRequest);
+                }),
+                catchError(() => {
+                  this.isRefreshing = false;
+                  this.authenticationService.logout();
 
-                return throwError(error);
-              })
-            );
-        }
+                  return throwError(error);
+                })
+              );
+          }
 
-        return throwError(error);
-      }));
+          return throwError(error);
+        }));
     }
 
     return next.handle(request);

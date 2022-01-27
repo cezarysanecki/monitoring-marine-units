@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   isPanelShown: boolean = true;
   isPanelShownSubject: Subject<void> = new Subject();
 
-  private mapMoveEndSubscription: Subscription | null = null;
+  private subscriptions: Subscription[] = [];
 
   constructor(private vesselService: VesselService,
               private markerPreparerService: MarkerPreparerService,
@@ -32,14 +32,12 @@ export class AppComponent implements OnInit {
       switch (mapState) {
         case MapState.Ready:
         case MapState.PublicMode:
-          this.mapMoveEndSubscription = this.mapService.mapMoveEnd$.subscribe(markersGroupOptions => {
+          this.subscriptions.push(this.mapService.mapMoveEnd$.subscribe(markersGroupOptions => {
             this.prepareMarkersForVessels(markersGroupOptions);
-          });
+          }));
           break;
         case MapState.AppMode:
-          if (this.mapMoveEndSubscription) {
-            this.mapMoveEndSubscription.unsubscribe();
-          }
+          this.subscriptions.forEach(subscription => subscription.unsubscribe());
           break;
       }
     })
@@ -50,11 +48,15 @@ export class AppComponent implements OnInit {
     this.isPanelShownSubject.next();
   }
 
-  prepareMarkersForVessels(mapParameters: CurrentMapParameters) {
-    this.vesselService.fetchVesselsPositions(mapParameters.bounds)
+  private prepareMarkersForVessels(mapParameters: CurrentMapParameters) {
+    this.subscriptions.push(this.vesselService.fetchVesselsPositions(mapParameters.bounds)
       .pipe(
         map(registries => this.markerPreparerService.prepareVesselsMarkersFor(registries, mapParameters)),
         map(preparedMarkers => this.markerService.convertToMapCircleMarkers(preparedMarkers))
-      ).subscribe(markers => this.mapService.attachMarkersOnMap(markers));
+      ).subscribe(markers => {
+      if ([MapState.PublicMode, MapState.Ready].includes(this.mapService.mapState)) {
+        this.mapService.attachMarkersOnMap(markers);
+      }
+    }));
   }
 }

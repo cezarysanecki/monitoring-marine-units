@@ -81,7 +81,9 @@ export class AppPanelComponent implements OnInit, OnDestroy {
     this.assignSortedVessels(vessels);
 
     let appMarkers = this.polylineMarkerService.convertToAppMarkers(vessels);
-    this.mapService.attachLinesOnMap(appMarkers);
+    if (this.mapService.mapState === MapState.AppMode) {
+      this.mapService.attachLinesOnMap(appMarkers);
+    }
   }
 
   private assignSortedVessels(monitoredVessels: MonitoredVessel[]) {

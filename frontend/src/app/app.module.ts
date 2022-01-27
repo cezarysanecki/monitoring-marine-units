@@ -14,7 +14,9 @@ import {MapPanelComponent} from "./components/panels/map-panel/map-panel.compone
 import {FormsModule} from "@angular/forms";
 import {AppPanelComponent} from "./components/panels/app-panel/app-panel.component";
 import {TokenInterceptor} from "./auth/interceptors/token.interceptor";
-import { PopupComponent } from './components/popup/popup.component';
+import {PopupComponent} from './components/popup/popup.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ToastrModule} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { PopupComponent } from './components/popup/popup.component';
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot()
   ],
   providers: [
     {

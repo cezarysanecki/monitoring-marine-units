@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import * as L from 'leaflet';
 import {LatLngTuple} from 'leaflet';
 import {AppMarkers, CurrentMapParameters, MapState} from "../type/map.type";
-import {BehaviorSubject, Observable} from "rxjs";
+import {BehaviorSubject, Observable, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,7 @@ export class MapService {
   private mapStateSubject: BehaviorSubject<MapState> = new BehaviorSubject<MapState>(MapState.Idle);
   public mapState$: Observable<MapState> = this.mapStateSubject.asObservable();
 
-  private mapMoveEndSubject!: BehaviorSubject<CurrentMapParameters>;
+  private mapMoveEndSubject!: Subject<CurrentMapParameters>;
   public mapMoveEnd$!: Observable<CurrentMapParameters>;
 
   map!: L.Map;
@@ -25,6 +25,10 @@ export class MapService {
   points: L.CircleMarker[] = [];
 
   constructor() {
+  }
+
+  get mapState() {
+    return this.mapStateSubject.value;
   }
 
   initMap() {
@@ -53,10 +57,6 @@ export class MapService {
   }
 
   attachMarkersOnMap(markers: L.CircleMarker[]) {
-    if (this.mapStateSubject.value !== MapState.PublicMode) {
-      return;
-    }
-
     this.markers.forEach(marker => this.map.removeLayer(marker));
     this.markers = markers;
 
@@ -68,10 +68,6 @@ export class MapService {
   }
 
   attachLinesOnMap(appMarkers: AppMarkers) {
-    if (this.mapStateSubject.value !== MapState.AppMode) {
-      return;
-    }
-
     this.polylines.forEach(polyline => this.map.removeLayer(polyline));
     this.polylines = appMarkers.polylines;
 
@@ -93,6 +89,7 @@ export class MapService {
     setTimeout(() => {
       this.map.invalidateSize(true)
     }, 200);
+    this.map.closePopup();
   }
 
   centerOnInitialPlace() {

@@ -5,6 +5,8 @@ import * as moment from 'moment';
 import {VesselService} from "../../vessels/services/vessel.service";
 import {GroupMarker, SingleMarker} from "../map/type/map.type";
 import {Router} from "@angular/router";
+import {catchError, EMPTY} from "rxjs";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-popup',
@@ -25,12 +27,19 @@ export class PopupComponent {
 
   constructor(private authenticationService: AuthenticationService,
               private vesselService: VesselService,
-              private router: Router) {
+              private router: Router,
+              private toastrService: ToastrService) {
     this.loggedUser = this.authenticationService.loggedUser;
   }
 
   trackVessel(mmsi: number) {
     this.vesselService.trackVessel(mmsi)
+      .pipe(
+        catchError(() => {
+          this.toastrService.error("Vessel already tracked");
+          return EMPTY;
+        })
+      )
       .subscribe(() => void this.router.navigate(["/app"]));
   }
 }
