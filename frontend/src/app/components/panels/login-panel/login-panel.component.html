@@ -1,15 +1,45 @@
 <div class="login-panel">
+  <ng-container [ngTemplateOutlet]="login_form_on ? login_panel : register_panel"></ng-container>
+</div>
+
+<ng-template #login_panel>
   <form class="login-form" (ngSubmit)="login()">
-    <label for="email" class="login-form__email-label">
+    <label for="email" class="login-form__label">
       <strong>Email</strong>
     </label>
     <input type="text" id="email" [(ngModel)]="email" class="login-form__email" name="email" required>
 
-    <label for="password" class="login-form__password-label">
+    <label for="password" class="login-form__label">
       <strong>Password</strong>
     </label>
     <input type="password" id="password" [(ngModel)]="password" class="login-form__password" name="password" required>
 
     <button type="submit" class="login-form__login-button">Login</button>
+    <a class="login-form__addition" (click)="toggleForm()">Sign In</a>
   </form>
-</div>
+</ng-template>
+
+<ng-template #register_panel>
+  <form class="login-form" (ngSubmit)="register()">
+    <label for="new-email" class="login-form__label">
+      <strong>Email</strong>
+    </label>
+    <input type="text" id="new-email" [(ngModel)]="email" class="login-form__email" name="email" required>
+    <p class="login-form__error" *ngIf="email_is_empty">Email cannot be empty</p>
+
+    <label for="new-password" class="login-form__label">
+      <strong>Password</strong>
+    </label>
+    <input (input)="resetErrors()" type="password" id="new-password" [(ngModel)]="password" class="login-form__password" name="password" required>
+    <p class="login-form__error" *ngIf="passwords_not_match">Passwords do not match</p>
+    <p class="login-form__error" *ngIf="passwords_not_long_enough">Passwords must contain at least 4 characters</p>
+
+    <label for="new-password-repeat" class="login-form__label">
+      <strong>Password</strong>
+    </label>
+    <input (input)="resetErrors()" type="password" id="new-password-repeat" [(ngModel)]="password_repeat" class="login-form__password" name="password" required>
+
+    <button type="submit" class="login-form__login-button">Register</button>
+    <a class="login-form__addition" (click)="toggleForm()">Login</a>
+  </form>
+</ng-template>

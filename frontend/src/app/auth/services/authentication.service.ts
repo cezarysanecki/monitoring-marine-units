@@ -24,6 +24,10 @@ export class AuthenticationService {
     return this.loggedUserSubject.value;
   }
 
+  register(credentials: LoginCredentials): Observable<void> {
+    return this.http.post<void>('barentswatch/authentication/register', credentials);
+  }
+
   login(credentials: LoginCredentials): Observable<LoggedUser> {
     return this.http.post<UserTokens>('barentswatch/authentication/login', credentials)
       .pipe(map(apiToken => {
