@@ -5,8 +5,9 @@ import * as moment from "moment";
 import {MonitoredVessel} from "../../../vessels/model/vessel.type";
 import {MapState} from "../../map/type/map.type";
 import {UserVesselService} from "../../../vessels/services/user-vessel.service";
-import {Subscription} from "rxjs";
+import {catchError, EMPTY, Subscription} from "rxjs";
 import {NgxSmartModalService} from "ngx-smart-modal";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-app-panel',
@@ -23,7 +24,8 @@ export class AppPanelComponent implements OnInit, OnDestroy {
   constructor(private mapService: MapService,
               private vesselService: VesselService,
               private userVesselService: UserVesselService,
-              private ngxSmartModalService: NgxSmartModalService) {
+              private ngxSmartModalService: NgxSmartModalService,
+              private toastrService: ToastrService) {
     this.monitoredVesselsSubscription = this.userVesselService.userVessels$
       .subscribe(vessels => {
         this.vessels = vessels;
@@ -50,7 +52,14 @@ export class AppPanelComponent implements OnInit, OnDestroy {
 
   track(mmsi: number) {
     this.blockButtons = true;
-    this.vesselService.trackVessel(mmsi).subscribe(
+    this.vesselService.trackVessel(mmsi)
+      .pipe(
+        catchError(err => {
+          this.toastrService.error(err.error.message);
+          return EMPTY;
+        })
+      )
+      .subscribe(
       () => {
         this.mapService.changeState(MapState.RefreshUserVessels);
         this.blockButtons = false;

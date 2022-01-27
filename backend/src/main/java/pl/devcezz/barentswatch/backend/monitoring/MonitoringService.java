@@ -1,14 +1,12 @@
 package pl.devcezz.barentswatch.backend.monitoring;
 
 import pl.devcezz.barentswatch.backend.authentication.exceptions.UserNotFoundException;
-import pl.devcezz.barentswatch.backend.common.Coordinates;
-import pl.devcezz.barentswatch.backend.common.PointInTime;
-import pl.devcezz.barentswatch.backend.common.Track;
 import pl.devcezz.barentswatch.backend.common.UserMonitoring;
 import pl.devcezz.barentswatch.backend.externalapi.BarentsWatchFacade;
+import pl.devcezz.barentswatch.backend.monitoring.exceptions.LimitOfAllTrackedVesselsExceededException;
+import pl.devcezz.barentswatch.backend.monitoring.exceptions.LimitOfActivelyTrackedVesselsExceededException;
 import pl.devcezz.barentswatch.backend.monitoring.repositories.MonitoringRepository;
 import pl.devcezz.barentswatch.backend.monitoring.repositories.MonitoringEntity;
-import pl.devcezz.barentswatch.backend.monitoring.repositories.VesselEntity;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -16,6 +14,9 @@ import java.util.List;
 
 @ApplicationScoped
 public class MonitoringService {
+
+    private static final int LIMIT_OF_ACTIVELY_TRACKED_VESSELS = 10;
+    private static final int LIMIT_OF_ALL_TRACKED_VESSELS = LIMIT_OF_ACTIVELY_TRACKED_VESSELS + 5;
 
     @Inject
     BarentsWatchFacade barentsWatchFacade;
@@ -33,6 +34,21 @@ public class MonitoringService {
     void trackVessel(String email, Integer mmsi) {
         MonitoringEntity user = monitoringRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
+
+        if (user.isTracking(mmsi)) {
+            Long numberOfActivelyTrackedVessels = user.numberOfTrackedVessels();
+            if (numberOfActivelyTrackedVessels >= LIMIT_OF_ACTIVELY_TRACKED_VESSELS) {
+                throw new LimitOfActivelyTrackedVesselsExceededException(LIMIT_OF_ACTIVELY_TRACKED_VESSELS);
+            }
+        } else {
+            Long numberOfActivelyTrackedVessels = user.numberOfTrackedVessels();
+            if (numberOfActivelyTrackedVessels >= LIMIT_OF_ACTIVELY_TRACKED_VESSELS) {
+                throw new LimitOfActivelyTrackedVesselsExceededException(LIMIT_OF_ACTIVELY_TRACKED_VESSELS);
+            }
+            if (user.trackedVessels.size() >= LIMIT_OF_ALL_TRACKED_VESSELS) {
+                throw new LimitOfAllTrackedVesselsExceededException(LIMIT_OF_ALL_TRACKED_VESSELS);
+            }
+        }
 
         user.trackVessel(mmsi);
         user.addPointForVessel(barentsWatchFacade.getVesselRegistryFor(mmsi));

@@ -9,6 +9,7 @@ import pl.devcezz.barentswatch.backend.monitoring.exceptions.VesselIsNotTrackedE
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @MongoEntity(collection = "monitoring")
@@ -74,6 +75,17 @@ public class MonitoringEntity {
         return trackedVessels.stream()
                 .map(vessel -> vessel.mmsi)
                 .toList();
+    }
+
+    public Long numberOfTrackedVessels() {
+        return trackedVessels.stream()
+                .filter(trackedVessel -> trackedVessel.status.equals(VesselEntity.Status.TRACKED))
+                .count();
+    }
+
+    public boolean isTracking(Integer mmsi) {
+        return trackedVessels.stream()
+                .anyMatch(trackedVessel -> Objects.equals(trackedVessel.mmsi, mmsi));
     }
 }
 

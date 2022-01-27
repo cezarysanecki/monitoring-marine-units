@@ -1,6 +1,5 @@
 package pl.devcezz.barentswatch.backend.token;
 
-import pl.devcezz.barentswatch.backend.token.exceptions.RefreshTokenExpiredException;
 import pl.devcezz.barentswatch.backend.token.exceptions.RefreshTokenNotFoundException;
 import pl.devcezz.barentswatch.backend.token.repositories.RefreshTokenEntity;
 import pl.devcezz.barentswatch.backend.token.repositories.RefreshTokenRepository;
