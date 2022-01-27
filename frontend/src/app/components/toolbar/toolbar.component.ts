@@ -1,8 +1,9 @@
-import {Component, EventEmitter, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {AuthenticationService} from "../../auth/services/authentication.service";
 import {LoggedUser} from "../../auth/model/login-credentials.type";
 import {MapService} from "../map/services/map.service";
 import {ToolbarService} from "./services/toolbar.service";
+import {MapState} from "../map/type/map.type";
 
 @Component({
   selector: 'app-toolbar',
@@ -13,6 +14,9 @@ export class ToolbarComponent {
 
   private readonly FILTER_ON_KEY = 'filterOn';
   filterOn;
+
+  @Input()
+  currentMapState!: MapState;
 
   @Output()
   panelShownEvent = new EventEmitter<boolean>();

@@ -1,5 +1,5 @@
 <div class="app__toolbar">
-  <app-toolbar (panelShownEvent)="handlePanelShownEvent($event)"></app-toolbar>
+  <app-toolbar [currentMapState]="currentMapState" (panelShownEvent)="handlePanelShownEvent($event)"></app-toolbar>
 </div>
 <div [ngClass]="isPanelShown ? 'app__panel-show' : 'app__panel-hide'">
   <router-outlet></router-outlet>

@@ -12,4 +12,8 @@ export class ToolbarService {
   changeFilterOn(filterOn: boolean) {
     this.filterOnSubject.next(filterOn);
   }
+
+  get filterOn() {
+    return this.filterOnSubject.value;
+  }
 }

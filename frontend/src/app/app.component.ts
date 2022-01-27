@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
   isPanelShownSubject: Subject<void> = new Subject();
 
   filterVessels: boolean = false;
+  currentMapState: MapState = MapState.Idle;
 
   private canAttachElementsToMap = false;
 
@@ -44,6 +45,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.mapService.mapState$.subscribe(mapState => {
+        this.currentMapState = mapState;
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
 
         switch (mapState) {

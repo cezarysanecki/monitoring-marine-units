@@ -26,7 +26,7 @@
         <div class="toolbar__text">Logout</div>
       </div>
     </div>
-    <div class="toolbar__item" (click)="toggleFilter()">
+    <div *ngIf="!(currentMapState | IsAppMapStatePipe)" class="toolbar__item" (click)="toggleFilter()">
       <div class="toolbar__link">
         <div [ngClass]="filterOn === 'yes' ? 'material-icons' : 'material-icons-outlined'" class="md-24">filter_alt</div>
         <div class="toolbar__text">{{ filterOn === 'yes' ? 'Filter On' : 'Filter Off' }}</div>
