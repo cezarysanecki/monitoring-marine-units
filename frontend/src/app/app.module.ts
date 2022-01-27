@@ -17,6 +17,7 @@ import {TokenInterceptor} from "./auth/interceptors/token.interceptor";
 import {PopupComponent} from './components/popup/popup.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
+import {NgxSmartModalModule} from "ngx-smart-modal";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import {ToastrModule} from "ngx-toastr";
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    NgxSmartModalModule.forRoot()
   ],
   providers: [
     {

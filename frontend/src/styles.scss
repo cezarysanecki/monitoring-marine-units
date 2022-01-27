@@ -1,6 +1,7 @@
 @import 'node_modules/material-icons/iconfont/material-icons.scss';
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;700&display=swap');
 @import '~ngx-toastr/toastr';
+@import "~ngx-smart-modal/ngx-smart-modal";
 
 body, html {
   margin: 0;
@@ -25,4 +26,13 @@ input:-webkit-autofill:active {
   transition-delay: 50000s;
   -webkit-box-shadow: 0 0 0 50px red inset;
   -webkit-text-fill-color: white;
+}
+
+// overridden modal background color of ngx-smart-modal
+.nsm-content {
+  background: linear-gradient(to right, #65667a, #444554) !important;
+}
+
+.nsm-dialog-btn-close {
+  color: white !important;
 }

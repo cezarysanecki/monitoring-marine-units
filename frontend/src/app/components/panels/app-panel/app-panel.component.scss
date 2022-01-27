@@ -3,10 +3,76 @@
   width: 100%;
   text-align: center;
   overflow-y: auto;
+
+  &__info {
+    margin-top: 5px;
+  }
+
+  &__table {
+    width: 90%;
+    margin: 0 auto;
+
+    &-mmsi {
+      width: 50%;
+    }
+  }
 }
 
-td a {
+.app-panel__table a {
   vertical-align: middle;
   margin: 2px;
   cursor: pointer;
+}
+
+.modal-vessel-info {
+  text-align: center;
+  color: white;
+
+  &__title {
+    &-tracked {
+      color: white;
+    }
+
+    &-suspended {
+      color: grey;
+    }
+  }
+
+  &__table {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  &__footer {
+    margin-top: 10px;
+    text-align: center;
+
+    &-button {
+      background: transparent;
+      border: 2px solid white;
+      border-radius: 10px;
+      padding: 10px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: .5s ease;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+}
+
+.modal-vessel-info__table td {
+  vertical-align: middle;
+  margin: 2px;
+}
+
+.modal-vessel-info hr {
+  border: 0;
+  margin: 5px 0;
+  width: 100%;
+  height: 2px;
+  background: white;
 }

@@ -1,7 +1,7 @@
 import {Component, LOCALE_ID, OnInit} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localePl from '@angular/common/locales/pl';
-import {map, mergeMap, Observable, Subject, Subscription, timer} from "rxjs";
+import {map, mergeMap, Subject, Subscription, timer} from "rxjs";
 import {VesselService} from "./vessels/services/vessel.service";
 import {MapService} from "./components/map/services/map.service";
 import {MarkerPreparerService} from "./components/map/services/marker-preparer.service";
@@ -9,7 +9,6 @@ import {MarkerService} from "./components/map/services/marker.service";
 import {CurrentMapParameters, MapState} from "./components/map/type/map.type";
 import {MonitoredVessel} from "./vessels/model/vessel.type";
 import {PolylineMarkerService} from "./components/map/services/polyline-marker.service";
-import {CircleMarker} from "leaflet";
 import {UserVesselService} from "./vessels/services/user-vessel.service";
 
 @Component({

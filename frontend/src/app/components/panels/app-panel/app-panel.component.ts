@@ -6,6 +6,7 @@ import {MonitoredVessel} from "../../../vessels/model/vessel.type";
 import {MapState} from "../../map/type/map.type";
 import {UserVesselService} from "../../../vessels/services/user-vessel.service";
 import {Subscription} from "rxjs";
+import {NgxSmartModalService} from "ngx-smart-modal";
 
 @Component({
   selector: 'app-app-panel',
@@ -21,7 +22,8 @@ export class AppPanelComponent implements OnInit, OnDestroy {
 
   constructor(private mapService: MapService,
               private vesselService: VesselService,
-              private userVesselService: UserVesselService) {
+              private userVesselService: UserVesselService,
+              private ngxSmartModalService: NgxSmartModalService) {
     this.monitoredVesselsSubscription = this.userVesselService.userVessels$
       .subscribe(vessels => {
         this.vessels = vessels;
@@ -71,5 +73,11 @@ export class AppPanelComponent implements OnInit, OnDestroy {
         this.mapService.changeState(MapState.RefreshUserVessels);
         this.blockButtons = false;
       });
+  }
+
+  openInfoModal(vessel: MonitoredVessel) {
+    this.ngxSmartModalService.resetModalData('vesselInfoModal');
+    this.ngxSmartModalService.setModalData(vessel, 'vesselInfoModal');
+    this.ngxSmartModalService.getModal('vesselInfoModal').open();
   }
 }
