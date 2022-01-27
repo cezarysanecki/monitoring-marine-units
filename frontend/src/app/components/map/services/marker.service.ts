@@ -32,7 +32,7 @@ export class MarkerService {
     let mapMarker = L.circleMarker(
       [marker.latitude, marker.longitude],
       {
-        ...this.getSingleMarkerOptions(2, marker.active ? 'grey' : 'green', 1)
+        ...this.getSingleMarkerOptions(2, marker.active ? 'green' : 'grey', 1)
       }
     );
 

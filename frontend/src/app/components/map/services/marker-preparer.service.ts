@@ -1,9 +1,7 @@
 import {Injectable} from "@angular/core";
 import {Bounds, CurrentMapParameters, GroupMarker, SingleMarker} from "../type/map.type";
-import {VesselRegistry} from "../../../vessels/model/vessel.type";
-import * as moment from "moment";
+import {CheckedVesselRegistry, VesselRegistry} from "../../../vessels/model/vessel.type";
 import {environment} from "../../../../environments/environment";
-import DurationConstructor = moment.unitOfTime.DurationConstructor;
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +11,7 @@ export class MarkerPreparerService {
   constructor() {
   }
 
-  prepareVesselsMarkersFor(registries: VesselRegistry[], markersGroupOptions: CurrentMapParameters): GroupMarker[] | SingleMarker[] {
+  prepareVesselsMarkersFor(registries: CheckedVesselRegistry[], markersGroupOptions: CurrentMapParameters): GroupMarker[] | SingleMarker[] {
     if (markersGroupOptions.zoom < environment.zoomThreshold) {
       return this.mapToGroupMarkers(markersGroupOptions.bounds, registries);
     }
@@ -45,15 +43,11 @@ export class MarkerPreparerService {
     return groupMarkers;
   }
 
-  private mapToSingleMarkers(registries: VesselRegistry[]): SingleMarker[] {
-    const limitTimestamp = moment().subtract(environment.activeThreshold.value, environment.activeThreshold.unit as DurationConstructor);
-
+  private mapToSingleMarkers(registries: CheckedVesselRegistry[]): SingleMarker[] {
     return registries.map(registry => {
-      const registryTimestamp = moment(registry.pointInTime.timestamp);
-
       return {
         mmsi: registry.mmsi,
-        active: registryTimestamp < limitTimestamp,
+        active: registry.active,
         timestamp: registry.pointInTime.timestamp,
         latitude: registry.pointInTime.coordinates.latitude,
         longitude: registry.pointInTime.coordinates.longitude

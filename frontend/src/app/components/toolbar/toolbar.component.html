@@ -26,6 +26,12 @@
         <div class="toolbar__text">Logout</div>
       </div>
     </div>
+    <div class="toolbar__item" (click)="toggleFilter()">
+      <div class="toolbar__link">
+        <div [ngClass]="filterOn === 'yes' ? 'material-icons' : 'material-icons-outlined'" class="md-24">filter_alt</div>
+        <div class="toolbar__text">{{ filterOn === 'yes' ? 'Filter On' : 'Filter Off' }}</div>
+      </div>
+    </div>
     <div class="toolbar__item" (click)="centerMap()">
       <div class="toolbar__link">
         <div class="material-icons-outlined md-24">control_camera</div>

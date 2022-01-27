@@ -7,9 +7,13 @@ import {MapService} from "./components/map/services/map.service";
 import {MarkerPreparerService} from "./components/map/services/marker-preparer.service";
 import {MarkerService} from "./components/map/services/marker.service";
 import {CurrentMapParameters, MapState} from "./components/map/type/map.type";
-import {MonitoredVessel} from "./vessels/model/vessel.type";
+import {CheckedVesselRegistry, MonitoredVessel, VesselRegistry} from "./vessels/model/vessel.type";
 import {PolylineMarkerService} from "./components/map/services/polyline-marker.service";
 import {UserVesselService} from "./vessels/services/user-vessel.service";
+import {ToolbarService} from "./components/toolbar/services/toolbar.service";
+import * as moment from "moment";
+import {environment} from "../environments/environment";
+import DurationConstructor = moment.unitOfTime.DurationConstructor;
 
 @Component({
   selector: 'app-root',
@@ -21,6 +25,8 @@ export class AppComponent implements OnInit {
   isPanelShown: boolean = true;
   isPanelShownSubject: Subject<void> = new Subject();
 
+  filterVessels: boolean = false;
+
   private canAttachElementsToMap = false;
 
   private subscriptions: Subscription[] = [];
@@ -30,8 +36,10 @@ export class AppComponent implements OnInit {
               private polylineMarkerService: PolylineMarkerService,
               private markerPreparerService: MarkerPreparerService,
               private markerService: MarkerService,
-              private mapService: MapService) {
+              private mapService: MapService,
+              private toolbarService: ToolbarService) {
     registerLocaleData(localePl, LOCALE_ID);
+    this.toolbarService.filterOn$.subscribe(filterOn => this.filterVessels = filterOn);
   }
 
   ngOnInit() {
@@ -44,7 +52,8 @@ export class AppComponent implements OnInit {
             break;
           case MapState.PublicMode:
             if (this.canAttachElementsToMap) {
-              this.subscriptions.push(this.mapService.mapMoveEnd$.subscribe(markers => this.prepareMarkersForVessels(markers)));
+              this.subscriptions.push(this.mapService.mapMoveEnd$
+                .subscribe(mapParams => this.prepareMarkersForVessels(mapParams)));
             }
             break;
           case MapState.AppMode:
@@ -79,11 +88,26 @@ export class AppComponent implements OnInit {
 
     this.subscriptions.push(this.vesselService.fetchVesselsPositions(bounds)
       .pipe(
+        map(registries => this.filterActive(registries)),
         map(registries => this.markerPreparerService.prepareVesselsMarkersFor(registries, mapParameters)),
         map(preparedMarkers => this.markerService.convertToMapCircleMarkers(preparedMarkers))
       ).subscribe(markers => {
         this.mapService.attachMarkersOnMap(markers);
       }));
+  }
+
+  private filterActive(registries: VesselRegistry[]): CheckedVesselRegistry[] {
+    const limitTimestamp = moment().subtract(environment.activeThreshold.value, environment.activeThreshold.unit as DurationConstructor);
+
+    return registries
+      .map(registry => {
+        const checkedVesselRegistry: CheckedVesselRegistry = {
+          active: (moment(registry.pointInTime.timestamp) > limitTimestamp),
+          ...registry
+        }
+        return checkedVesselRegistry;
+      })
+      .filter(registry => this.filterVessels ? registry.active : true);
   }
 
   private sortVessels(monitoredVessels: MonitoredVessel[]): MonitoredVessel[] {

@@ -9,6 +9,10 @@ export type VesselRegistry = {
   }
 }
 
+export type CheckedVesselRegistry = {
+  active: boolean
+} & VesselRegistry;
+
 export type MonitoredVessel = {
   mmsi: number,
   isSuspended: boolean,
