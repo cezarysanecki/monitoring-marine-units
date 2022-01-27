@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import {VesselService} from "../../vessels/services/vessel.service";
 import {GroupMarker, SingleMarker} from "../map/type/map.type";
 import {Router} from "@angular/router";
-import {catchError, EMPTY} from "rxjs";
+import {catchError, EMPTY, tap} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 
 @Component({
@@ -35,11 +35,14 @@ export class PopupComponent {
   trackVessel(mmsi: number) {
     this.vesselService.trackVessel(mmsi)
       .pipe(
+        tap(
+          () => void this.router.navigate(["/app"])
+        ),
         catchError(() => {
           this.toastrService.error("Vessel already tracked");
           return EMPTY;
         })
       )
-      .subscribe(() => void this.router.navigate(["/app"]));
+      .subscribe();
   }
 }

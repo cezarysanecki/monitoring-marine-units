@@ -73,7 +73,12 @@ export class AppComponent implements OnInit {
   }
 
   private prepareMarkersForVessels(mapParameters: CurrentMapParameters) {
-    this.subscriptions.push(this.vesselService.fetchVesselsPositions(mapParameters.bounds)
+    let bounds = mapParameters.bounds;
+    if (bounds.southEastLatitude > bounds.northWestLatitude || bounds.northWestLongitude > bounds.southEastLongitude) {
+      return;
+    }
+
+    this.subscriptions.push(this.vesselService.fetchVesselsPositions(bounds)
       .pipe(
         map(registries => this.markerPreparerService.prepareVesselsMarkersFor(registries, mapParameters)),
         map(preparedMarkers => this.markerService.convertToMapCircleMarkers(preparedMarkers))

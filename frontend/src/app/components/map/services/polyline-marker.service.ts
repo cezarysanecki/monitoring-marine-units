@@ -63,11 +63,13 @@ export class PolylineMarkerService {
 
       let lastPolylineObject = polylineObjects[polylineObjects.length - 1];
 
-      points.push(new L.CircleMarker([lastPolylineObject.lastPoint.latitude, lastPolylineObject.lastPoint.longitude],
+      let point = new L.CircleMarker([lastPolylineObject.lastPoint.latitude, lastPolylineObject.lastPoint.longitude],
         {
           radius: 2,
           color: monitoredVessel.isSuspended ? 'grey' : 'blue'
-        }));
+        });
+      point.bindPopup(`<div>MMSI: <strong>${monitoredVessel.mmsi}</strong></div>`)
+      points.push(point);
     });
 
     return {

@@ -17,12 +17,15 @@ export class AppPanelComponent implements OnInit, OnDestroy {
   vessels: MonitoredVessel[] = [];
 
   private monitoredVesselsSubscription: Subscription;
+  private blockButtons = false;
 
   constructor(private mapService: MapService,
               private vesselService: VesselService,
               private userVesselService: UserVesselService) {
     this.monitoredVesselsSubscription = this.userVesselService.userVessels$
-      .subscribe(vessels => this.vessels = vessels);
+      .subscribe(vessels => {
+        this.vessels = vessels;
+      });
   }
 
   ngOnInit() {
@@ -44,17 +47,29 @@ export class AppPanelComponent implements OnInit, OnDestroy {
   }
 
   track(mmsi: number) {
-    this.vesselService.trackVessel(mmsi).subscribe();
-    this.mapService.changeState(MapState.RefreshUserVessels)
+    this.blockButtons = true;
+    this.vesselService.trackVessel(mmsi).subscribe(
+      () => {
+        this.mapService.changeState(MapState.RefreshUserVessels);
+        this.blockButtons = false;
+      });
   }
 
   suspend(mmsi: number) {
-    this.vesselService.suspendTrackingVessel(mmsi).subscribe();
-    this.mapService.changeState(MapState.RefreshUserVessels)
+    this.blockButtons = true;
+    this.vesselService.suspendTrackingVessel(mmsi).subscribe(
+      () => {
+        this.mapService.changeState(MapState.RefreshUserVessels);
+        this.blockButtons = false;
+      });
   }
 
   remove(mmsi: number) {
-    this.vesselService.removeTrackedVessel(mmsi).subscribe();
-    this.mapService.changeState(MapState.RefreshUserVessels)
+    this.blockButtons = true;
+    this.vesselService.removeTrackedVessel(mmsi).subscribe(
+      () => {
+        this.mapService.changeState(MapState.RefreshUserVessels);
+        this.blockButtons = false;
+      });
   }
 }

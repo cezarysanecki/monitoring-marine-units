@@ -120,7 +120,7 @@ export class MapService {
         northWestLongitude: bounds.getNorthWest().lng,
         northWestLatitude: bounds.getNorthWest().lat,
         southEastLongitude: bounds.getSouthEast().lng,
-        southEastLatitude: bounds.getSouthEast().lng
+        southEastLatitude: bounds.getSouthEast().lat
       },
       zoom: this.map.getZoom()
     }
