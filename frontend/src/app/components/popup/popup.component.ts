@@ -38,8 +38,8 @@ export class PopupComponent {
         tap(
           () => void this.router.navigate(["/app"])
         ),
-        catchError(() => {
-          this.toastrService.error("Vessel already tracked");
+        catchError(err => {
+          this.toastrService.error(err.error.message);
           return EMPTY;
         })
       )

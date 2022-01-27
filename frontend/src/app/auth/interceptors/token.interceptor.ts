@@ -31,9 +31,11 @@ export class TokenInterceptor implements HttpInterceptor {
 
                   return next.handle(apiRequest);
                 }),
-                catchError(() => {
+                catchError(error => {
                   this.isRefreshing = false;
-                  this.authenticationService.logout();
+                  if (error.status === HttpStatusCode.Unauthorized) {
+                    this.authenticationService.logout();
+                  }
 
                   return throwError(error);
                 })
