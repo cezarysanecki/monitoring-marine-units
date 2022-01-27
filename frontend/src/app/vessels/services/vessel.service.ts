@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {MonitoredVessel, VesselRegistry} from "../model/vessel.type";
-import {mergeMap, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {Bounds} from "../../components/map/type/map.type";
 
 @Injectable({

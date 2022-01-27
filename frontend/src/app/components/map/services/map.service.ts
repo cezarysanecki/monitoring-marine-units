@@ -27,10 +27,6 @@ export class MapService {
   constructor() {
   }
 
-  get mapState() {
-    return this.mapStateSubject.value;
-  }
-
   initMap() {
     this.map = L.map('map', {
       center: this.initialCenter,
@@ -54,6 +50,29 @@ export class MapService {
     });
 
     this.mapStateSubject.next(MapState.Ready);
+  }
+
+  changeState(mapState: MapState) {
+    switch (mapState) {
+      case MapState.AppMode:
+        this.markers.forEach(marker => this.map.removeLayer(marker));
+        this.markers = [];
+        break;
+      case MapState.PublicMode:
+        this.polylines.forEach(polyline => this.map.removeLayer(polyline));
+        this.polylines = [];
+        this.points.forEach(point => this.map.removeLayer(point));
+        this.points = [];
+        break;
+    }
+    this.mapStateSubject.next(mapState);
+  }
+
+  refreshMap() {
+    setTimeout(() => {
+      this.map.invalidateSize(true)
+    }, 200);
+    this.map.closePopup();
   }
 
   attachMarkersOnMap(markers: L.CircleMarker[]) {
@@ -85,35 +104,12 @@ export class MapService {
     this.refreshMap();
   }
 
-  refreshMap() {
-    setTimeout(() => {
-      this.map.invalidateSize(true)
-    }, 200);
-    this.map.closePopup();
-  }
-
   centerOnInitialPlace() {
     this.map.flyTo(this.initialCenter, this.initialZoom);
   }
 
   centerOn(latitude: number, longitude: number, zoom: number = 10) {
     this.map.flyTo([latitude, longitude], zoom);
-  }
-
-  changeState(mapState: MapState) {
-    switch (mapState) {
-      case MapState.AppMode:
-        this.markers.forEach(marker => this.map.removeLayer(marker));
-        this.markers = [];
-        break;
-      case MapState.PublicMode:
-        this.polylines.forEach(polyline => this.map.removeLayer(polyline));
-        this.polylines = [];
-        this.points.forEach(point => this.map.removeLayer(point));
-        this.points = [];
-        break;
-    }
-    this.mapStateSubject.next(mapState);
   }
 
   private getCurrentMapParameters(): CurrentMapParameters {

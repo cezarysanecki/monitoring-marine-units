@@ -1,25 +1,36 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {VesselService} from "../../../vessels/services/vessel.service";
 import {MapService} from "../../map/services/map.service";
 import * as moment from "moment";
 import {MonitoredVessel} from "../../../vessels/model/vessel.type";
 import {MapState} from "../../map/type/map.type";
+import {UserVesselService} from "../../../vessels/services/user-vessel.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-app-panel',
   templateUrl: './app-panel.component.html',
   styleUrls: ['./app-panel.component.scss']
 })
-export class AppPanelComponent implements OnInit {
+export class AppPanelComponent implements OnInit, OnDestroy {
 
   vessels: MonitoredVessel[] = [];
 
+  private monitoredVesselsSubscription: Subscription;
+
   constructor(private mapService: MapService,
-              private vesselService: VesselService) {
+              private vesselService: VesselService,
+              private userVesselService: UserVesselService) {
+    this.monitoredVesselsSubscription = this.userVesselService.userVessels$
+      .subscribe(vessels => this.vessels = vessels);
   }
 
   ngOnInit() {
     this.mapService.changeState(MapState.AppMode);
+  }
+
+  ngOnDestroy() {
+    this.monitoredVesselsSubscription.unsubscribe();
   }
 
   adjust(vessel: MonitoredVessel) {

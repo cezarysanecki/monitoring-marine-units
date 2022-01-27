@@ -10,6 +10,7 @@ import {CurrentMapParameters, MapState} from "./components/map/type/map.type";
 import {MonitoredVessel} from "./vessels/model/vessel.type";
 import {PolylineMarkerService} from "./components/map/services/polyline-marker.service";
 import {CircleMarker} from "leaflet";
+import {UserVesselService} from "./vessels/services/user-vessel.service";
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit {
   private subscriptions: Subscription[] = [];
 
   constructor(private vesselService: VesselService,
+              private userVesselService: UserVesselService,
               private polylineMarkerService: PolylineMarkerService,
               private markerPreparerService: MarkerPreparerService,
               private markerService: MarkerService,
@@ -57,7 +59,11 @@ export class AppComponent implements OnInit {
                 .pipe(
                   mergeMap(() => this.vesselService.getUserVessels())
                 )
-                .subscribe(vessels => this.markUserMarkers(this.sortVessels(vessels))));
+                .subscribe(vessels => {
+                  const sortedUserVessels = this.sortVessels(vessels);
+                  this.userVesselService.pushUserVessels(sortedUserVessels);
+                  this.markUserMarkers(sortedUserVessels);
+                }));
             }
             break;
         }
@@ -84,8 +90,6 @@ export class AppComponent implements OnInit {
 
   private markUserMarkers(vessels: MonitoredVessel[]) {
     let appMarkers = this.polylineMarkerService.convertToAppMarkers(vessels);
-    if (this.mapService.mapState === MapState.AppMode) {
-      this.mapService.attachLinesOnMap(appMarkers);
-    }
+    this.mapService.attachLinesOnMap(appMarkers);
   }
 }
