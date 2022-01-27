@@ -45,11 +45,7 @@ export class AppComponent implements OnInit {
             break;
           case MapState.PublicMode:
             if (this.canAttachElementsToMap) {
-              this.subscriptions.push(this.mapService.mapMoveEnd$.pipe(
-                mergeMap(
-                  markersGroupOptions => this.prepareMarkersForVessels(markersGroupOptions)
-                )
-              ).subscribe(markers => this.mapService.attachMarkersOnMap(markers)));
+              this.subscriptions.push(this.mapService.mapMoveEnd$.subscribe(markers => this.prepareMarkersForVessels(markers)));
             }
             break;
           case MapState.AppMode:
@@ -76,12 +72,14 @@ export class AppComponent implements OnInit {
     this.isPanelShownSubject.next();
   }
 
-  private prepareMarkersForVessels(mapParameters: CurrentMapParameters): Observable<CircleMarker[]> {
-    return this.vesselService.fetchVesselsPositions(mapParameters.bounds)
+  private prepareMarkersForVessels(mapParameters: CurrentMapParameters) {
+    this.subscriptions.push(this.vesselService.fetchVesselsPositions(mapParameters.bounds)
       .pipe(
         map(registries => this.markerPreparerService.prepareVesselsMarkersFor(registries, mapParameters)),
         map(preparedMarkers => this.markerService.convertToMapCircleMarkers(preparedMarkers))
-      );
+      ).subscribe(markers => {
+        this.mapService.attachMarkersOnMap(markers);
+      }));
   }
 
   private sortVessels(monitoredVessels: MonitoredVessel[]): MonitoredVessel[] {
