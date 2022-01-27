@@ -1,4 +1,4 @@
-import {Component, LOCALE_ID, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, LOCALE_ID, OnInit} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localePl from '@angular/common/locales/pl';
 import {map, mergeMap, Subject, Subscription, timer} from "rxjs";
@@ -38,7 +38,8 @@ export class AppComponent implements OnInit {
               private markerPreparerService: MarkerPreparerService,
               private markerService: MarkerService,
               private mapService: MapService,
-              private toolbarService: ToolbarService) {
+              private toolbarService: ToolbarService,
+              private changeDetectorRef: ChangeDetectorRef) {
     registerLocaleData(localePl, LOCALE_ID);
     this.toolbarService.filterOn$.subscribe(filterOn => this.filterVessels = filterOn);
   }
@@ -46,6 +47,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.mapService.mapState$.subscribe(mapState => {
         this.currentMapState = mapState;
+        this.changeDetectorRef.detectChanges();
         this.subscriptions.forEach(subscription => subscription.unsubscribe());
 
         switch (mapState) {
