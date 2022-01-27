@@ -40,5 +40,6 @@ export enum MapState {
   Idle,
   Ready,
   AppMode,
-  PublicMode
+  PublicMode,
+  RefreshUserVessels
 }

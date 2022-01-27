@@ -10,7 +10,7 @@ import {AppRoutingModule} from "./app-routing-module";
 import {MapComponent} from "./components/map/map.component";
 import {ToolbarComponent} from "./components/toolbar/toolbar.component";
 import {LoginPanelComponent} from "./components/panels/login-panel/login-panel.component";
-import {MapPanelComponent} from "./components/panels/map-panel/map-panel.component";
+import {InfoPanelComponent} from "./components/panels/info-panel/info-panel.component";
 import {FormsModule} from "@angular/forms";
 import {AppPanelComponent} from "./components/panels/app-panel/app-panel.component";
 import {TokenInterceptor} from "./auth/interceptors/token.interceptor";
@@ -24,7 +24,7 @@ import {ToastrModule} from "ngx-toastr";
     MapComponent,
     ToolbarComponent,
     LoginPanelComponent,
-    MapPanelComponent,
+    InfoPanelComponent,
     AppPanelComponent,
     PopupComponent,
   ],

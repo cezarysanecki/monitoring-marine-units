@@ -1,12 +1,15 @@
 import {Component, LOCALE_ID, OnInit} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localePl from '@angular/common/locales/pl';
-import {map, Subject, Subscription} from "rxjs";
+import {map, mergeMap, Observable, Subject, Subscription, timer} from "rxjs";
 import {VesselService} from "./vessels/services/vessel.service";
 import {MapService} from "./components/map/services/map.service";
 import {MarkerPreparerService} from "./components/map/services/marker-preparer.service";
 import {MarkerService} from "./components/map/services/marker.service";
 import {CurrentMapParameters, MapState} from "./components/map/type/map.type";
+import {MonitoredVessel} from "./vessels/model/vessel.type";
+import {PolylineMarkerService} from "./components/map/services/polyline-marker.service";
+import {CircleMarker} from "leaflet";
 
 @Component({
   selector: 'app-root',
@@ -18,9 +21,12 @@ export class AppComponent implements OnInit {
   isPanelShown: boolean = true;
   isPanelShownSubject: Subject<void> = new Subject();
 
+  private canAttachElementsToMap = false;
+
   private subscriptions: Subscription[] = [];
 
   constructor(private vesselService: VesselService,
+              private polylineMarkerService: PolylineMarkerService,
               private markerPreparerService: MarkerPreparerService,
               private markerService: MarkerService,
               private mapService: MapService) {
@@ -29,18 +35,34 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.mapService.mapState$.subscribe(mapState => {
-      switch (mapState) {
-        case MapState.Ready:
-        case MapState.PublicMode:
-          this.subscriptions.push(this.mapService.mapMoveEnd$.subscribe(markersGroupOptions => {
-            this.prepareMarkersForVessels(markersGroupOptions);
-          }));
-          break;
-        case MapState.AppMode:
-          this.subscriptions.forEach(subscription => subscription.unsubscribe());
-          break;
+        this.subscriptions.forEach(subscription => subscription.unsubscribe());
+
+        switch (mapState) {
+          case MapState.Ready:
+            this.canAttachElementsToMap = true;
+            break;
+          case MapState.PublicMode:
+            if (this.canAttachElementsToMap) {
+              this.subscriptions.push(this.mapService.mapMoveEnd$.pipe(
+                mergeMap(
+                  markersGroupOptions => this.prepareMarkersForVessels(markersGroupOptions)
+                )
+              ).subscribe(markers => this.mapService.attachMarkersOnMap(markers)));
+            }
+            break;
+          case MapState.AppMode:
+          case MapState.RefreshUserVessels:
+            if (this.canAttachElementsToMap) {
+              this.subscriptions.push(timer(0, 10_000)
+                .pipe(
+                  mergeMap(() => this.vesselService.getUserVessels())
+                )
+                .subscribe(vessels => this.markUserMarkers(this.sortVessels(vessels))));
+            }
+            break;
+        }
       }
-    })
+    );
   }
 
   handlePanelShownEvent(value: boolean) {
@@ -48,15 +70,22 @@ export class AppComponent implements OnInit {
     this.isPanelShownSubject.next();
   }
 
-  private prepareMarkersForVessels(mapParameters: CurrentMapParameters) {
-    this.subscriptions.push(this.vesselService.fetchVesselsPositions(mapParameters.bounds)
+  private prepareMarkersForVessels(mapParameters: CurrentMapParameters): Observable<CircleMarker[]> {
+    return this.vesselService.fetchVesselsPositions(mapParameters.bounds)
       .pipe(
         map(registries => this.markerPreparerService.prepareVesselsMarkersFor(registries, mapParameters)),
         map(preparedMarkers => this.markerService.convertToMapCircleMarkers(preparedMarkers))
-      ).subscribe(markers => {
-      if ([MapState.PublicMode, MapState.Ready].includes(this.mapService.mapState)) {
-        this.mapService.attachMarkersOnMap(markers);
-      }
-    }));
+      );
+  }
+
+  private sortVessels(monitoredVessels: MonitoredVessel[]): MonitoredVessel[] {
+    return monitoredVessels.sort((v1) => v1.isSuspended ? 1 : -1);
+  }
+
+  private markUserMarkers(vessels: MonitoredVessel[]) {
+    let appMarkers = this.polylineMarkerService.convertToAppMarkers(vessels);
+    if (this.mapService.mapState === MapState.AppMode) {
+      this.mapService.attachLinesOnMap(appMarkers);
+    }
   }
 }

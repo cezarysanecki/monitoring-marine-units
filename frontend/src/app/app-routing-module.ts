@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {LoginPanelComponent} from "./components/panels/login-panel/login-panel.component";
-import {MapPanelComponent} from "./components/panels/map-panel/map-panel.component";
+import {InfoPanelComponent} from "./components/panels/info-panel/info-panel.component";
 import {AuthGuard} from "./auth/guards/auth.guard";
 import {NoLoggedGuard} from "./auth/guards/no-logged.guard";
 import {AppPanelComponent} from "./components/panels/app-panel/app-panel.component";
@@ -9,7 +9,7 @@ import {AppPanelComponent} from "./components/panels/app-panel/app-panel.compone
 const routes: Routes = [
   {
     path: "",
-    component: MapPanelComponent
+    component: InfoPanelComponent
   },
   {
     path: "login",
