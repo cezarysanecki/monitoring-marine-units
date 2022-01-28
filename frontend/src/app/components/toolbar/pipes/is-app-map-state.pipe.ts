@@ -2,12 +2,11 @@ import {Pipe, PipeTransform} from '@angular/core';
 import {MapState} from "../../map/type/map.type";
 
 @Pipe({
-  name: 'IsAppMapStatePipe',
-  pure: true // by default
+  name: 'hideFilter'
 })
-export class IsAppMapStatePipePipe implements PipeTransform {
+export class HideFilterPipe implements PipeTransform {
 
   transform(mapState: MapState): boolean {
-    return mapState === MapState.AppMode;
+    return [MapState.AppMode, MapState.RefreshUserVessels].includes(mapState);
   }
 }

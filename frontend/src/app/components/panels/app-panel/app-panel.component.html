@@ -30,7 +30,8 @@
       [ngClass]="vesselInfoModal.getData().isSuspended ? 'modal-vessel-info__title-suspended' : 'modal-vessel-info__title-tracked'"
     >{{ vesselInfoModal.getData().mmsi }}</h1>
     <ng-container *ngFor="let track of vesselInfoModal.getData().tracks; let i = index">
-      <table class="modal-vessel-info__table">
+      <hr *ngIf="i !== 0 && track.pointsInTime.length > 0">
+      <table *ngIf="track.pointsInTime.length > 0" class="modal-vessel-info__table">
         <tr>
           <th>Timestamp</th>
           <th>Latitude</th>
@@ -44,7 +45,6 @@
           </tr>
         </ng-container>
       </table>
-      <hr *ngIf="i !== vesselInfoModal.getData().tracks.length - 1">
     </ng-container>
   </div>
   <div *ngIf="!vesselInfoModal.hasData()" class="modal-vessel-info">

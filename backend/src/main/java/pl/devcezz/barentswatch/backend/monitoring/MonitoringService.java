@@ -32,28 +32,15 @@ public class MonitoringService {
     }
 
     void trackVessel(String email, Integer mmsi) {
-        MonitoringEntity user = monitoringRepository.findByEmail(email)
+        MonitoringEntity entity = monitoringRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
 
-        if (user.isTracking(mmsi)) {
-            Long numberOfActivelyTrackedVessels = user.numberOfTrackedVessels();
-            if (numberOfActivelyTrackedVessels >= LIMIT_OF_ACTIVELY_TRACKED_VESSELS) {
-                throw new LimitOfActivelyTrackedVesselsExceededException(LIMIT_OF_ACTIVELY_TRACKED_VESSELS);
-            }
-        } else {
-            Long numberOfActivelyTrackedVessels = user.numberOfTrackedVessels();
-            if (numberOfActivelyTrackedVessels >= LIMIT_OF_ACTIVELY_TRACKED_VESSELS) {
-                throw new LimitOfActivelyTrackedVesselsExceededException(LIMIT_OF_ACTIVELY_TRACKED_VESSELS);
-            }
-            if (user.trackedVessels.size() >= LIMIT_OF_ALL_TRACKED_VESSELS) {
-                throw new LimitOfAllTrackedVesselsExceededException(LIMIT_OF_ALL_TRACKED_VESSELS);
-            }
-        }
+        validate(mmsi, entity);
 
-        user.trackVessel(mmsi);
-        user.addPointForVessel(barentsWatchFacade.getVesselRegistryFor(mmsi));
+        entity.trackVessel(mmsi);
+        entity.addPointForVessel(barentsWatchFacade.getVesselRegistryFor(mmsi));
 
-        monitoringRepository.update(user);
+        monitoringRepository.update(entity);
     }
 
     void suspendTracking(String email, Integer mmsi) {
@@ -72,5 +59,22 @@ public class MonitoringService {
         user.removeTrackingVessel(mmsi);
 
         monitoringRepository.update(user);
+    }
+
+    private void validate(Integer mmsi, MonitoringEntity user) {
+        if (user.isTracking(mmsi)) {
+            Long numberOfActivelyTrackedVessels = user.numberOfTrackedVessels();
+            if (numberOfActivelyTrackedVessels >= LIMIT_OF_ACTIVELY_TRACKED_VESSELS) {
+                throw new LimitOfActivelyTrackedVesselsExceededException(LIMIT_OF_ACTIVELY_TRACKED_VESSELS);
+            }
+        } else {
+            Long numberOfActivelyTrackedVessels = user.numberOfTrackedVessels();
+            if (numberOfActivelyTrackedVessels >= LIMIT_OF_ACTIVELY_TRACKED_VESSELS) {
+                throw new LimitOfActivelyTrackedVesselsExceededException(LIMIT_OF_ACTIVELY_TRACKED_VESSELS);
+            }
+            if (user.trackedVessels.size() >= LIMIT_OF_ALL_TRACKED_VESSELS) {
+                throw new LimitOfAllTrackedVesselsExceededException(LIMIT_OF_ALL_TRACKED_VESSELS);
+            }
+        }
     }
 }

@@ -5,6 +5,7 @@ import {MapService} from "../../map/services/map.service";
 import {MapState} from "../../map/type/map.type";
 import {catchError, EMPTY} from "rxjs";
 import {ToastrService} from "ngx-toastr";
+import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
   selector: 'app-login-panel',
@@ -36,9 +37,18 @@ export class LoginPanelComponent implements OnInit {
     this.authenticationService.login({
       email: this.email,
       password: this.password
-    }).subscribe(() => {
-      void this.router.navigate(['/app']);
-    });
+    })
+      .pipe(
+        catchError(err => {
+          if (err.status === HttpStatusCode.BadRequest) {
+            this.toastrService.error("Account not found");
+          } else {
+            this.toastrService.error("Internal server error");
+          }
+          return EMPTY;
+        })
+      )
+      .subscribe(() => void this.router.navigate(['/app']));
   }
 
   register() {
@@ -92,7 +102,6 @@ export class LoginPanelComponent implements OnInit {
   }
 
   toggleForm() {
-    this.email = '';
     this.password = '';
     this.password_repeat = '';
     this.login_form_on = !this.login_form_on;

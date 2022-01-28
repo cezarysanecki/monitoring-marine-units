@@ -68,9 +68,8 @@ export class AppComponent implements OnInit {
                   mergeMap(() => this.vesselService.getUserVessels())
                 )
                 .subscribe(vessels => {
-                  const sortedUserVessels = this.sortVessels(vessels);
-                  this.userVesselService.pushUserVessels(sortedUserVessels);
-                  this.markUserMarkers(sortedUserVessels);
+                  this.userVesselService.pushUserVessels(vessels);
+                  this.markUserMarkers(vessels);
                 }));
             }
             break;
@@ -112,10 +111,6 @@ export class AppComponent implements OnInit {
         return checkedVesselRegistry;
       })
       .filter(registry => this.filterVessels ? registry.active : true);
-  }
-
-  private sortVessels(monitoredVessels: MonitoredVessel[]): MonitoredVessel[] {
-    return monitoredVessels.sort((v1) => v1.isSuspended ? 1 : -1);
   }
 
   private markUserMarkers(vessels: MonitoredVessel[]) {

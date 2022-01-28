@@ -18,7 +18,7 @@ import {PopupComponent} from './components/popup/popup.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ToastrModule} from "ngx-toastr";
 import {NgxSmartModalModule} from "ngx-smart-modal";
-import {IsAppMapStatePipePipe} from "./components/toolbar/pipes/is-app-map-state.pipe";
+import {HideFilterPipe} from "./components/toolbar/pipes/is-app-map-state.pipe";
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import {IsAppMapStatePipePipe} from "./components/toolbar/pipes/is-app-map-state
     InfoPanelComponent,
     AppPanelComponent,
     PopupComponent,
-    IsAppMapStatePipePipe,
+    HideFilterPipe,
   ],
   entryComponents: [
     PopupComponent
