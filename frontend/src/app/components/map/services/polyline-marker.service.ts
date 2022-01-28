@@ -68,7 +68,10 @@ export class PolylineMarkerService {
           radius: 2,
           color: monitoredVessel.isSuspended ? 'grey' : 'blue'
         });
-      point.bindPopup(`<div>MMSI: <strong>${monitoredVessel.mmsi}</strong></div>`)
+      point.bindPopup(`
+        <div>MMSI: <strong>${monitoredVessel.mmsi}</strong></div>
+        <div>Name: <strong>${monitoredVessel.name}</strong></div>
+        <div>Ship type: <strong>${monitoredVessel.shipType}</strong></div>`);
       points.push(point);
     });
 

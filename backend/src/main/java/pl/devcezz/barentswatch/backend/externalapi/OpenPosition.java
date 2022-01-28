@@ -10,13 +10,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record OpenPosition(String timeStamp, Integer mmsi, Geometry geometry) {
+public record OpenPosition(String timeStamp, String name, Integer shipType, String destination, Integer mmsi,
+                           Geometry geometry) {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record Geometry(String type, List<Double> coordinates) { }
+    public record Geometry(String type, List<Double> coordinates) {
+    }
 
     CurrentVesselRegistry toVesselRegistry() {
-        return new CurrentVesselRegistry(mmsi, new PointInTime(parseTimestamp(), new Coordinates(parseLatitude(), parseLongitude())));
+        return new CurrentVesselRegistry(mmsi, name, shipType, destination,
+                new PointInTime(parseTimestamp(), new Coordinates(parseLatitude(), parseLongitude())));
     }
 
     boolean isPoint() {

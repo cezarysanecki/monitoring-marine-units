@@ -1,5 +1,8 @@
 export type VesselRegistry = {
   mmsi: number,
+  name: string,
+  shipType: string,
+  destination: string,
   pointInTime: {
     timestamp: string,
     coordinates: {
@@ -9,6 +12,12 @@ export type VesselRegistry = {
   }
 }
 
+export type VesselToTrack = {
+  mmsi: number,
+  name: string,
+  shipType: string
+}
+
 export type CheckedVesselRegistry = {
   active: boolean
 } & VesselRegistry;
@@ -16,6 +25,8 @@ export type CheckedVesselRegistry = {
 export type MonitoredVessel = {
   mmsi: number,
   isSuspended: boolean,
+  name: string,
+  shipType: string,
   tracks: Track[]
 }
 

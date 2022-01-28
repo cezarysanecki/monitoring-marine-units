@@ -3,13 +3,16 @@
 </div>
 
 <ng-template #single_marker_template>
-  <div class="popup-map__title">MMSI: {{ singleMarker!.mmsi }}</div>
+  <div class="popup-map__description">MMSI: <strong>{{ singleMarker!.mmsi }}</strong></div>
+  <div class="popup-map__description">Name: {{ singleMarker!.name }}</div>
+  <div class="popup-map__description">Type: {{ singleMarker!.shipType }}</div>
+  <div class="popup-map__description">Destination: {{ singleMarker!.destination ? singleMarker!.destination : 'none' }}</div>
   <div class="popup-map__timestamp">Last position update:</div>
   <div>{{ moment(singleMarker!.timestamp).format('DD-MM-YYYY HH:mm:ss') }}</div>
   <a
     *ngIf="loggedUser"
     title="Track vessel"
-    (click)="trackVessel(singleMarker!.mmsi)"
+    (click)="trackVessel(singleMarker!)"
     class="popup-map__track material-icons-outlined md-24"
   >add</a>
 </ng-template>

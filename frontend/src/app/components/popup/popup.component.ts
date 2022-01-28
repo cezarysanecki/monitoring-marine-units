@@ -32,8 +32,8 @@ export class PopupComponent {
     this.loggedUser = this.authenticationService.loggedUser;
   }
 
-  trackVessel(mmsi: number) {
-    this.vesselService.trackVessel(mmsi)
+  trackVessel(singleMarker: SingleMarker) {
+    this.vesselService.trackVessel({ mmsi: singleMarker.mmsi, name: singleMarker.name, shipType: singleMarker.shipType })
       .pipe(
         tap(
           () => void this.router.navigate(["/app"])

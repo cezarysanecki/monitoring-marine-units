@@ -4,6 +4,9 @@ export type GroupMarker = {
 
 export type SingleMarker = {
   mmsi: number,
+  name: string,
+  shipType: string,
+  destination: string,
   timestamp: string,
   active: boolean
 } & MarkerCoordinates

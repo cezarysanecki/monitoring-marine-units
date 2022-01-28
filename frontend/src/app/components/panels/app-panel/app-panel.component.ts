@@ -50,9 +50,9 @@ export class AppPanelComponent implements OnInit, OnDestroy {
     this.mapService.centerOn(latestPoint.coordinates.latitude, latestPoint.coordinates.longitude, 10);
   }
 
-  track(mmsi: number) {
+  track(vessel: MonitoredVessel) {
     this.blockButtons = true;
-    this.vesselService.trackVessel(mmsi)
+    this.vesselService.trackVessel({ mmsi: vessel.mmsi, name: vessel.name, shipType: vessel.shipType })
       .pipe(
         catchError(err => {
           this.toastrService.error(err.error.message);

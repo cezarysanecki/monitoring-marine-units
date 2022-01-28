@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {MonitoredVessel, VesselRegistry} from "../model/vessel.type";
+import {MonitoredVessel, VesselRegistry, VesselToTrack} from "../model/vessel.type";
 import {Observable} from "rxjs";
 import {Bounds} from "../../components/map/type/map.type";
 
@@ -25,8 +25,8 @@ export class VesselService {
     return this.http.get<MonitoredVessel[]>('barentswatch/monitoring/vessels');
   }
 
-  trackVessel(mmsi: number): Observable<void> {
-    return this.http.post<void>('barentswatch/monitoring/track', mmsi);
+  trackVessel(vesselToTrack: VesselToTrack): Observable<void> {
+    return this.http.post<void>('barentswatch/monitoring/track', vesselToTrack);
   }
 
   suspendTrackingVessel(mmsi: number): Observable<void> {

@@ -16,7 +16,7 @@
         <a (click)="adjust(vessel)" title="Adjust" class="material-icons-outlined md-24">adjust</a>
         <a *ngIf="!vessel.isSuspended" (click)="suspend(vessel.mmsi)" title="Suspend"
            class="material-icons-outlined md-24">remove_circle</a>
-        <a *ngIf="vessel.isSuspended" (click)="track(vessel.mmsi)" title="Resume tracking"
+        <a *ngIf="vessel.isSuspended" (click)="track(vessel)" title="Resume tracking"
            class="material-icons-outlined md-24">play_arrow</a>
         <a (click)="remove(vessel.mmsi)" title="Remove" class="material-icons-outlined md-24">delete_forever</a>
       </td>
@@ -29,6 +29,10 @@
     <h1
       [ngClass]="vesselInfoModal.getData().isSuspended ? 'modal-vessel-info__title-suspended' : 'modal-vessel-info__title-tracked'"
     >{{ vesselInfoModal.getData().mmsi }}</h1>
+    <div style="margin-bottom: 10px;">
+      <div>Name: <strong>{{ vesselInfoModal.getData().name }}</strong></div>
+      <div>Ship type: <strong>{{ vesselInfoModal.getData().shipType }}</strong></div>
+    </div>
     <ng-container *ngFor="let track of vesselInfoModal.getData().tracks; let i = index">
       <hr *ngIf="i !== 0 && track.pointsInTime.length > 0">
       <table *ngIf="track.pointsInTime.length > 0" class="modal-vessel-info__table">

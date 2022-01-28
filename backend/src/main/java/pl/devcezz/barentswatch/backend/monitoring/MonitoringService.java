@@ -2,6 +2,7 @@ package pl.devcezz.barentswatch.backend.monitoring;
 
 import pl.devcezz.barentswatch.backend.authentication.exceptions.UserNotFoundException;
 import pl.devcezz.barentswatch.backend.common.UserMonitoring;
+import pl.devcezz.barentswatch.backend.common.VesselToTrack;
 import pl.devcezz.barentswatch.backend.externalapi.BarentsWatchFacade;
 import pl.devcezz.barentswatch.backend.monitoring.exceptions.LimitOfAllTrackedVesselsExceededException;
 import pl.devcezz.barentswatch.backend.monitoring.exceptions.LimitOfActivelyTrackedVesselsExceededException;
@@ -31,14 +32,14 @@ public class MonitoringService {
         return entity.convertToMonitoringList();
     }
 
-    void trackVessel(String email, Integer mmsi) {
+    void trackVessel(String email, VesselToTrack vessel) {
         MonitoringEntity entity = monitoringRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email));
 
-        validate(mmsi, entity);
+        validate(vessel, entity);
 
-        entity.trackVessel(mmsi);
-        entity.addPointForVessel(barentsWatchFacade.getVesselRegistryFor(mmsi));
+        entity.trackVessel(vessel);
+        entity.addPointForVessel(barentsWatchFacade.getVesselRegistryFor(vessel.mmsi()));
 
         monitoringRepository.update(entity);
     }
@@ -61,8 +62,8 @@ public class MonitoringService {
         monitoringRepository.update(user);
     }
 
-    private void validate(Integer mmsi, MonitoringEntity user) {
-        if (user.isTracking(mmsi)) {
+    private void validate(VesselToTrack vessel, MonitoringEntity user) {
+        if (user.isTracking(vessel.mmsi())) {
             Long numberOfActivelyTrackedVessels = user.numberOfTrackedVessels();
             if (numberOfActivelyTrackedVessels >= LIMIT_OF_ACTIVELY_TRACKED_VESSELS) {
                 throw new LimitOfActivelyTrackedVesselsExceededException(LIMIT_OF_ACTIVELY_TRACKED_VESSELS);

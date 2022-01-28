@@ -1,13 +1,12 @@
 .popup-map {
   text-align: center;
 
-  &__title {
-    margin-bottom: 10px;
-    border-bottom: 2px solid #444554;
+  &__description {
     font-size: 0.8rem;
   }
 
   &__timestamp {
+    margin-top: 10px;
     text-decoration: underline;
   }
 

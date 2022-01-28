@@ -2,6 +2,7 @@ package pl.devcezz.barentswatch.backend.monitoring;
 
 import org.eclipse.microprofile.jwt.JsonWebToken;
 import pl.devcezz.barentswatch.backend.common.UserMonitoring;
+import pl.devcezz.barentswatch.backend.common.VesselToTrack;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -34,9 +35,10 @@ public class MonitoringResource {
 
     @POST
     @Path("/track")
+    @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({"user"})
-    public void trackVessel(Integer mmsi) {
-        monitoringService.trackVessel(token.getSubject(), mmsi);
+    public void trackVessel(VesselToTrack vessel) {
+        monitoringService.trackVessel(token.getSubject(), vessel);
     }
 
     @DELETE

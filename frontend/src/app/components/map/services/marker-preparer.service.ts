@@ -47,6 +47,9 @@ export class MarkerPreparerService {
     return registries.map(registry => {
       return {
         mmsi: registry.mmsi,
+        name: registry.name,
+        shipType: registry.shipType,
+        destination: registry.destination,
         active: registry.active,
         timestamp: registry.pointInTime.timestamp,
         latitude: registry.pointInTime.coordinates.latitude,
