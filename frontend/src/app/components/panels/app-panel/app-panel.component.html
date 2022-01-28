@@ -6,10 +6,12 @@
   </div>
   <table *ngIf="vessels.length > 0" class="app-panel__table">
     <tr>
+      <th>#</th>
       <th class="app-panel__table-mmsi">MMSI</th>
       <th>Actions</th>
     </tr>
-    <tr *ngFor="let vessel of vessels">
+    <tr *ngFor="let vessel of vessels; let i = index">
+      <td>{{ i + 1 }}</td>
       <td>{{ vessel.mmsi }}</td>
       <td>
         <a (click)="openInfoModal(vessel)" title="Info" class="material-icons-outlined md-24">info</a>

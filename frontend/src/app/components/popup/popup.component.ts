@@ -36,7 +36,7 @@ export class PopupComponent {
     this.vesselService.trackVessel({ mmsi: singleMarker.mmsi, name: singleMarker.name, shipType: singleMarker.shipType })
       .pipe(
         tap(
-          () => void this.router.navigate(["/app"])
+          () => this.toastrService.success(`Successfully tracked vessel: ${singleMarker.mmsi}`)
         ),
         catchError(err => {
           this.toastrService.error(err.error.message);
