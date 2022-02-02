@@ -1,4 +1,4 @@
-import {ComponentFactoryResolver, ComponentRef, Injectable, Injector} from '@angular/core';
+import {ComponentFactory, ComponentFactoryResolver, Injectable, Injector} from '@angular/core';
 import * as L from 'leaflet';
 import {GroupMarker, MarkerOptions, SingleMarker} from "../type/map.type";
 import {PopupComponent} from "../../popup/popup.component";
@@ -8,12 +8,11 @@ import {PopupComponent} from "../../popup/popup.component";
 })
 export class MarkerService {
 
-  popupComponentRef: ComponentRef<PopupComponent>;
+  popupComponentFactory: ComponentFactory<PopupComponent>;
 
   constructor(private injector: Injector,
               private resolver: ComponentFactoryResolver) {
-    const compFactory = this.resolver.resolveComponentFactory(PopupComponent);
-    this.popupComponentRef = compFactory.create(this.injector);
+    this.popupComponentFactory = this.resolver.resolveComponentFactory(PopupComponent);
   }
 
   convertToMapCircleMarkers(preparedMarkers: GroupMarker[] | SingleMarker[]): L.CircleMarker[] {
@@ -36,7 +35,7 @@ export class MarkerService {
       }
     );
 
-    const component = this.resolver.resolveComponentFactory(PopupComponent).create(this.injector);
+    const component = this.popupComponentFactory.create(this.injector);
     component.instance.singleMarker = marker;
     component.changeDetectorRef.detectChanges();
 
