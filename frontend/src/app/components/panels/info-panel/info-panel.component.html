@@ -13,12 +13,21 @@
     </ul>
     <p>
       At closed range vessels are treated separately (not in groups). This allows to check if the
-      vessel position was registered more than 5 minutes ago (it is marked as
+      actual vessel position was registered earlier than 5 minutes ago (it is marked as
       <span style="color: grey; font-weight: bold;">grey circle</span>, otherwise is
       <span style="color: green; font-weight: bold;">green circle</span>).
     </p>
     <p>
-      Logged user can add single vessels to track them individually (having additional info about them).
+      Logged user can add single vessels to track them individually <strong>to have history of their positions</strong>
+      while they was being tracked. There is also possibility to suspend tracking, resume it or even remove
+      all history about vessel positions.
+    </p>
+    <p>
+      On the map tracked vessels are marked as <span style="color: blue; font-weight: bold">blue polylines</span>
+      with circles on current positions. If tracking is suspended then color of
+      <span style="color: grey; font-weight: bold">polyline is grey</span>. Suspended tracking means that application
+      will not record positions of this vessel. If tracking is resumed then polyline since suspension to renewal
+      will be <span style="color: red; font-weight: bold">red and dashed</span>.
     </p>
   </div>
 </div>
