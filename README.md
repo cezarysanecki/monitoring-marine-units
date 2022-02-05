@@ -11,6 +11,10 @@ Required setup:
 - Angular 13.1.2
 - Docker
 
+Video on YouTube:
+
+[![Intro](docs/00_intro.png)](https://www.youtube.com/watch?v=0DmAX3xPoZs)
+
 ## Running the application in dev mode
 
 Firstly there is need to set up databases. In main project path there is `docker-compose.yml` file to make
